@@ -36,7 +36,7 @@ const filteredShrooms = computed(() => {
         class="flex items-center hover:bg-gray-100 rounded-lg">
         <!-- Uncomment if you want to use images -->
         <!-- :src="`https://www.123pilzsuche.de/${shroom.image}`" -->
-        <img :src="shroom.photo_url" alt="mushroom"
+        <img :src="shroom.photo_url" alt="mushroom" loading="lazy"
           class="w-20 h-20 object-cover mr-4 rounded-lg" v-if="shroom.image" />
 
         <div>
