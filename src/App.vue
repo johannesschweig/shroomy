@@ -20,8 +20,8 @@ const filteredShrooms = computed(() => {
 </script>
 
 <template>
-  <h1>Shroomy</h1>
-  <h2>Schnelle und einfache Pilzsuche</h2>
+  <h1 class="text-3xl">🍄‍ Shroomy</h1>
+  <h2 class="text-xl">Schnelle und einfache Pilzsuche</h2>
   <input v-model="search" placeholder="Search by name or latin name..." style="width: 100%; margin-bottom: 1em;" />
   <div v-if="filteredShrooms.length === 0">No mushrooms found.</div>
   <div v-for="shroom in filteredShrooms" :key="shroom.url" style="margin-bottom: 1.5em; display: flex; align-items: center;">
