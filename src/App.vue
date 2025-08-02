@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { capitalize } from './utils'
 
-// Load the JSON (adjust path if needed)
 const shrooms = ref<any[]>([])
 fetch('/data/shrooms.json')
   .then(res => res.json())
@@ -20,29 +20,34 @@ const filteredShrooms = computed(() => {
 </script>
 
 <template>
-  <h1 class="text-3xl">🍄‍ Shroomy</h1>
-  <h2 class="text-xl">Schnelle und einfache Pilzsuche</h2>
-  <input v-model="search" placeholder="Search by name or latin name..." style="width: 100%; margin-bottom: 1em;" />
-  <div v-if="filteredShrooms.length === 0">No mushrooms found.</div>
-  <div v-for="shroom in filteredShrooms" :key="shroom.url" style="margin-bottom: 1.5em; display: flex; align-items: center;">
-    <img
-      :src="`https://www.123pilzsuche.de/${shroom.image}`"
-      alt="mushroom"
-      style="width: 80px; height: 80px; object-fit: cover; margin-right: 1em;"
-      v-if="shroom.image"
-    />
-    <div>
-      <a :href="shroom.url" target="_blank" style="font-weight: bold;">
-        {{ shroom.name_de?.[0] || 'No Name' }}
+  <div class="max-w-xl mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-2">🍄‍ Shroomy</h1>
+    <h2 class="text-xl text-gray-600 mb-4">Schnelle und einfache Pilzsuche</h2>
+
+    <input v-model="search" placeholder="Suche nach Namen oder lateinischem Namen..."
+      class="w-full px-4 py-2 border rounded-md mb-4 focus:outline-none focus:ring focus:ring-blue-200" />
+
+    <div v-if="filteredShrooms.length === 0" class="text-gray-500">
+      Keine Pilze gefunden.
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <a v-for="shroom in filteredShrooms" :href="shroom.url" target="_blank" :key="shroom.url"
+        class="flex items-center hover:bg-gray-100 rounded-lg">
+        <!-- Uncomment if you want to use images -->
+        <!-- :src="`https://www.123pilzsuche.de/${shroom.image}`" -->
+        <img :src="shroom.photo_url" alt="mushroom"
+          class="w-20 h-20 object-cover mr-4 rounded-lg" v-if="shroom.image" />
+
+        <div>
+          <div class="text-lg text-slate-900 font-semibold">
+            {{ shroom.name_de?.[0] || 'No Name' }}
+          </div>
+          <div class="italic text-gray-500">
+            {{ capitalize(shroom.name_lat?.[0].split(' ').slice(0, 2).join(' ')) || 'No Latin Name' }}
+          </div>
+        </div>
       </a>
-      <div style="font-style: italic; color: #666;">{{ shroom.name_lat?.[0] }}</div>
     </div>
   </div>
 </template>
-
-<style scoped>
-input {
-  padding: 0.5em;
-  font-size: 1em;
-}
-</style>
