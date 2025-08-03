@@ -18,7 +18,7 @@ function onInput(e: Event) {
   clearTimeout(debounceTimer)
   debounceTimer = setTimeout(() => {
     search.value = value
-  }, 2000) // adjust delay as needed (ms)
+  }, 1000) // adjust delay as needed (ms)
 }
 
 function applySearch() {
@@ -70,7 +70,7 @@ const filteredShrooms = computed(() => {
       <div class="text-sm text-stone-500">{{ filteredShrooms.length }} Treffer</div>
       <a v-for="shroom in filteredShrooms" :href="shroom.url" target="_blank" :key="shroom.url"
         class="flex items-center hover:bg-stone-100 rounded-lg">
-        <img :src="shroom.photo_url" alt="mushroom" loading="lazy" class="w-20 h-20 object-cover mr-4 rounded-lg"
+        <img :src="shroom.photo_url.replace('square', 'small')" alt="mushroom" loading="lazy" class="w-20 h-20 object-cover mr-4 rounded-lg"
           v-if="shroom.photo_url" />
         <div v-else class="w-20 h-20 bg-stone-200 mr-4 rounded-lg flex items-center justify-center">
           <MushroomIcon class="w-12 h-12 text-stone-400" />
