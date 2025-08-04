@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 .btn {
-  @apply px-4 py-2 rounded-lg transition-colors cursor-pointer;
+  @apply px-4 py-2 rounded-lg transition-colors cursor-pointer flex gap-2 items-center font-medium;
 }
 
 .btn-primary {
@@ -9,5 +9,5 @@
 }
 
 .btn-secondary {
-  @apply border border-amber-500 text-amber-700 hover:bg-amber-100;
+  @apply border border-amber-500 text-amber-600 hover:bg-amber-100;
 }
