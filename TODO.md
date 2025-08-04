@@ -15,7 +15,7 @@
   - family: gype of gills
   - stem type: 
 - better search:
-  - show search hit score
+  - show search hit probability and what matched
 # DONE
 - x button to clear search
 # DROPPED
