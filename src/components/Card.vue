@@ -23,7 +23,7 @@ defineProps<{
 
 <template>
   <a :href="shroom.url" target="_blank" :key="shroom.url"
-    class="grid grid-cols-[80px_1fr_auto] gap-2 items-center hover:bg-stone-100 rounded-lg">
+    class="grid grid-cols-[80px_1fr_auto] gap-2 md:gap-3 items-center hover:bg-stone-100 rounded-lg">
     <img :src="shroom.photo_url.replace('square', 'small')" alt="mushroom" loading="lazy"
       class="w-20 h-20 object-cover mr-4 rounded-lg" v-if="shroom.photo_url" />
     <div v-else class="w-20 h-20 bg-stone-200 mr-4 rounded-lg flex items-center justify-center">

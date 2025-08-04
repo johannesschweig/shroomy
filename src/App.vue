@@ -53,11 +53,13 @@ const filteredShrooms = computed(() => {
         ✕
       </button>
 
-      <button @click="applySearch"
-        class="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors cursor-pointer">
+      <button @click="applySearch" class="btn btn-primary">
         Suchen
       </button>
     </div>
+    <button @click="" class="btn btn-secondary">
+      Filter
+    </button>
     <div v-if="!search.trim()" class="text-stone-400">
       Gib einen Suchbegriff ein.
     </div>
@@ -68,7 +70,6 @@ const filteredShrooms = computed(() => {
     <div v-if="filteredShrooms.length > 0" class="flex flex-col gap-2">
       <div class="text-sm text-stone-500">{{ filteredShrooms.length }} Treffer</div>
       <Card v-for="shroom in filteredShrooms" :shroom="shroom" />
-      
     </div>
   </div>
 </template>
