@@ -7,7 +7,13 @@
   - month
   - diameter
   - rarity
-  - color: flesh, stem, gill edge, spore
+  - color: general, flesh, stem, gill edge, spore
+  - taste
+  - habitat: soil, meadow, wood, flowers
+  - color change after cutting
+  - other special features
+  - family: gype of gills
+  - stem type: 
 - better search:
   - show search hit score
 # DONE
