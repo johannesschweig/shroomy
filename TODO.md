@@ -1,8 +1,13 @@
 # TODO
+- Suche nach  Merkmalen
+- Suche in einer Gattung oder 
+- Bessere suche/Matches der lateinischen Namen
+- Seite mit den Gattungen und untergattungen
 - edibility in card: it is in the shrooms
 - there are mismatched images (e.g. boletus edulis)
 - some mushrooms are missing images (maybe use the ones from 123pilze)
 - check copyright for inaturalist images
+- data quality: cap color is an array. see apfeltäbling (rot, orange)
 - search with features
   - month
   - diameter
