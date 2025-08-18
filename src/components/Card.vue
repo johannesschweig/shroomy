@@ -11,9 +11,9 @@ defineProps<{
   shroom: {
     url: string
     photo_url?: string
+    taxon_name: string
     name: {
       de: string[]
-      lat: string[]
     },
     toxicity: 'toxic' | 'deadly' | null,
     edibility: 'inedible' | 'good' | 'excellent' | null
@@ -35,7 +35,7 @@ defineProps<{
         {{ shroom.name.de?.[0] || 'No Name' }}
       </div>
       <div class="text-sm md:text-base italic text-stone-500 max-w-[25ch] truncate">
-        {{ capitalize(shroom.name.lat[0] || 'No Latin Name' )}}
+        {{ shroom.taxon_name  || 'No Latin Name' }}
       </div>
     </div>
 

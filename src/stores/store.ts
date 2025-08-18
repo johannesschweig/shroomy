@@ -20,7 +20,7 @@ export const useStore = defineStore('store', {
         const matchesSearch =
           !q ||
           (shroom.name.de.join(' ').toLowerCase().includes(q)) ||
-          (shroom.name.lat.join(' ').toLowerCase().includes(q))
+          (shroom.taxon_name.toLowerCase().includes(q))
 
         // ✅ Filter condition
         const matchesFilters = Object.entries(state.filters).every(([key, values]) => {
@@ -56,7 +56,7 @@ export const useStore = defineStore('store', {
       this.search = query
     },
     setShrooms(data: any[]) {
-      this.shrooms = data
+      this.shrooms = data.filter(shroom => shroom.taxon_name)
     }
   }
 })
