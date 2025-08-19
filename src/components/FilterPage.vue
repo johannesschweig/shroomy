@@ -119,7 +119,7 @@ function updateSize(val: number) {
       <div>
         <h2 class="text-stone-700 mb-2">Größe (cm)</h2>
         <div class="flex items-center gap-2">
-          <input type="number" min="0" max="100" :value="selectedSize" @input="updateSize($event.target.valueAsNumber)"
+          <input type="number" min="0" max="100" :value="selectedSize" @input="updateSize(($event.target && ($event.target as HTMLInputElement).valueAsNumber) || 1)"
             class="border rounded px-2 py-1 w-24" placeholder="cm" />
           <span class="text-stone-500 text-sm">0 = beliebig</span>
         </div>

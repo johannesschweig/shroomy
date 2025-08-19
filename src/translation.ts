@@ -65,7 +65,7 @@ export const translations: Record<string, string> = {
   scaly: 'flockig',
   brittle_stem: 'brüchiger Stiel',
   fibrous: 'faserig',
-  speckled_stem: 'gefleckter Stiel',
+  speckled_stem: 'genatterter Stiel',
   spiny: 'stachelig',
   rooting_base: 'Wurzelbasis',
   hollow_stem: 'hohler Stiel',
