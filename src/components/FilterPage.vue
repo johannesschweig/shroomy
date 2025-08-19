@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useStore } from '@/stores/store'
 import { capitalize } from '@/utils'
 
@@ -12,15 +12,15 @@ const allOptions = {
   smell: ['anise', 'mushroomy', 'sweet', 'earthy', 'radish', 'marzipan', 'putrid', 'fishy', 'floral'],
   taste: ['mild', 'bitter', 'spicy', 'mushroomy', 'other'],
   cap: {
-    color: ['white', 'yellow', 'orange', 'red', 'pink', 'brown', 'black', 'gray', 'amber', 'green'],
+    color: ['white', 'yellow', 'orange', 'red', 'pink', 'brown', 'black', 'gray', 'green'],
     shape: ['round', 'flat', 'funnel', 'conical', 'coral-like', 'other'],
   },
   flesh: {
-    bruising_color: ['amber', 'brown', 'yellow', 'gray', 'green', 'red', 'none'],
-    color: ['white', 'yellow', 'orange', 'red', 'pink', 'brown', 'black', 'gray', 'amber', 'green'],
+    bruising_color: ['blue', 'brown', 'yellow', 'gray', 'green', 'red', 'none'],
+    color: ['white', 'yellow', 'orange', 'red', 'pink', 'brown', 'black', 'gray', 'green'],
   },
   gills: {
-    color: ['white', 'yellow', 'orange', 'red', 'pink', 'brown', 'black', 'gray', 'amber', 'green'],
+    color: ['white', 'yellow', 'orange', 'red', 'pink', 'brown', 'black', 'gray', 'green'],
     attachment: ['free', 'attached', 'decurrent'],
   },
   spore_color: ['white', 'yellow', 'red', 'brown', 'purple', 'black'],
@@ -60,8 +60,18 @@ const toggleFilter = (key: string, value: string) => {
   store.toggleFilter(key, value)
 }
 
-const labelFor = (key: string) =>
-  key.replace(/\./g, ' · ').replace(/_/g, ' ')
+// Month slider state
+const monthRange = ref([store.monthFrom ?? 1, store.monthTo ?? 12])
+function updateMonthRange([from, to]: [number, number]) {
+  monthRange.value = [from, to]
+  store.setMonthFilter(from, to)
+}
+
+const selectedSize = ref(store.sizeCm ?? 0)
+function updateSize(val: number) {
+  selectedSize.value = val
+  store.setSizeCm(val)
+}
 </script>
 
 <template>
@@ -69,12 +79,14 @@ const labelFor = (key: string) =>
     <div class="flex justify-between items-center p-4">
       <h1 class="text-xl">Filter</h1>
       <div class="flex gap-4">
-        <button v-if="Object.keys(store.filters).length" @click="store.clearFilters()" class="btn btn-secondary">Zurücksetzen</button>
+        <button v-if="Object.keys(store.filters).length" @click="store.clearFilters()"
+          class="btn btn-secondary">Zurücksetzen</button>
         <button @click="store.setFilterVisible(false)" class="btn btn-secondary">Schließen</button>
       </div>
     </div>
 
     <div class="p-4 space-y-6">
+      <!-- ...existing filter buttons... -->
       <div v-for="(options, key) in flatOptions" :key="key">
         <h2 class="text-stone-700 mb-2 capitalize">{{ $t(key) }}</h2>
         <div class="flex flex-wrap gap-2">
@@ -86,6 +98,30 @@ const labelFor = (key: string) =>
           ]">
             {{ capitalize($t(option)) }}
           </button>
+        </div>
+      </div>
+
+      <!-- Month slider -->
+      <div>
+        <h2 class="text-stone-700 mb-2">Monat</h2>
+        <div class="flex items-center gap-2">
+          <span>{{ monthRange[0] }}</span>
+          <input type="range" min="1" max="12" :value="monthRange[0]"
+            @input="updateMonthRange([($event.target as HTMLInputElement)?.valueAsNumber || 1, monthRange[1]])" />
+          <span>-</span>
+          <input type="range" min="1" max="12" :value="monthRange[1]"
+            @input="updateMonthRange([monthRange[0], ($event.target && ($event.target as HTMLInputElement).valueAsNumber) || 1])" />
+          <span>{{ monthRange[1] }}</span>
+        </div>
+      </div>
+
+      <!-- Size input -->
+      <div>
+        <h2 class="text-stone-700 mb-2">Größe (cm)</h2>
+        <div class="flex items-center gap-2">
+          <input type="number" min="0" max="100" :value="selectedSize" @input="updateSize($event.target.valueAsNumber)"
+            class="border rounded px-2 py-1 w-24" placeholder="cm" />
+          <span class="text-stone-500 text-sm">0 = beliebig</span>
         </div>
       </div>
     </div>

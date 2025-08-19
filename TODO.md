@@ -12,6 +12,7 @@
   - show search hit probability and what matched
   - Suche in einer Gattung oder Bessere suche/Matches der lateinischen Namen
 # DONE
+- German translation for filter page
 - x button to clear search
 - edibility in card: it is in the shrooms
 - search with features

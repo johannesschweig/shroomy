@@ -6,7 +6,10 @@ export const useStore = defineStore('store', {
     filterVisible: false,
     filters: {} as Record<string, string[]>,
     search: '' as string,
-    shrooms: [] as any[] // replace `any[]` with your Mushroom type if available
+    shrooms: [] as any[],
+    monthFrom: 1,
+    monthTo: 12,
+    sizeCm: 0 // 0 means "not set"
   }),
   getters: {
     totalFilters(state) {
@@ -16,15 +19,15 @@ export const useStore = defineStore('store', {
       const q = state.search.trim().toLowerCase()
 
       return state.shrooms.filter(shroom => {
-        // ✅ Search condition
+        // Search condition
         const matchesSearch =
           !q ||
           (shroom.name.de.join(' ').toLowerCase().includes(q)) ||
           (shroom.taxon_name.toLowerCase().includes(q))
 
-        // ✅ Filter condition
+        // Attribute filters
         const matchesFilters = Object.entries(state.filters).every(([key, values]) => {
-          if (!values.length) return true // skip empty
+          if (!values.length) return true
           const val = getNestedValue(shroom, key)
           if (Array.isArray(val)) {
             return values.some(v => val.includes(v))
@@ -32,7 +35,21 @@ export const useStore = defineStore('store', {
           return values.includes(val)
         })
 
-        return matchesSearch && matchesFilters
+        // Month filter
+        const season = shroom.season || { from: 1, to: 12 }
+        const matchesMonth =
+          season.from <= state.monthTo && season.to >= state.monthFrom
+
+        // Size filter
+        const size = shroom.size || { min_diameter_cm: 1, max_diameter_cm: 100 }
+        let matchesSize = true
+        if (state.sizeCm > 0) {
+          matchesSize =
+            state.sizeCm >= size.min_diameter_cm &&
+            state.sizeCm <= size.max_diameter_cm
+        }
+
+        return matchesSearch && matchesFilters && matchesMonth && matchesSize
       })
     }
   },
@@ -48,6 +65,9 @@ export const useStore = defineStore('store', {
     },
     clearFilters() {
       this.filters = {}
+      this.monthFrom = 1
+      this.monthTo = 12
+      this.sizeCm = 0
     },
     setFilterVisible(visible: boolean) {
       this.filterVisible = visible
@@ -57,11 +77,18 @@ export const useStore = defineStore('store', {
     },
     setShrooms(data: any[]) {
       this.shrooms = data.filter(shroom => shroom.taxon_name)
+    },
+    setMonthFilter(from: number, to: number) {
+      this.monthFrom = from
+      this.monthTo = to
+    },
+    setSizeCm(val: number) {
+      this.sizeCm = val
     }
   }
 })
 
-// ✅ Helper for nested keys like "cap.color" or "gills.attachment"
+// Helper for nested keys like "cap.color" or "gills.attachment"
 function getNestedValue(obj: any, path: string) {
   return path.split('.').reduce((acc, key) => (acc ? acc[key] : undefined), obj)
 }

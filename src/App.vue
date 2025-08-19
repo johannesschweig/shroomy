@@ -66,7 +66,7 @@ function clearSearch() {
 
     <!-- Results Wrapper -->
     <div class="flex-1 overflow-y-auto">
-      <div v-if="store.filteredShrooms.length > 0 && store.filteredShrooms.length < 3000">
+      <div v-if="!store.filterVisible && store.filteredShrooms.length > 0 && store.filteredShrooms.length < 3000">
         <div class="text-sm text-stone-500 mb-2">
           {{ store.filteredShrooms.length }} Treffer
         </div>
