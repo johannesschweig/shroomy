@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useStore } from '@/stores/store'
+import { capitalize } from '@/utils'
 
 const store = useStore()
 
@@ -75,15 +76,15 @@ const labelFor = (key: string) =>
 
     <div class="p-4 space-y-6">
       <div v-for="(options, key) in flatOptions" :key="key">
-        <h2 class="text-stone-700 mb-2 capitalize">{{ labelFor(key) }}</h2>
+        <h2 class="text-stone-700 mb-2 capitalize">{{ $t(key) }}</h2>
         <div class="flex flex-wrap gap-2">
           <button v-for="option in options" :key="`${key}:${option}`" @click="toggleFilter(key, option)" :class="[
-            'px-3 py-1 text-sm rounded-full border',
+            'px-3 py-1 text-sm rounded-full border cursor-pointer',
             getFilter(key).includes(option)
               ? 'bg-amber-600 text-white border-amber-600'
               : 'text-stone-600 border-stone-300'
           ]">
-            {{ option }}
+            {{ capitalize($t(option)) }}
           </button>
         </div>
       </div>
