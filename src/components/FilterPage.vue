@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useStore } from '@/stores/store'
-import { capitalize } from '@/utils'
+import FilterOptionButton from './FilterOptionButton.vue'
 
 const store = useStore()
 
@@ -90,14 +90,8 @@ function updateSize(val: number) {
       <div v-for="(options, key) in flatOptions" :key="key">
         <h2 class="text-stone-700 mb-2 capitalize">{{ $t(key) }}</h2>
         <div class="flex flex-wrap gap-2">
-          <button v-for="option in options" :key="`${key}:${option}`" @click="toggleFilter(key, option)" :class="[
-            'px-3 py-1 text-sm rounded-full border cursor-pointer',
-            getFilter(key).includes(option)
-              ? 'bg-amber-600 text-white border-amber-600'
-              : 'text-stone-600 border-stone-300'
-          ]">
-            {{ capitalize($t(option)) }}
-          </button>
+          <FilterOptionButton v-for="option in options" :key="`${key}:${option}`" :filter-key="key"
+            :option-value="option" />
         </div>
       </div>
 
@@ -119,7 +113,8 @@ function updateSize(val: number) {
       <div>
         <h2 class="text-stone-700 mb-2">Größe (cm)</h2>
         <div class="flex items-center gap-2">
-          <input type="number" min="0" max="100" :value="selectedSize" @input="updateSize(($event.target && ($event.target as HTMLInputElement).valueAsNumber) || 1)"
+          <input type="number" min="0" max="100" :value="selectedSize"
+            @input="updateSize(($event.target && ($event.target as HTMLInputElement).valueAsNumber) || 1)"
             class="border rounded px-2 py-1 w-24" placeholder="cm" />
           <span class="text-stone-500 text-sm">0 = beliebig</span>
         </div>
