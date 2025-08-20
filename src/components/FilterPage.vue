@@ -54,11 +54,6 @@ function flattenOptions(
 
 const flatOptions = computed<FlatOptions>(() => flattenOptions(allOptions))
 
-const getFilter = (key: string) => store.filters[key] || []
-
-const toggleFilter = (key: string, value: string) => {
-  store.toggleFilter(key, value)
-}
 
 // Month slider state
 const monthRange = ref([store.monthFrom ?? 1, store.monthTo ?? 12])
@@ -75,9 +70,13 @@ function updateSize(val: number) {
 </script>
 
 <template>
-  <div class="fixed inset-0 bg-white z-50 overflow-y-auto max-w-3xl mx-auto">
+  <div class="fixed inset-0 bg-white z-50  max-w-3xl mx-auto">
     <div class="flex justify-between items-center p-4">
-      <h1 class="text-xl">Filter</h1>
+      <div>
+        <h1 class="text-xl">Filter</h1>
+        <span v-if="store.filteredShrooms.length < 3000" class="text-sm text-stone-500">{{ store.filteredShrooms.length
+          }} Ergebisse</span>
+      </div>
       <div class="flex gap-4">
         <button v-if="Object.keys(store.filters).length" @click="store.clearFilters()"
           class="btn btn-secondary">Zurücksetzen</button>
@@ -85,38 +84,40 @@ function updateSize(val: number) {
       </div>
     </div>
 
-    <div class="p-4 space-y-6">
-      <!-- ...existing filter buttons... -->
-      <div v-for="(options, key) in flatOptions" :key="key">
-        <h2 class="text-stone-700 mb-2 capitalize">{{ $t(key) }}</h2>
-        <div class="flex flex-wrap gap-2">
-          <FilterOptionButton v-for="option in options" :key="`${key}:${option}`" :filter-key="key"
-            :option-value="option" />
+    <div class="overflow-y-auto h-8/10">
+      <div class="p-4 space-y-6">
+        <!-- ...existing filter buttons... -->
+        <div v-for="(options, key) in flatOptions" :key="key">
+          <h2 class="text-stone-700 mb-2 capitalize">{{ $t(key) }}</h2>
+          <div class="flex flex-wrap gap-2">
+            <FilterOptionButton v-for="option in options" :key="`${key}:${option}`" :filter-key="key"
+              :option-value="option" />
+          </div>
         </div>
-      </div>
 
-      <!-- Month slider -->
-      <div>
-        <h2 class="text-stone-700 mb-2">Monat</h2>
-        <div class="flex items-center gap-2">
-          <span>{{ monthRange[0] }}</span>
-          <input type="range" min="1" max="12" :value="monthRange[0]"
-            @input="updateMonthRange([($event.target as HTMLInputElement)?.valueAsNumber || 1, monthRange[1]])" />
-          <span>-</span>
-          <input type="range" min="1" max="12" :value="monthRange[1]"
-            @input="updateMonthRange([monthRange[0], ($event.target && ($event.target as HTMLInputElement).valueAsNumber) || 1])" />
-          <span>{{ monthRange[1] }}</span>
+        <!-- Month slider -->
+        <div>
+          <h2 class="text-stone-700 mb-2">Monat</h2>
+          <div class="flex items-center gap-2">
+            <span>{{ monthRange[0] }}</span>
+            <input type="range" min="1" max="12" :value="monthRange[0]"
+              @input="updateMonthRange([($event.target as HTMLInputElement)?.valueAsNumber || 1, monthRange[1]])" />
+            <span>-</span>
+            <input type="range" min="1" max="12" :value="monthRange[1]"
+              @input="updateMonthRange([monthRange[0], ($event.target && ($event.target as HTMLInputElement).valueAsNumber) || 1])" />
+            <span>{{ monthRange[1] }}</span>
+          </div>
         </div>
-      </div>
 
-      <!-- Size input -->
-      <div>
-        <h2 class="text-stone-700 mb-2">Größe (cm)</h2>
-        <div class="flex items-center gap-2">
-          <input type="number" min="0" max="100" :value="selectedSize"
-            @input="updateSize(($event.target && ($event.target as HTMLInputElement).valueAsNumber) || 1)"
-            class="border rounded px-2 py-1 w-24" placeholder="cm" />
-          <span class="text-stone-500 text-sm">0 = beliebig</span>
+        <!-- Size input -->
+        <div>
+          <h2 class="text-stone-700 mb-2">Größe (cm)</h2>
+          <div class="flex items-center gap-2">
+            <input type="number" min="0" max="100" :value="selectedSize"
+              @input="updateSize(($event.target && ($event.target as HTMLInputElement).valueAsNumber) || 1)"
+              class="border rounded px-2 py-1 w-24" placeholder="cm" />
+            <span class="text-stone-500 text-sm">0 = beliebig</span>
+          </div>
         </div>
       </div>
     </div>
