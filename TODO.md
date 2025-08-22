@@ -5,9 +5,6 @@
   - more fine grained edibility from the other file
   - 5% of latin names/pictures are missing from inaturalist
   - eichenrotkappe/espenrotkappe have the same image
-- search with features
-  - month
-  - diameter
 - better search:
   - show search hit probability and what matched
   - Suche in einer Gattung oder Bessere suche/Matches der lateinischen Namen
@@ -33,3 +30,6 @@
   - latin names are scrambled
   - some mushrooms are missing images (maybe use the ones from 123pilze)
 # DROPPED
+- search with features
+  - month
+  - diameter
