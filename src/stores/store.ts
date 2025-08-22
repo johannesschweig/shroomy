@@ -52,25 +52,27 @@ export const useStore = defineStore('store', {
         return matchesSearch && matchesFilters && matchesMonth && matchesSize
       })
     },
-    getMatches: (state) => (attributePath: string, value?: string) => {
-      const keys = attributePath.split('.')
+    getMatches() {
+      return (attributePath: string, value?: string) => {
+        const keys = attributePath.split('.')
 
-      return state.filteredShrooms.filter((shroom: any) => {
-        let current = shroom
-        for (const key of keys) {
-          if (current && typeof current === 'object') {
-            current = current[key]
-          } else {
-            return false
+        return this.filteredShrooms.filter((shroom: any) => {
+          let current = shroom
+          for (const key of keys) {
+            if (current && typeof current === 'object') {
+              current = current[key]
+            } else {
+              return false
+            }
           }
-        }
 
-        if (Array.isArray(current)) {
-          return value ? current.includes(value) : current.length > 0
-        }
+          if (Array.isArray(current)) {
+            return value ? current.includes(value) : current.length > 0
+          }
 
-        return value ? current === value : current != null
-      })
+          return value ? current === value : current != null
+        })
+      }
     }
 
   },
