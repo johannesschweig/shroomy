@@ -11,6 +11,8 @@
 - better search:
   - show search hit probability and what matched
   - Suche in einer Gattung oder Bessere suche/Matches der lateinischen Namen
+- xs: lamellenfarbe: change to Röhrenfarbe if poroid
+
 # DONE
 - deemphasize irrelevant filters in a search
 - German translation for filter page

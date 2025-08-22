@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { capitalize } from '@/utils'
 import MushroomIcon from '@/assets/mushroom.svg'
 import ToxicIcon from '@/assets/toxic.svg'
 import DeadlyIcon from '@/assets/deadly.svg'

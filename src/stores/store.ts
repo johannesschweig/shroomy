@@ -25,14 +25,15 @@ export const useStore = defineStore('store', {
           (shroom.name.de.join(' ').toLowerCase().includes(q)) ||
           (shroom.taxon_name.toLowerCase().includes(q))
 
-        // Attribute filters
+        // Attribute filters (must match ALL values for a given key)
         const matchesFilters = Object.entries(state.filters).every(([key, values]) => {
           if (!values.length) return true
           const val = getNestedValue(shroom, key)
+
           if (Array.isArray(val)) {
-            return values.some(v => val.includes(v))
+            return values.every(v => val.includes(v)) // all selected values must be present
           }
-          return values.includes(val)
+          return values.every(v => v === val) // must match exactly if scalar
         })
 
         // Month filter
@@ -51,7 +52,8 @@ export const useStore = defineStore('store', {
 
         return matchesSearch && matchesFilters && matchesMonth && matchesSize
       })
-    },
+    }
+    ,
     getMatches() {
       return (attributePath: string, value?: string) => {
         const keys = attributePath.split('.')

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useStore } from '@/stores/store'
+import TypeFilter from './TypeFilter.vue'
+import ColorFilter from './ColorFilter.vue'
 import FilterOptionButton from './FilterOptionButton.vue'
 
 const store = useStore()
@@ -12,16 +14,19 @@ const allOptions = {
   smell: ['anise', 'mushroomy', 'sweet', 'earthy', 'radish', 'marzipan', 'putrid', 'fishy', 'floral'],
   taste: ['mild', 'bitter', 'spicy', 'mushroomy', 'other'],
   cap: {
-    color: ['white', 'yellow', 'orange', 'red', 'pink', 'brown', 'black', 'gray', 'green'],
+    color: ['white', 'yellow', 'orange', 'red', 'pink', 'green', 'blue', 'brown', 'black', 'gray'],
     shape: ['round', 'flat', 'funnel', 'conical', 'coral-like', 'other'],
   },
-  flesh: {
-    bruising_color: ['blue', 'brown', 'yellow', 'gray', 'green', 'red', 'none'],
-    color: ['white', 'yellow', 'orange', 'red', 'pink', 'brown', 'black', 'gray', 'green'],
-  },
   gills: {
-    color: ['white', 'yellow', 'orange', 'red', 'pink', 'brown', 'black', 'gray', 'green'],
+    color: ['white', 'yellow', 'orange', 'red', 'pink', 'green', 'blue', 'brown', 'black', 'gray'],
     attachment: ['free', 'attached', 'decurrent'],
+  },
+  stem: {
+    color: ['white', 'yellow', 'orange', 'red', 'pink', 'green', 'blue', 'brown', 'black', 'gray'],
+  },
+  flesh: {
+    bruising_color: ['yellow', 'red', 'green', 'blue', 'brown', 'gray', 'none'],
+    color: ['white', 'yellow', 'orange', 'red', 'pink', 'green', 'blue', 'brown', 'black', 'gray'],
   },
   spore_color: ['white', 'yellow', 'red', 'brown', 'purple', 'black'],
   habitat: ['wood', 'soil', 'meadow'],
@@ -34,44 +39,12 @@ const allOptions = {
   ]
 } as const
 
-type FlatOptions = Record<string, readonly string[]>
 
-function flattenOptions(
-  obj: Record<string, any>,
-  prefix = ''
-): FlatOptions {
-  const out: Record<string, readonly string[]> = {}
-  for (const [k, v] of Object.entries(obj)) {
-    const key = prefix ? `${prefix}.${k}` : k
-    if (Array.isArray(v)) {
-      out[key] = v
-    } else if (v && typeof v === 'object') {
-      Object.assign(out, flattenOptions(v, key))
-    }
-  }
-  return out
-}
-
-const flatOptions = computed<FlatOptions>(() => flattenOptions(allOptions))
-
-
-// Month slider state
-const monthRange = ref([store.monthFrom ?? 1, store.monthTo ?? 12])
-function updateMonthRange([from, to]: [number, number]) {
-  monthRange.value = [from, to]
-  store.setMonthFilter(from, to)
-}
-
-const selectedSize = ref(store.sizeCm ?? 0)
-function updateSize(val: number) {
-  selectedSize.value = val
-  store.setSizeCm(val)
-}
 </script>
 
 <template>
   <div class="fixed inset-0 bg-white z-50  max-w-3xl mx-auto">
-    <div class="flex justify-between items-center p-4">
+    <div class="flex justify-between items-center p-4 h-21">
       <div>
         <h1 class="text-xl">Filter</h1>
         <span v-if="store.filteredShrooms.length < 3000" class="text-sm text-stone-500">{{ store.filteredShrooms.length
@@ -83,42 +56,25 @@ function updateSize(val: number) {
         <button @click="store.setFilterVisible(false)" class="btn btn-secondary">Schließen</button>
       </div>
     </div>
-
+    <!-- {{ store.filters }} -->
     <div class="overflow-y-auto h-8/10">
       <div class="p-4 space-y-6">
-        <!-- ...existing filter buttons... -->
-        <div v-for="(options, key) in flatOptions" :key="key">
-          <h2 class="text-stone-700 mb-2 capitalize">{{ $t(key) }}</h2>
-          <div class="flex flex-wrap gap-2">
-            <FilterOptionButton v-for="option in options" :key="`${key}:${option}`" :filter-key="key"
-              :option-value="option" />
-          </div>
-        </div>
-
-        <!-- Month slider -->
+        <TypeFilter />
+        <ColorFilter type="cap.color" />
         <div>
-          <h2 class="text-stone-700 mb-2">Monat</h2>
-          <div class="flex items-center gap-2">
-            <span>{{ monthRange[0] }}</span>
-            <input type="range" min="1" max="12" :value="monthRange[0]"
-              @input="updateMonthRange([($event.target as HTMLInputElement)?.valueAsNumber || 1, monthRange[1]])" />
-            <span>-</span>
-            <input type="range" min="1" max="12" :value="monthRange[1]"
-              @input="updateMonthRange([monthRange[0], ($event.target && ($event.target as HTMLInputElement).valueAsNumber) || 1])" />
-            <span>{{ monthRange[1] }}</span>
-          </div>
+          <ColorFilter type="gills.color" />
+          <div class="text-stone-700 text-sm mt-3 mb-2">Merkmale</div>
+          <FilterOptionButton filterKey="traits" optionValue="milky" />
         </div>
-
-        <!-- Size input -->
         <div>
-          <h2 class="text-stone-700 mb-2">Größe (cm)</h2>
-          <div class="flex items-center gap-2">
-            <input type="number" min="0" max="100" :value="selectedSize"
-              @input="updateSize(($event.target && ($event.target as HTMLInputElement).valueAsNumber) || 1)"
-              class="border rounded px-2 py-1 w-24" placeholder="cm" />
-            <span class="text-stone-500 text-sm">0 = beliebig</span>
+        <ColorFilter type="stem.color" />
+          <div class="text-stone-700 text-sm mt-3 mb-2">Merkmale</div>
+          <div class="flex gap-1 flex-row flex-wrap">
+            <FilterOptionButton v-for='option in ["ring", "brittle_stem", "bulbous_base", "fibrous", "netted_stem", "scaly", "speckled_stem", "hollow_stem"]' filterKey="traits" :optionValue="option" />
           </div>
         </div>
+        <ColorFilter type="flesh.color" />
+        <ColorFilter type="flesh.bruising_color" :colors="[...allOptions.flesh.bruising_color]" />
       </div>
     </div>
   </div>
