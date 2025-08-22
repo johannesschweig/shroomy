@@ -2,6 +2,8 @@
 import { ref } from 'vue'
 import { useStore } from '@/stores/store'
 import { computed } from 'vue'
+import GillsIcon from '@/assets/gills.svg'
+import PoroidIcon from '@/assets/poroid.svg'
 
 const store = useStore()
 
@@ -38,6 +40,7 @@ const selectedType = computed(() => store.filters["traits"]?.includes(POROID) ? 
           ? 'bg-amber-600 text-white border-amber-600'
           : 'text-stone-600 border-stone-300',
       ]">
+        <GillsIcon class="w-8 h-8 mr-2 text-stone-500" />
         Lamellen
       </button>
       <button @click="selectType(POROID)" :class="[
@@ -46,6 +49,7 @@ const selectedType = computed(() => store.filters["traits"]?.includes(POROID) ? 
           ? 'bg-amber-600 text-white border-amber-600'
           : 'text-stone-600 border-stone-300',
       ]">
+        <PoroidIcon class="w-8 h-8 mr-2 text-stone-500" />
         Röhren
       </button>
     </div>

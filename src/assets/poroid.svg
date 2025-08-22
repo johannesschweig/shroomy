@@ -1,0 +1,33 @@
+<svg viewBox="0 0 65 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+  <path
+    d="M0.394534 44C0.394535 35.5131 3.76595 27.3737 9.76712 21.3726C15.7683 15.3714 23.9076 12 32.3945 12C40.8815 12 49.0208 15.3714 55.022 21.3726C61.0231 27.3737 64.3945 35.5131 64.3945 44L32.3945 44L0.394534 44Z"
+    fill="white" stroke="currentColor" stroke-opacity="0.7" stroke-width="2"
+    mask="url(#path-1-inside-1_1632_648)" />
+  <path
+    d="M24.3945 44C24.3945 41.8783 25.2374 39.8434 26.7377 38.3431C28.238 36.8429 30.2728 36 32.3945 36C34.5163 36 36.5511 36.8429 38.0514 38.3431C39.5517 39.8434 40.3945 41.8783 40.3945 44L32.3945 44L24.3945 44Z"
+    fill="currentColor" />
+  <circle cx="12.5" cy="24.5" r="1.5" fill="currentColor" />
+  <circle cx="44.5" cy="21.5" r="1.5" fill="currentColor" />
+  <circle cx="57.5" cy="33.5" r="1.5" fill="currentColor" />
+  <circle cx="13.5" cy="38.5" r="1.5" fill="currentColor" />
+  <circle cx="32.5" cy="24.5" r="1.5" fill="currentColor" />
+  <circle cx="33.5" cy="18.5" r="1.5" fill="currentColor" />
+  <circle cx="41.5" cy="33.5" r="1.5" fill="currentColor" />
+  <circle cx="48.5" cy="33.5" r="1.5" fill="currentColor" />
+  <circle cx="47.5" cy="27.5" r="1.5" fill="currentColor" />
+  <circle cx="44.5" cy="39.5" r="1.5" fill="currentColor" />
+  <circle cx="21.5" cy="20.5" r="1.5" fill="currentColor" />
+  <circle cx="32.5" cy="33.5" r="1.5" fill="currentColor" />
+  <circle cx="7.5" cy="32.5" r="1.5" fill="currentColor" />
+  <circle cx="5.5" cy="39.5" r="1.5" fill="currentColor" />
+  <circle cx="26.5" cy="15.5" r="1.5" fill="currentColor" />
+  <circle cx="39.5" cy="26.5" r="1.5" fill="currentColor" />
+  <circle cx="53.5" cy="39.5" r="1.5" fill="currentColor" />
+  <circle cx="25.5" cy="26.5" r="1.5" fill="currentColor" />
+  <circle cx="16.5" cy="30.5" r="1.5" fill="currentColor" />
+  <circle cx="23.5" cy="33.5" r="1.5" fill="currentColor" />
+  <circle cx="21.5" cy="39.5" r="1.5" fill="currentColor" />
+  <circle cx="40.5" cy="16.5" r="1.5" fill="currentColor" />
+  <circle cx="51.5" cy="23.5" r="1.5" fill="currentColor" />
+</svg>

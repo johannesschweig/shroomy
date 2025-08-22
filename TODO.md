@@ -1,4 +1,7 @@
 # TODO
+- icons for the filter page
+- detail page for mushroom
+  - routing: landing, filter, mushroom page
 - Seite mit den Gattungen und untergattungen
 - check copyright for inaturalist images
 - data quality:
