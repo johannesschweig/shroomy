@@ -3,6 +3,9 @@ import { useStore } from '@/stores/store'
 import { toTwColorClass } from '@/utils'
 import { useI18n } from 'vue-i18n'
 import CapIcon from '@/assets/cap.svg'
+import GillsColorIcon from '@/assets/gill-color.svg'
+import StemIcon from '@/assets/stem.svg'
+import FleshIcon from '@/assets/flesh.svg'
 
 const { t } = useI18n()
 const store = useStore()
@@ -43,6 +46,9 @@ const colors: string[] = props.colors ? props.colors : DEFAULT_COLORS
   <div>
     <h2 class="text-stone-700 mb-2 flex items-center gap-2">
       <CapIcon v-if="props.type === 'cap.color'" class="w-8 h-8 text-stone-500" />
+      <GillsColorIcon v-if="props.type === 'gills.color'" class="w-8 h-8 text-stone-500" />
+      <StemIcon v-if="props.type === 'stem.color'" class="w-8 h-8 text-stone-500" />
+      <FleshIcon v-if="props.type === 'flesh.color' || props.type === 'flesh.bruising_color'" class="w-8 h-8 text-stone-500" />
       {{ t(props.type) }}
       <span class="text-sm text-stone-500 italic inline-block">{{ subtitle() }}</span>
     </h2>

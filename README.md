@@ -1,6 +1,6 @@
 # shroomy
 
-A mushroom search which is fast and mobile friendly. Check it out under shroomy.surge.sh.
+A mushroom search which is fast and mobile friendly. Check it out under shroomy.vercel.app.
 
 ## Project Setup
 
