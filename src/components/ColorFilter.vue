@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useStore } from '@/stores/store'
-import { toTwColorClass } from '@/utils'
+import { toTwColorClass, toHexColor } from '@/utils'
 import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
 import CapIcon from '@/assets/cap.svg'
 import GillsColorIcon from '@/assets/gill-color.svg'
 import StemIcon from '@/assets/stem.svg'
@@ -40,8 +41,10 @@ const isSelected = (color: string) => {
   return store.filters[props.type]?.includes(color)
 }
 
+const selectedColors = computed(() => store.filters[props.type] || [])
+
 const subtitle = () => {
-  var filters = store.filters[props.type] || []
+  var filters = selectedColors.value
   if (filters.length === 0) {
     return ''
   } else {
@@ -50,12 +53,17 @@ const subtitle = () => {
 }
 
 const colors: string[] = props.colors ? props.colors : DEFAULT_COLORS
+
+const svgStyle = computed(() => ({
+  '--primary': toHexColor(selectedColors.value[0]), // selected color
+  '--secondary': '#78716c', // grey: bg-stone-500
+}))
 </script>
 
 <template>
   <div>
     <h2 class="text-stone-700 mb-2 flex items-center gap-2">
-      <component v-if="SelectedIcon" :is="SelectedIcon" class="w-8 h-8 text-stone-500" />
+      <component v-if="SelectedIcon" :is="SelectedIcon" class="w-8 h-8" :style="svgStyle" />
       {{ t(props.type) }}
       <span class="text-sm text-stone-500 italic inline-block">{{ subtitle() }}</span>
     </h2>

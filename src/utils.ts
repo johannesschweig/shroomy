@@ -13,8 +13,29 @@ const TW_COLOR_MAP: Record<string, string> = {
   brown: 'bg-[#8B4513]',
 };
 
+const HEX_COLOR_MAP: Record<string, string> = {
+  none: '#FFFFFF',
+  white: '#FFFFFF',
+  black: '#000000',
+  yellow: '#FBBF24',
+  orange: '#F97316',
+  red: '#EF4444',
+  pink: '#EC4899',
+  blue: '#2563EB',
+  green: '#16A34A',
+  grey: '#4B5563',
+  gray: '#4B5563',
+  brown: '#8B4513',
+};
+
 export function toTwColorClass(
   color: string
 ): string {
   return TW_COLOR_MAP[color]
+}
+
+export function toHexColor(
+  color: string
+): string {
+  return HEX_COLOR_MAP[color] || '#78716c'
 }
