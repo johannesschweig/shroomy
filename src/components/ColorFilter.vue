@@ -20,6 +20,16 @@ const props = defineProps({
   }
 })
 
+const iconMap: Record<string, any> = {
+  'cap.color': CapIcon,
+  'gills.color': GillsColorIcon,
+  'stem.color': StemIcon,
+  'flesh.color': FleshIcon,
+  'flesh.bruising_color': FleshIcon
+}
+
+const SelectedIcon = iconMap[props.type] || null
+
 const DEFAULT_COLORS: string[] = ['white', 'yellow', 'orange', 'red', 'pink', 'blue', 'green', 'brown', 'grey', 'black']
 
 const toggleColor = (color: string) => {
@@ -45,10 +55,7 @@ const colors: string[] = props.colors ? props.colors : DEFAULT_COLORS
 <template>
   <div>
     <h2 class="text-stone-700 mb-2 flex items-center gap-2">
-      <CapIcon v-if="props.type === 'cap.color'" class="w-8 h-8 text-stone-500" />
-      <GillsColorIcon v-if="props.type === 'gills.color'" class="w-8 h-8 text-stone-500" />
-      <StemIcon v-if="props.type === 'stem.color'" class="w-8 h-8 text-stone-500" />
-      <FleshIcon v-if="props.type === 'flesh.color' || props.type === 'flesh.bruising_color'" class="w-8 h-8 text-stone-500" />
+      <component v-if="SelectedIcon" :is="SelectedIcon" class="w-8 h-8 text-stone-500" />
       {{ t(props.type) }}
       <span class="text-sm text-stone-500 italic inline-block">{{ subtitle() }}</span>
     </h2>
