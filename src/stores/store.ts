@@ -3,7 +3,6 @@ import { computed, ref } from 'vue'
 
 export const useStore = defineStore('store', {
   state: () => ({
-    filterVisible: false,
     filters: {} as Record<string, string[]>,
     search: '' as string,
     shrooms: [] as any[],
@@ -93,9 +92,6 @@ export const useStore = defineStore('store', {
       this.monthFrom = 1
       this.monthTo = 12
       this.sizeCm = 0
-    },
-    setFilterVisible(visible: boolean) {
-      this.filterVisible = visible
     },
     setSearch(query: string) {
       this.search = query

@@ -53,7 +53,7 @@ const allOptions = {
       <div class="flex gap-4">
         <button v-if="Object.keys(store.filters).length" @click="store.clearFilters()"
           class="btn btn-secondary">Zurücksetzen</button>
-        <button @click="store.setFilterVisible(false)" class="btn btn-secondary">Schließen</button>
+        <router-link to="/" class="btn btn-secondary">Schließen</router-link>
       </div>
     </div>
     <!-- {{ store.filters }} -->

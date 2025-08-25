@@ -1,5 +1,4 @@
 # TODO
-- icons for the filter page
 - detail page for mushroom
   - routing: landing, filter, mushroom page
 - Seite mit den Gattungen und untergattungen
@@ -14,6 +13,7 @@
 - xs: lamellenfarbe: change to Röhrenfarbe if poroid
 
 # DONE
+- icons for the filter page
 - deemphasize irrelevant filters in a search
 - German translation for filter page
 - x button to clear search

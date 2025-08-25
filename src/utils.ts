@@ -1,3 +1,5 @@
+import type Shroom from '@/types/Shroom'
+
 const TW_COLOR_MAP: Record<string, string> = {
   none: 'bg-white',
   white: 'bg-white',
@@ -38,4 +40,22 @@ export function toHexColor(
   color: string
 ): string {
   return HEX_COLOR_MAP[color] || '#78716c'
+}
+
+function seededRandom(seed: number) {
+  let value = seed
+  return function () {
+    value = (value * 1664525 + 1013904223) % 4294967296
+    return value / 4294967296
+  }
+}
+
+export function getRandomSeededSample(arr: Array<Shroom>, sampleSize: number) {
+  // seed
+  const now = new Date()
+  const dayFrom1980 = Math.floor(now.getTime() / (1000 * 60 * 60 * 24))
+
+  const random = seededRandom(dayFrom1980);
+  const shuffled = [...arr].sort(() => random() - 0.5);
+  return shuffled.slice(0, sampleSize);
 }
