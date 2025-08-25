@@ -8,12 +8,11 @@ const routes = [
     path: '/',
     name: 'home',
     component: Home,
-    meta: { keepAlive: true }
   },
   {
     path: '/filter',
     name: 'filter',
-    component: FilterPage
+    component: FilterPage,
   },
   {
     path: '/mushroom/:id',

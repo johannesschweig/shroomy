@@ -5,23 +5,15 @@ import DeadlyIcon from '@/assets/deadly.svg'
 import EdibleGoodIcon from '@/assets/edible-good.svg'
 import EdibleExcellentIcon from '@/assets/edible-excellent.svg'
 import InedibleIcon from '@/assets/inedible.svg'
+import type Shroom from '@/types/Shroom'
 
 defineProps<{
-  shroom: {
-    url: string
-    photo_url?: string
-    taxon_name: string
-    name: {
-      de: string[]
-    },
-    toxicity: 'toxic' | 'deadly' | null,
-    edibility: 'inedible' | 'good' | 'excellent' | null
-  }
+  shroom: Shroom
 }>()
 </script>
 
 <template>
-  <a :href="shroom.url" target="_blank" :key="shroom.url"
+  <router-link :to="`/mushroom/${shroom.taxon_id}`" :key="shroom.url"
     class="grid grid-cols-[80px_1fr_auto] gap-2 md:gap-3 items-center hover:bg-stone-100 rounded-lg">
     <img :src="shroom.photo_url.replace('square', 'small')" alt="mushroom" loading="lazy"
       class="w-20 h-20 object-cover mr-4 rounded-lg" v-if="shroom.photo_url" />
@@ -34,7 +26,7 @@ defineProps<{
         {{ shroom.name.de?.[0] || 'No Name' }}
       </div>
       <div class="text-sm md:text-base italic text-stone-500 max-w-[25ch] truncate">
-        {{ shroom.taxon_name  || 'No Latin Name' }}
+        {{ shroom.taxon_name || 'No Latin Name' }}
       </div>
     </div>
 
@@ -42,9 +34,9 @@ defineProps<{
     <div class="hidden md:block mx-4 w-8 h-8">
       <ToxicIcon class="text-amber-700" v-if="shroom.toxicity === 'toxic'" />
       <DeadlyIcon class="text-red-700" v-if="shroom.toxicity === 'deadly'" />
-      <InedibleIcon class="text-stone-700" v-if="shroom.edibility === 'inedible'"/>
-      <EdibleGoodIcon class="text-emerald-700" v-if="shroom.edibility === 'good'"/>
-      <EdibleExcellentIcon class="text-emerald-800" v-if="shroom.edibility === 'excellent'"/>
+      <InedibleIcon class="text-stone-700" v-if="shroom.edibility === 'inedible'" />
+      <EdibleGoodIcon class="text-emerald-700" v-if="shroom.edibility === 'good'" />
+      <EdibleExcellentIcon class="text-emerald-800" v-if="shroom.edibility === 'excellent'" />
     </div>
-  </a>
+  </router-link>
 </template>

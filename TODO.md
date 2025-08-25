@@ -1,18 +1,21 @@
 # TODO
-- detail page for mushroom
-  - routing: landing, filter, mushroom page
-- Seite mit den Gattungen und untergattungen
-- check copyright for inaturalist images
+- detail page: better display, translate
 - data quality:
   - more fine grained edibility from the other file
   - 5% of latin names/pictures are missing from inaturalist
   - eichenrotkappe/espenrotkappe have the same image
+  - add attribution for inaturalist images
+    - default_photo: attribution
+    - data qual
 - better search:
   - show search hit probability and what matched
   - Suche in einer Gattung oder Bessere suche/Matches der lateinischen Namen
 - xs: lamellenfarbe: change to Röhrenfarbe if poroid
+- Seite mit den Gattungen und untergattungen
 
 # DONE
+- detail page for mushroom
+  - routing: landing, filter, mushroom page
 - icons for the filter page
 - deemphasize irrelevant filters in a search
 - German translation for filter page
@@ -32,6 +35,7 @@
   - there are mismatched images (e.g. boletus edulis)
   - latin names are scrambled
   - some mushrooms are missing images (maybe use the ones from 123pilze)
+
 # DROPPED
 - search with features
   - month

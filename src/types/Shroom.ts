@@ -26,13 +26,16 @@ export default interface Shroom {
   }
   gills: {
     color: string[]
-    attachment: string | null
+    attachment: string[] | null
   }
+  stem: {
+    color: string[]
+  },
   smell: string[]
-  taste: string | null
+  taste: string[] | null
   spore_color: string[]
   habitat: string[]
-  edibility: string | null
-  toxicity: string | null
+  toxicity: 'toxic' | 'deadly' | null,
+  edibility: 'inedible' | 'good' | 'excellent' | null
   traits: string[]
 }

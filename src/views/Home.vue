@@ -5,14 +5,11 @@ import FilterIcon from '@/assets/filter.svg'
 import { useStore } from '@/stores/store'
 import { getRandomSeededSample } from '@/utils'
 
+defineOptions({
+  name: 'HomeView'
+})
+
 const store = useStore()
-
-// Load shrooms data into store
-fetch('/data/shrooms.json')
-  .then(res => res.json())
-  .then(data => store.setShrooms(data))
-
-// Search input with debounce
 const searchInput = ref('')
 
 function onInput(e: Event) {
@@ -63,11 +60,13 @@ function clearSearch() {
 
     <!-- Results Wrapper -->
     <div class="flex-1 overflow-y-auto">
-      <div v-if="(store.search === '' && store.totalFilters === 0)"
-        class="text-stone-400 italic flex flex-wrap gap-2">
-        <img v-for='shroom in getRandomSeededSample(store.shrooms.filter(s => s.photo_url), 28)' :src="shroom.photo_url"
-          class="rounded-lg" />
+      <!-- Sample mushroom pictures -->
+      <div v-if="(store.search === '' && store.totalFilters === 0)" class="text-stone-400 italic flex flex-wrap gap-2">
+        <router-link :to="`/mushroom/${shroom.taxon_id}`" v-for='shroom in getRandomSeededSample(store.shrooms.filter(s => s.photo_url), 28)'>
+          <img :src="shroom.photo_url" class="rounded-lg" />
+          </router-link>
       </div>
+      <!-- Results -->
       <div v-else-if="store.filteredShrooms.length > 0">
         <div class="text-sm text-stone-500 mb-2">
           {{ store.filteredShrooms.length }} Treffer
@@ -76,6 +75,7 @@ function clearSearch() {
           <Card v-for="shroom in store.filteredShrooms" :key="shroom.url" :shroom="shroom" />
         </div>
       </div>
+      <!-- Empty: Nothing found -->
       <div v-else-if="store.filteredShrooms.length === 0" class="text-stone-500">
         Keine Pilze gefunden.
       </div>
