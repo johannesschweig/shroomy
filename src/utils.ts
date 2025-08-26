@@ -88,3 +88,8 @@ export function getMushroomIcon(shroom: Shroom): MushroomIconData {
       return { icon: null, class: '', text: '' }
   }
 }
+
+// from dot notation to object
+export function getNested(obj: any, path: string) {
+  return path.split('.').reduce((acc, key) => acc?.[key], obj)
+}
