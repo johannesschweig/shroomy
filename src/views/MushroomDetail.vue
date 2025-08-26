@@ -104,7 +104,7 @@ function svgStyle(attr: string) {
         <GillsColorIcon class="w-8 h-8" :style="svgStyle('gills.color')" />
         {{shroom.gills.color.map(c => t(c)).join(', ')}}
       </div>
-      <div class="flex items-center gap-2">
+      <div v-if="shroom.stem" class="flex items-center gap-2">
         <StemIcon class="w-8 h-8" :style="svgStyle('stem.color')" />
         {{shroom.stem.color.map(c => t(c)).join(', ')}}
       </div>

@@ -28,7 +28,7 @@ export default interface Shroom {
     color: string[]
     attachment: string[] | null
   }
-  stem: {
+  stem?: {
     color: string[]
   },
   smell: string[]
