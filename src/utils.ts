@@ -1,4 +1,9 @@
 import type Shroom from '@/types/Shroom'
+import ToxicIcon from '@/assets/toxic.svg'
+import DeadlyIcon from '@/assets/deadly.svg'
+import InedibleIcon from '@/assets/inedible.svg'
+import EdibleGoodIcon from '@/assets/edible-good.svg'
+import EdibleExcellentIcon from '@/assets/edible-excellent.svg'
 
 const TW_COLOR_MAP: Record<string, string> = {
   none: 'bg-white',
@@ -58,4 +63,28 @@ export function getRandomSeededSample(arr: Array<Shroom>, sampleSize: number) {
   const random = seededRandom(dayFrom1980);
   const shuffled = [...arr].sort(() => random() - 0.5);
   return shuffled.slice(0, sampleSize);
+}
+
+export type MushroomIconData = {
+  icon: any | null
+  class: string
+  text: string
+}
+
+export function getMushroomIcon(shroom: Shroom): MushroomIconData {
+  if (!shroom) return { icon: null, class: '', text: '' }
+
+  if (shroom.toxicity === 'deadly') return { icon: DeadlyIcon, class: 'text-red-700', text: 'Tödlich giftig' }
+  if (shroom.toxicity === 'toxic') return { icon: ToxicIcon, class: 'text-amber-700', text: 'Giftig' }
+
+  switch (shroom.edibility) {
+    case 'excellent':
+      return { icon: EdibleExcellentIcon, class: 'text-emerald-800', text: 'Ausgezeichnet' }
+    case 'good':
+      return { icon: EdibleGoodIcon, class: 'text-emerald-700', text: 'Gut' }
+    case 'inedible':
+      return { icon: InedibleIcon, class: 'text-stone-700', text: 'Ungenießbar' }
+    default:
+      return { icon: null, class: '', text: '' }
+  }
 }

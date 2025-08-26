@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
 import { useStore } from '@/stores/store'
 import TypeFilter from './TypeFilter.vue'
 import ColorFilter from './ColorFilter.vue'

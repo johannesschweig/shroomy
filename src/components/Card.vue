@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import MushroomIcon from '@/assets/mushroom.svg'
-import ToxicIcon from '@/assets/toxic.svg'
-import DeadlyIcon from '@/assets/deadly.svg'
-import EdibleGoodIcon from '@/assets/edible-good.svg'
-import EdibleExcellentIcon from '@/assets/edible-excellent.svg'
-import InedibleIcon from '@/assets/inedible.svg'
 import type Shroom from '@/types/Shroom'
+import { computed } from 'vue';
+import { getMushroomIcon } from '@/utils';
 
-defineProps<{
+const props = defineProps<{
   shroom: Shroom
 }>()
+
+const iconData = computed(() => getMushroomIcon(props.shroom))
+
 </script>
 
 <template>
@@ -32,11 +32,7 @@ defineProps<{
 
     <!-- Edibility & Toxicity icons -->
     <div class="hidden md:block mx-4 w-8 h-8">
-      <ToxicIcon class="text-amber-700" v-if="shroom.toxicity === 'toxic'" />
-      <DeadlyIcon class="text-red-700" v-if="shroom.toxicity === 'deadly'" />
-      <InedibleIcon class="text-stone-700" v-if="shroom.edibility === 'inedible'" />
-      <EdibleGoodIcon class="text-emerald-700" v-if="shroom.edibility === 'good'" />
-      <EdibleExcellentIcon class="text-emerald-800" v-if="shroom.edibility === 'excellent'" />
+      <component v-if="iconData.icon" :is="iconData.icon" :class="iconData.class" />
     </div>
   </router-link>
 </template>
