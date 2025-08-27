@@ -60,11 +60,15 @@ function clearSearch() {
 
     <!-- Results Wrapper -->
     <div class="flex-1 overflow-y-auto">
-      <!-- Sample mushroom pictures -->
-      <div v-if="(store.search === '' && store.totalFilters === 0)" class="text-stone-400 italic flex flex-wrap gap-2">
-        <router-link :to="`/mushroom/${shroom.taxon_id}`" v-for='shroom in getRandomSeededSample(store.shrooms.filter(s => s.photo_url), 28)'>
-          <img :src="shroom.photo_url" class="rounded-lg" />
+      <!-- Mushrooms of the day -->
+      <div v-if="(store.search === '' && store.totalFilters === 0)" class="text-stone-400 ">
+        <div class="flex flex-wrap gap-2">
+          <router-link :to="`/mushroom/${shroom.taxon_id}`" class="w-18 h-18 rounded-lg border-2 border-transparent hover:border-amber-600"
+            v-for='shroom in getRandomSeededSample(store.shrooms.filter(s => s.photo_url), 28)'>
+            <img :src="shroom.photo_url" class="rounded-[6px]" />
           </router-link>
+        </div>
+        <div class="text-stone-600 mt-2">Pilze des Tages</div>
       </div>
       <!-- Results -->
       <div v-else-if="store.filteredShrooms.length > 0">

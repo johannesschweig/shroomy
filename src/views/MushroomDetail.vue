@@ -70,8 +70,8 @@ function svgStyle(attr: string) {
     <h1 class="text-3xl font-bold">{{ shroom.name.de[0] }}</h1>
     <h2 class="text-lg text-stone-600 italic">{{ shroom.taxon_name }}</h2>
 
-    <img :src="shroom.photo_url.replace('square', 'medium') || shroom.image" alt=""
-      class="w-full rounded-lg shadow-md" />
+    <img :src="shroom.photo_url.replace('square', 'medium') || shroom.image" :alt="shroom.name.de[0]"
+      class="object-cover rounded-lg shadow-md md:aspect-3/2" />
 
     <div class="flex gap-2 flex-wrap">
       <!-- edibility/toxicity -->
