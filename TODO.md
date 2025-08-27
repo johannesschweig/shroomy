@@ -1,5 +1,7 @@
 # TODO
-- detail page: better display, translate
+- detail page:
+  -  cap.shape.other does nothing. remove
+  - capitalize them (hard when it is in a str join)
 - data quality:
   - more fine grained edibility from the other file
   - 5% of latin names/pictures are missing from inaturalist
@@ -14,6 +16,7 @@
 - Seite mit den Gattungen und untergattungen
 
 # DONE
+- detail page: better display, translate
 - detail page for mushroom
   - routing: landing, filter, mushroom page
 - icons for the filter page

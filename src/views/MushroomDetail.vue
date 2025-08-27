@@ -94,27 +94,57 @@ function svgStyle(attr: string) {
       </div>
     </div>
 
-    <div class="text-xl mt-6 mb-2 text-stone-800">Details</div>
-    <div class="grid grid-rows-3 gap-3 grid-flow-col text-stone-700">
-      <div class="flex items-center gap-2">
-        <CapIcon class="w-8 h-8" :style="svgStyle('cap.color')" />
-        {{shroom.cap.color.map(c => t(c)).join(', ')}}
+    <div class="text-xl mt-6 text-stone-800">Details</div>
+    <div class="flex flex-col gap-3 text-stone-700">
+      <!-- Cap -->
+      <div class="mb-4">
+        <div class="text-lg">Hut</div>
+        <div class="flex items-center gap-2 mb-2">
+          <CapIcon class="w-8 h-8" :style="svgStyle('cap.color')" />
+          {{shroom.cap.color.map(c => t(c)).join(', ')}}
+        </div>
+        <div class="text-sm">Form: {{shroom.cap.shape.map(s => t(s)).join(', ')}} {{
+          shroom.traits.includes('grooved_cap') ? t('grooved_cap') : '' }}</div>
       </div>
-      <div class="flex items-center gap-2">
-        <GillsColorIcon class="w-8 h-8" :style="svgStyle('gills.color')" />
-        {{shroom.gills.color.map(c => t(c)).join(', ')}}
+      <!-- Gills -->
+      <div class="mb-4">
+        <div class="text-lg">Lamellen</div>
+        <div class="flex items-center gap-2 mb-2">
+          <GillsColorIcon class="w-8 h-8" :style="svgStyle('gills.color')" />
+          {{shroom.gills.color.map(c => t(c)).join(', ')}}
+        </div>
+        <div class="text-sm">{{shroom.gills.attachment?.map(s => t(s)).join(', ')}}
+          {{ shroom.traits.includes('crowded_gills') ? t('crowded_gills') : '' }}
+          {{ shroom.traits.includes('sawtooth_gills') ? t('sawtooth_gills') : '' }}
+          {{ shroom.traits.includes('forked_gills') ? t('forked_gills') : '' }}
+        </div>
       </div>
-      <div v-if="shroom.stem" class="flex items-center gap-2">
-        <StemIcon class="w-8 h-8" :style="svgStyle('stem.color')" />
-        {{shroom.stem.color.map(c => t(c)).join(', ')}}
+      <!-- Stem -->
+      <div class="mb-4">
+        <div class="text-lg">Stiel</div>
+        <div class="flex items-center gap-2 mb-2">
+          <div v-if="shroom.stem" class="flex items-center gap-2">
+            <StemIcon class="w-8 h-8" :style="svgStyle('stem.color')" />
+            {{shroom.stem.color.map(c => t(c)).join(', ')}}
+          </div>
+        </div>
+        <div class="text-sm flex gap-1">
+          <span
+            v-for='trait in ["ring", "brittle_stem", "bulbous_base", "fibrous", "netted_stem", "scaly", "speckled_stem", "hollow_stem"]'
+            class="capitalize"
+            :key="trait">
+            {{ shroom.traits.includes(trait) ? t(trait) : '' }}
+          </span>
+        </div>
       </div>
+
       <div class="flex items-center gap-2">
         <FleshIcon class="w-8 h-8" :style="svgStyle('flesh.color')" />
         {{shroom.flesh.color.map(c => t(c)).join(', ')}}
       </div>
       <div class="flex items-center gap-2">
         <FleshIcon class="w-8 h-8" :style="svgStyle('flesh.bruising_color')" />
-        Verfärbung:<br/>{{shroom.flesh.bruising_color?.map(c => t(c)).join(', ')}}
+        Verfärbung:<br />{{shroom.flesh.bruising_color?.map(c => t(c)).join(', ')}}
       </div>
     </div>
 
@@ -126,9 +156,6 @@ function svgStyle(attr: string) {
       <div><strong>Smell:</strong> {{ joinAttr(shroom.smell) }}</div>
       <div><strong>Spore Color:</strong> {{ joinAttr(shroom.spore_color) }}</div>
       <div><strong>Habitat:</strong> {{ joinAttr(shroom.habitat) }}</div>
-      <div><strong>Cap Shape:</strong> {{ joinAttr(shroom.cap.shape) }}</div>
-      <div><strong>Stem Color:</strong> {{ joinAttr(shroom.stem?.color) }}</div>
-      <div><strong>Gills Attachment:</strong> {{ joinAttr(shroom.gills.attachment) }}</div>
       <div><strong>Traits:</strong> {{ joinAttr(shroom.traits) }}</div>
     </div>
 
@@ -143,20 +170,6 @@ function svgStyle(attr: string) {
 </template>
 
 <!--
-  cap: {
-    //color: ['white', 'yellow', 'orange', 'red', 'pink', 'green', 'blue', 'brown', 'black', 'gray'],
-    shape: ['round', 'flat', 'funnel', 'conical', 'other'],
-  },
-  traits: grooved_cap
-  gills: {
-    //color: ['white', 'yellow', 'orange', 'red', 'pink', 'green', 'blue', 'brown', 'black', 'gray'],
-    attachment: ['free', 'attached', 'decurrent'],
-  },
-'crowded_gills', 'sawtooth_gills', 'forked_gills', 
-  //stem: {
-    //color: ['white', 'yellow', 'orange', 'red', 'pink', 'green', 'blue', 'brown', 'black', 'gray'],
-  },
-  traits ["ring", "brittle_stem", "bulbous_base", "fibrous", "netted_stem", "scaly", "speckled_stem", "hollow_stem"]'
   flesh: {
     bruising_color: ['yellow', 'red', 'green', 'blue', 'brown', 'gray', 'none'],
     color: ['white', 'yellow', 'orange', 'red', 'pink', 'green', 'blue', 'brown', 'black', 'gray'],
