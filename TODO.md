@@ -9,6 +9,7 @@
   - add attribution for inaturalist images
     - default_photo: attribution
     - data qual
+  - gills.color should be null for stäublinge
 - better search:
   - show search hit probability and what matched
   - Suche in einer Gattung oder Bessere suche/Matches der lateinischen Namen

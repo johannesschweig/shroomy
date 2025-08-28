@@ -5,6 +5,11 @@ import InedibleIcon from '@/assets/inedible.svg'
 import EdibleGoodIcon from '@/assets/edible-good.svg'
 import EdibleExcellentIcon from '@/assets/edible-excellent.svg'
 
+export const GERMAN_MONTHS = [
+  'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
+  'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'
+];
+
 const TW_COLOR_MAP: Record<string, string> = {
   none: 'bg-white',
   white: 'bg-white',

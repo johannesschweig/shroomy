@@ -31,7 +31,7 @@ export default interface Shroom {
   stem?: {
     color: string[]
   },
-  smell: string[]
+  smell: string[] | []
   taste: string[] | null
   spore_color: string[]
   habitat: string[]

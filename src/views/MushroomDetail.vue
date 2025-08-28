@@ -3,7 +3,7 @@ import { onMounted, watch, ref, computed } from 'vue'
 import { useRoute, onBeforeRouteLeave } from 'vue-router'
 import { useStore } from '@/stores/store'
 import type Shroom from '@/types/Shroom'
-import { getMushroomIcon, toHexColor, getNested } from '@/utils'
+import { GERMAN_MONTHS, getMushroomIcon, toHexColor, getNested } from '@/utils'
 import PoroidIcon from '@/assets/poroid.svg'
 import GilledIcon from '@/assets/gills.svg'
 import CapIcon from '@/assets/cap.svg'
@@ -38,8 +38,10 @@ watch(() => route.params.id, () => {
 })
 
 const seasonText = computed(() => {
-  if (!shroom.value) return ''
-  return `von ${shroom.value.season.from} bis ${shroom.value.season.to}`
+   if (!shroom.value) return '';
+  const from = GERMAN_MONTHS[shroom.value.season.from - 1];
+  const to = GERMAN_MONTHS[shroom.value.season.to - 1];
+  return `Von ${from} bis ${to}`;
 })
 
 const sizeText = computed(() => {
@@ -118,6 +120,9 @@ function svgStyle(attr: string) {
           {{ shroom.traits.includes('sawtooth_gills') ? t('sawtooth_gills') : '' }}
           {{ shroom.traits.includes('forked_gills') ? t('forked_gills') : '' }}
         </div>
+        <div class="text-sm">
+          Sporenpulverfarbe: {{shroom.spore_color.map(s => t(s)).join(', ')}}
+        </div>
       </div>
       <!-- Stem -->
       <div class="mb-4">
@@ -129,34 +134,71 @@ function svgStyle(attr: string) {
           </div>
         </div>
         <div class="text-sm flex gap-1">
+          <!-- TODO this leads to empty space as every trait is rendered -->
           <span
             v-for='trait in ["ring", "brittle_stem", "bulbous_base", "fibrous", "netted_stem", "scaly", "speckled_stem", "hollow_stem"]'
-            class="capitalize"
-            :key="trait">
+            class="capitalize" :key="trait">
             {{ shroom.traits.includes(trait) ? t(trait) : '' }}
           </span>
         </div>
       </div>
-
-      <div class="flex items-center gap-2">
-        <FleshIcon class="w-8 h-8" :style="svgStyle('flesh.color')" />
-        {{shroom.flesh.color.map(c => t(c)).join(', ')}}
+      <!-- Flesh -->
+      <div class="mb-4">
+        <div class="text-lg">Fleisch</div>
+        <div class="flex items-center gap-2">
+          <FleshIcon class="w-8 h-8" :style="svgStyle('flesh.color')" />
+          {{shroom.flesh.color.map(c => t(c)).join(', ')}}
+        </div>
+        <div class="flex items-center gap-2">
+          <FleshIcon class="w-8 h-8" :style="svgStyle('flesh.bruising_color')" />
+          Verfärbung:<br />{{shroom.flesh.bruising_color?.map(c => t(c)).join(', ')}}
+        </div>
       </div>
-      <div class="flex items-center gap-2">
-        <FleshIcon class="w-8 h-8" :style="svgStyle('flesh.bruising_color')" />
-        Verfärbung:<br />{{shroom.flesh.bruising_color?.map(c => t(c)).join(', ')}}
+      <!-- Smell -->
+      <div class="mb-4" v-if="shroom.smell.length">
+        <div class="text-lg">Geruch</div>
+        <div>
+          {{shroom.smell.map(c => t(c)).join(', ')}}
+        </div>
       </div>
-    </div>
-
-    <!-- rest of attributes -->
-    <div class="grid grid-cols-2 gap-4 mt-4 text-sm text-stone-700">
-      <div><strong>Season:</strong> {{ seasonText }}</div>
-      <div><strong>Size:</strong> {{ sizeText }}</div>
-      <div><strong>Taste:</strong> {{ joinAttr(shroom.taste) }}</div>
-      <div><strong>Smell:</strong> {{ joinAttr(shroom.smell) }}</div>
-      <div><strong>Spore Color:</strong> {{ joinAttr(shroom.spore_color) }}</div>
-      <div><strong>Habitat:</strong> {{ joinAttr(shroom.habitat) }}</div>
-      <div><strong>Traits:</strong> {{ joinAttr(shroom.traits) }}</div>
+      <!-- Taste -->
+      <div class="mb-4">
+        <div class="text-lg">Geschmack</div>
+        <div>
+          {{shroom.taste?.map(c => t(c)).join(', ')}}
+        </div>
+      </div>
+      <!-- Habitat -->
+      <div class="mb-4">
+        <div class="text-lg">Lebensraum</div>
+        <div>
+          {{shroom.habitat.map(c => t(c)).join(', ')}}
+        </div>
+      </div>
+      <!-- Season -->
+      <div class="mb-4">
+        <div class="text-lg">Jahreszeit</div>
+        <div>
+          {{ seasonText }}
+        </div>
+      </div>
+      <!-- Size -->
+      <div class="mb-4">
+        <div class="text-lg">Größe</div>
+        <div>
+          {{ sizeText }}
+        </div>
+      </div>
+      <!-- Further details -->
+      <div class="mb-4">
+        <div class="text-lg">Weitere Merkmale</div>
+        <!-- TODO this leads to empty space as every trait is rendered -->
+        <div class="text-sm flex gap-1">
+          <span v-for='trait in ["tufted", "hygrophanous", "rooting_base", "slimy"]' class="capitalize" :key="trait">
+            {{ shroom.traits.includes(trait) ? t(trait) : '' }}
+          </span>
+        </div>
+      </div>
     </div>
 
     <a :href="shroom.url" target="_blank" class="mt-4 text-amber-600 underline">
@@ -168,16 +210,3 @@ function svgStyle(attr: string) {
     Pilz nicht gefunden
   </div>
 </template>
-
-<!--
-  flesh: {
-    bruising_color: ['yellow', 'red', 'green', 'blue', 'brown', 'gray', 'none'],
-    color: ['white', 'yellow', 'orange', 'red', 'pink', 'green', 'blue', 'brown', 'black', 'gray'],
-  },
-  smell: ['anise', 'mushroomy', 'sweet', 'earthy', 'radish', 'marzipan', 'putrid', 'fishy', 'floral'],
-  taste: ['mild', 'bitter', 'spicy', 'mushroomy', 'other'],
-  spore_color: ['white', 'yellow', 'red', 'brown', 'purple', 'black'],
-  habitat: ['wood', 'soil', 'meadow'],
-  traits: [
-    'tufted', 'hygrophanous', 'rooting_base', 'slimy', 
-  ] -->
