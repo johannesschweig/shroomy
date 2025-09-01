@@ -37,21 +37,10 @@ watch(() => route.params.id, () => {
   }
 })
 
-const seasonText = computed(() => {
-   if (!shroom.value) return '';
-  const from = GERMAN_MONTHS[shroom.value.season.from - 1];
-  const to = GERMAN_MONTHS[shroom.value.season.to - 1];
-  return `Von ${from} bis ${to}`;
-})
-
 const sizeText = computed(() => {
   if (!shroom.value) return ''
   return `${shroom.value.size.min_diameter_cm}–${shroom.value.size.max_diameter_cm} cm`
 })
-
-function joinAttr(attr: string[] | null | undefined) {
-  return attr?.join(', ') || '-'
-}
 
 const iconData = computed(() => shroom.value ? getMushroomIcon(shroom.value) : { icon: null, class: '', text: '' })
 
@@ -178,8 +167,13 @@ function svgStyle(attr: string) {
       <!-- Season -->
       <div class="mb-4">
         <div class="text-lg">Jahreszeit</div>
-        <div>
-          {{ seasonText }}
+        <div class="flex flex-wrap gap-1">
+          <div v-for="i in 12" class="w-8 h-8 rounded-lg text-sm text-center leading-8"
+          :class='i >= shroom.season.from && i <= shroom.season.to ? "bg-amber-300 text-stone-800 " : "bg-stone-100 text-stone-600"' :key="i"
+          >
+            {{ GERMAN_MONTHS[i - 1].slice(0, 3) }}
+          </div>
+
         </div>
       </div>
       <!-- Size -->
