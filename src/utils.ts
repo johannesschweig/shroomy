@@ -98,3 +98,7 @@ export function getMushroomIcon(shroom: Shroom): MushroomIconData {
 export function getNested(obj: any, path: string) {
   return path.split('.').reduce((acc, key) => acc?.[key], obj)
 }
+
+export function getInaturalistImageUrl(photo: string, size: "square" | "small" | "medium" | "large") {
+  return photo.replace("square", size)
+}

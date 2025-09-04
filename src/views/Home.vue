@@ -3,7 +3,8 @@ import { ref } from 'vue'
 import Card from '@/components/Card.vue'
 import FilterIcon from '@/assets/filter.svg'
 import { useStore } from '@/stores/store'
-import { getRandomSeededSample } from '@/utils'
+import { getRandomSeededSample, getInaturalistImageUrl } from '@/utils'
+import type Shroom from '@/types/Shroom'
 
 defineOptions({
   name: 'HomeView'
@@ -63,9 +64,11 @@ function clearSearch() {
       <!-- Mushrooms of the day -->
       <div v-if="(store.search === '' && store.totalFilters === 0)" class="text-stone-400 ">
         <div class="flex flex-wrap gap-2">
-          <router-link :to="`/mushroom/${shroom.taxon_id}`" class="w-18 h-18 rounded-lg border-2 border-transparent hover:border-amber-600"
-            v-for='shroom in getRandomSeededSample(store.shrooms.filter(s => s.photo_url), 28)'>
-            <img :src="shroom.photo_url" class="rounded-[6px]" />
+          <router-link :to="`/mushroom/${shroom.id}`"
+            class="relative w-22 h-22 rounded-lg border-2 border-transparent hover:border-amber-600"
+            v-for="shroom in getRandomSeededSample(store.shrooms.filter((s: Shroom) => (s.photos && s.id_123 && s.observations_count > 500)), 12)">
+            <img :src="getInaturalistImageUrl(shroom.photos?.[0].url ?? '', 'small')"
+              class="absolute inset-0 w-full h-full object-cover rounded-[6px]" />
           </router-link>
         </div>
         <div class="text-stone-600 mt-2">Pilze des Tages</div>

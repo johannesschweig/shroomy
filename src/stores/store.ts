@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import type Shroom from '@/types/Shroom'
 
 export const useStore = defineStore('store', {
   state: () => ({
@@ -17,12 +17,12 @@ export const useStore = defineStore('store', {
     filteredShrooms(state) {
       const q = state.search.trim().toLowerCase()
 
-      return state.shrooms.filter(shroom => {
+      return state.shrooms.filter((shroom: Shroom) => {
         // Search condition
         const matchesSearch =
           !q ||
-          (shroom.name.de.join(' ').toLowerCase().includes(q)) ||
-          (shroom.taxon_name.toLowerCase().includes(q))
+          (shroom.preferred_common_name?.toLowerCase().includes(q)) ||
+          (shroom.name?.toLowerCase().includes(q))
 
         // Attribute filters (must match ALL values for a given key)
         const matchesFilters = Object.entries(state.filters).every(([key, values]) => {
@@ -36,17 +36,19 @@ export const useStore = defineStore('store', {
         })
 
         // Month filter
-        const season = shroom.season || { from: 1, to: 12 }
         const matchesMonth =
-          season.from <= state.monthTo && season.to >= state.monthFrom
+          Array.isArray(shroom.season) &&
+          shroom.season[0] <= state.monthTo &&
+          shroom.season[1] >= state.monthFrom
 
         // Size filter
         const size = shroom.size || { min_diameter_cm: 1, max_diameter_cm: 100 }
         let matchesSize = true
         if (state.sizeCm > 0) {
           matchesSize =
-            state.sizeCm >= size.min_diameter_cm &&
-            state.sizeCm <= size.max_diameter_cm
+            Array.isArray(size) &&
+            state.sizeCm >= size[0] &&
+            state.sizeCm <= size[1]
         }
 
         return matchesSearch && matchesFilters && matchesMonth && matchesSize
@@ -58,7 +60,7 @@ export const useStore = defineStore('store', {
         const keys = attributePath.split('.')
 
         return this.filteredShrooms.filter((shroom: any) => {
-          let current = shroom
+          let current: any = shroom
           for (const key of keys) {
             if (current && typeof current === 'object') {
               current = current[key]
@@ -97,7 +99,8 @@ export const useStore = defineStore('store', {
       this.search = query
     },
     setShrooms(data: any[]) {
-      this.shrooms = data.filter(shroom => shroom.taxon_name)
+      this.shrooms = data
+      console.log(`Loaded ${this.shrooms.length} shrooms`)
     },
     setMonthFilter(from: number, to: number) {
       this.monthFrom = from

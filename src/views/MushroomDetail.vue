@@ -3,7 +3,7 @@ import { onMounted, watch, ref, computed } from 'vue'
 import { useRoute, onBeforeRouteLeave } from 'vue-router'
 import { useStore } from '@/stores/store'
 import type Shroom from '@/types/Shroom'
-import { GERMAN_MONTHS, getMushroomIcon, toHexColor, getNested } from '@/utils'
+import { GERMAN_MONTHS, getMushroomIcon, toHexColor, getNested, getInaturalistImageUrl } from '@/utils'
 import PoroidIcon from '@/assets/poroid.svg'
 import GilledIcon from '@/assets/gills.svg'
 import CapIcon from '@/assets/cap.svg'
@@ -11,6 +11,7 @@ import GillsColorIcon from '@/assets/gill-color.svg'
 import StemIcon from '@/assets/stem.svg'
 import FleshIcon from '@/assets/flesh.svg'
 import { useI18n } from 'vue-i18n'
+import MushroomImage from '@/components/MushroomImage.vue'
 
 const route = useRoute()
 const store = useStore()
@@ -21,7 +22,7 @@ const shroom = ref<Shroom | null>(null)
 
 onMounted(() => {
   setTimeout(() => {
-    shroom.value = store.shrooms.find(s => s['taxon_id'] === Number(route.params.id)) || null
+    shroom.value = store.shrooms.find(s => s['id'] === Number(route.params.id)) || null
   }, 500)
 })
 
@@ -32,14 +33,9 @@ onBeforeRouteLeave(async (_to, _from) => {
 watch(() => route.params.id, () => {
   if (route.params.id) {
     setTimeout(() => {
-      shroom.value = store.shrooms.find(s => s['taxon_id'] === Number(route.params.id)) || null
+      shroom.value = store.shrooms.find(s => s['id'] === Number(route.params.id)) || null
     }, 500)
   }
-})
-
-const sizeText = computed(() => {
-  if (!shroom.value) return ''
-  return `${shroom.value.size.min_diameter_cm}–${shroom.value.size.max_diameter_cm} cm`
 })
 
 const iconData = computed(() => shroom.value ? getMushroomIcon(shroom.value) : { icon: null, class: '', text: '' })
@@ -58,11 +54,22 @@ function svgStyle(attr: string) {
     <router-link to="/" class="btn btn-secondary w-fit">
       Zurück
     </router-link>
-    <h1 class="text-3xl font-bold">{{ shroom.name.de[0] }}</h1>
-    <h2 class="text-lg text-stone-600 italic">{{ shroom.taxon_name }}</h2>
+    <h1 class="text-3xl font-bold">{{ shroom.preferred_common_name }}</h1>
+    <h2 class="text-lg text-stone-600 italic">{{ shroom.name }}</h2>
 
-    <img :src="shroom.photo_url.replace('square', 'medium') || shroom.image" :alt="shroom.name.de[0]"
-      class="object-cover rounded-lg shadow-md md:aspect-3/2" />
+    <div v-if="shroom.photos" class="md:flex md:gap-4 md:h-[500px]">
+      <!-- Left large image -->
+      <div class="w-full md:w-2/3">
+        <MushroomImage :shroom="shroom" :index="0" class="w-full h-full object-cover" />
+      </div>
+
+      <!-- Right stacked small images - hide on mobile -->
+      <div class="hidden md:flex md:flex-col md:w-1/3 md:gap-4">
+        <MushroomImage v-if="shroom.photos.length > 1" :shroom="shroom" :index="1" class="w-full h-1/2 object-cover" />
+        <MushroomImage v-if="shroom.photos.length > 2" :shroom="shroom" :index="2" class="w-full h-1/2 object-cover" />
+      </div>
+    </div>
+
 
     <div class="flex gap-2 flex-wrap">
       <!-- edibility/toxicity -->
@@ -72,135 +79,142 @@ function svgStyle(attr: string) {
       </div>
 
       <!-- poroid or gilled -->
-      <div class="p-3 rounded-lg bg-stone-200 flex w-fit gap-2 items-center">
-        <PoroidIcon v-if="shroom.traits.includes('poroid')" class="w-8 h-8" />
-        <GilledIcon v-if="shroom.traits.includes('gilled')" class="w-8 h-8" />
-        <div>{{ shroom.traits.includes('gilled') ? 'Lamellen' : shroom.traits.includes('poroid') ? 'Poren' :
+      <div v-if="shroom.type" class="p-3 rounded-lg bg-stone-200 flex w-fit gap-2 items-center">
+        <PoroidIcon v-if="shroom.type.includes('poroid')" class="w-8 h-8" />
+        <GilledIcon v-if="shroom.type.includes('gilled')" class="w-8 h-8" />
+        <div>{{ shroom.type.includes('gilled') ? 'Lamellen' : shroom.type.includes('poroid') ? 'Poren' :
           'Andere Gattung' }}</div>
       </div>
 
       <!-- milky -->
-      <div v-if="shroom.traits.includes('milky')" class="p-3 rounded-lg bg-stone-200 flex w-fit gap-2 items-center">
+      <div v-if="shroom.gills && shroom.gills.traits && shroom.gills.traits.includes('milky')"
+        class="p-3 rounded-lg bg-stone-200 flex w-fit gap-2 items-center">
         Milchend
       </div>
-    </div>
 
-    <div class="text-xl mt-6 text-stone-800">Details</div>
-    <div class="flex flex-col gap-3 text-stone-700">
-      <!-- Cap -->
-      <div class="mb-4">
-        <div class="text-lg">Hut</div>
-        <div class="flex items-center gap-2 mb-2">
-          <CapIcon class="w-8 h-8" :style="svgStyle('cap.color')" />
-          {{shroom.cap.color.map(c => t(c)).join(', ')}}
-        </div>
-        <div class="text-sm">Form: {{shroom.cap.shape.map(s => t(s)).join(', ')}} {{
-          shroom.traits.includes('grooved_cap') ? t('grooved_cap') : '' }}</div>
+      <!-- frequency -->
+      <div class="p-3 rounded-lg bg-stone-200 flex w-fit gap-2 items-center" :title="String(shroom.observations_count)">
+        {{ shroom.observations_count < 100 ? 'Sehr selten' : shroom.observations_count < 500 ? 'Selten' :
+          shroom.observations_count < 2500 ? 'Häufig' : 'Sehr häufig' }} </div>
       </div>
-      <!-- Gills -->
-      <div class="mb-4">
-        <div class="text-lg">Lamellen</div>
-        <div class="flex items-center gap-2 mb-2">
-          <GillsColorIcon class="w-8 h-8" :style="svgStyle('gills.color')" />
-          {{shroom.gills.color.map(c => t(c)).join(', ')}}
+
+      <div class="text-xl mt-6 text-stone-800">Details</div>
+      <div class="flex flex-col gap-3 text-stone-700">
+        <!-- Cap -->
+        <div v-if="shroom.cap" class="mb-4">
+          <div class="text-lg">Hut</div>
+          <div class="flex items-center gap-2 mb-2">
+            <CapIcon class="w-8 h-8" :style="svgStyle('cap.color')" />
+            {{shroom.cap.color.map(c => t(c)).join(', ')}}
+          </div>
+          <div v-if="shroom.cap.shape" class="text-sm">Form: {{shroom.cap.shape.map(s => t(s)).join(', ')}} {{
+            shroom.cap.shape.includes('grooved_cap') ? t('grooved_cap') : '' }}</div>
         </div>
-        <div class="text-sm">{{shroom.gills.attachment?.map(s => t(s)).join(', ')}}
-          {{ shroom.traits.includes('crowded_gills') ? t('crowded_gills') : '' }}
-          {{ shroom.traits.includes('sawtooth_gills') ? t('sawtooth_gills') : '' }}
-          {{ shroom.traits.includes('forked_gills') ? t('forked_gills') : '' }}
-        </div>
-        <div class="text-sm">
-          Sporenpulverfarbe: {{shroom.spore_color.map(s => t(s)).join(', ')}}
-        </div>
-      </div>
-      <!-- Stem -->
-      <div class="mb-4">
-        <div class="text-lg">Stiel</div>
-        <div class="flex items-center gap-2 mb-2">
-          <div v-if="shroom.stem" class="flex items-center gap-2">
-            <StemIcon class="w-8 h-8" :style="svgStyle('stem.color')" />
-            {{shroom.stem.color.map(c => t(c)).join(', ')}}
+        <!-- Gills -->
+        <div v-if="shroom.gills" class="mb-4">
+          <div class="text-lg">Lamellen</div>
+          <div v-if="shroom.gills.color" class="flex items-center gap-2 mb-2">
+            <GillsColorIcon class="w-8 h-8" :style="svgStyle('gills.color')" />
+            {{shroom.gills.color.map(c => t(c)).join(', ')}}
+          </div>
+          <div class="text-sm">{{shroom.gills.attachment?.map(s => t(s)).join(', ')}}
+            {{shroom.gills.traits?.map(s => t(s)).join(', ')}}
+          </div>
+          <div v-if="shroom.spore_color" class="text-sm">
+            Sporenpulverfarbe: {{shroom.spore_color.map(s => t(s)).join(', ')}}
           </div>
         </div>
-        <div class="text-sm flex gap-1">
-          <!-- TODO this leads to empty space as every trait is rendered -->
-          <span
-            v-for='trait in ["ring", "brittle_stem", "bulbous_base", "fibrous", "netted_stem", "scaly", "speckled_stem", "hollow_stem"]'
-            class="capitalize" :key="trait">
-            {{ shroom.traits.includes(trait) ? t(trait) : '' }}
-          </span>
-        </div>
-      </div>
-      <!-- Flesh -->
-      <div class="mb-4">
-        <div class="text-lg">Fleisch</div>
-        <div class="flex items-center gap-2">
-          <FleshIcon class="w-8 h-8" :style="svgStyle('flesh.color')" />
-          {{shroom.flesh.color.map(c => t(c)).join(', ')}}
-        </div>
-        <div class="flex items-center gap-2">
-          <FleshIcon class="w-8 h-8" :style="svgStyle('flesh.bruising_color')" />
-          Verfärbung:<br />{{shroom.flesh.bruising_color?.map(c => t(c)).join(', ')}}
-        </div>
-      </div>
-      <!-- Smell -->
-      <div class="mb-4" v-if="shroom.smell.length">
-        <div class="text-lg">Geruch</div>
-        <div>
-          {{shroom.smell.map(c => t(c)).join(', ')}}
-        </div>
-      </div>
-      <!-- Taste -->
-      <div class="mb-4">
-        <div class="text-lg">Geschmack</div>
-        <div>
-          {{shroom.taste?.map(c => t(c)).join(', ')}}
-        </div>
-      </div>
-      <!-- Habitat -->
-      <div class="mb-4">
-        <div class="text-lg">Lebensraum</div>
-        <div>
-          {{shroom.habitat.map(c => t(c)).join(', ')}}
-        </div>
-      </div>
-      <!-- Season -->
-      <div class="mb-4">
-        <div class="text-lg">Jahreszeit</div>
-        <div class="flex flex-wrap gap-1">
-          <div v-for="i in 12" class="w-8 h-8 rounded-lg text-sm text-center leading-8"
-          :class='i >= shroom.season.from && i <= shroom.season.to ? "bg-amber-300 text-stone-800 " : "bg-stone-100 text-stone-600"' :key="i"
-          >
-            {{ GERMAN_MONTHS[i - 1].slice(0, 3) }}
+        <!-- Stem -->
+        <div v-if="shroom.stem" class="mb-4">
+          <div class="text-lg">Stiel</div>
+          <div class="flex items-center gap-2 mb-2">
+            <div v-if="shroom.stem" class="flex items-center gap-2">
+              <StemIcon class="w-8 h-8" :style="svgStyle('stem.color')" />
+              {{shroom.stem.color.map(c => t(c)).join(', ')}}
+            </div>
           </div>
+          <div class="text-sm flex gap-1">
+            <span v-for='trait in shroom.stem.traits' class="capitalize" :key="trait">
+              {{ t(trait) }}
+            </span>
+          </div>
+        </div>
+        <!-- Flesh -->
+        <div v-if="shroom.flesh" class="mb-4">
+          <div class="text-lg">Fleisch</div>
+          <div class="flex items-center gap-2">
+            <FleshIcon class="w-8 h-8" :style="svgStyle('flesh.color')" />
+            {{shroom.flesh.color.map(c => t(c)).join(', ')}}
+          </div>
+          <div class="flex items-center gap-2">
+            <FleshIcon class="w-8 h-8" :style="svgStyle('flesh.bruising_color')" />
+            Verfärbung:<br />{{shroom.flesh.bruising_color?.map(c => t(c)).join(', ')}}
+          </div>
+        </div>
+        <!-- Smell -->
+        <div class="mb-4" v-if="shroom.smell">
+          <div class="text-lg">Geruch</div>
+          <div>
+            {{shroom.smell.map(c => t(c)).join(', ')}}
+          </div>
+        </div>
+        <!-- Taste -->
+        <div v-if="shroom.taste" class="mb-4">
+          <div class="text-lg">Geschmack</div>
+          <div>
+            {{shroom.taste.map(c => t(c)).join(', ')}}
+          </div>
+        </div>
+        <!-- Habitat -->
+        <div v-if="shroom.habitat" class="mb-4">
+          <div class="text-lg">Lebensraum</div>
+          <div>
+            {{shroom.habitat.map(c => t(c)).join(', ')}}
+          </div>
+        </div>
+        <!-- Season -->
+        <div v-if="shroom.season" class="mb-4">
+          <div class="text-lg">Jahreszeit</div>
+          <div class="flex flex-wrap gap-1">
+            <div v-for="i in 12" class="w-8 h-8 rounded-lg text-sm text-center leading-8"
+              :class='i >= shroom.season[0] && i <= shroom.season[1] ? "bg-amber-300 text-stone-800 " : "bg-stone-100 text-stone-600"'
+              :key="i">
+              {{ GERMAN_MONTHS[i - 1].slice(0, 3) }}
+            </div>
 
+          </div>
+        </div>
+        <!-- Size -->
+        <div v-if="shroom.size" class="mb-4">
+          <div class="text-lg">Größe</div>
+          <div>
+            {{ `${shroom.size[0]}–${shroom.size[1]} cm` }}
+          </div>
+        </div>
+        <!-- Further details -->
+        <div v-if="shroom.traits" class="mb-4">
+          <div class="text-lg">Weitere Merkmale</div>
+          <div class="text-sm flex gap-1">
+            <span v-for='trait in shroom.traits' class="capitalize" :key="trait">
+              {{ t(trait) }}
+            </span>
+          </div>
         </div>
       </div>
-      <!-- Size -->
-      <div class="mb-4">
-        <div class="text-lg">Größe</div>
-        <div>
-          {{ sizeText }}
-        </div>
-      </div>
-      <!-- Further details -->
-      <div class="mb-4">
-        <div class="text-lg">Weitere Merkmale</div>
-        <!-- TODO this leads to empty space as every trait is rendered -->
-        <div class="text-sm flex gap-1">
-          <span v-for='trait in ["tufted", "hygrophanous", "rooting_base", "slimy"]' class="capitalize" :key="trait">
-            {{ shroom.traits.includes(trait) ? t(trait) : '' }}
-          </span>
-        </div>
+
+      <div class="flex gap-2">
+        <a :href="`https://www.inaturalist.org/taxa/${shroom.id}`" target="_blank"
+          class="mt-4 text-amber-600 underline text-sm">
+          iNaturalist
+        </a>
+        <a v-if="shroom.id_123" :href="`https://www.123pilzsuche.de/daten/details/${shroom.id_123}`" target="_blank"
+          class="mt-4 text-amber-600 underline text-sm">
+          123Pilzsuche
+        </a>
       </div>
     </div>
 
-    <a :href="shroom.url" target="_blank" class="mt-4 text-amber-600 underline">
-      Mehr Details auf 123Pilzsuche
-    </a>
-  </div>
-
-  <div v-else class="text-center p-8 text-stone-500">
-    Pilz nicht gefunden
-  </div>
+    <div v-else class="text-center p-8 text-stone-500">
+      Pilz nicht gefunden
+    </div>
 </template>

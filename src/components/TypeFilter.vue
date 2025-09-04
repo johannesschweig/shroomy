@@ -13,21 +13,20 @@ const GILLED = "gilled"
 const selectType = (type: string) => {
   // remove only
   if (selectedType.value === type) {
-    store.toggleFilter("traits", type)
+    store.toggleFilter("type", type)
   } else {
     if (selectedType.value) {
       // toggle from existing
-      store.toggleFilter("traits", selectedType.value)
-      store.toggleFilter("traits", type)
+      store.toggleFilter("type", selectedType.value)
+      store.toggleFilter("type", type)
     } else {
       // empty -> add
-      store.toggleFilter("traits", type)
+      store.toggleFilter("type", type)
     }
-
   }
 }
 
-const selectedType = computed(() => store.filters["traits"]?.includes(POROID) ? POROID : store.filters["traits"]?.includes(GILLED) ? GILLED : null)
+const selectedType = computed(() => store.filters["type"]?.includes(POROID) ? POROID : store.filters["type"]?.includes(GILLED) ? GILLED : null)
 </script>
 
 <template>

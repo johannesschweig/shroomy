@@ -31,8 +31,6 @@ const iconMap: Record<string, any> = {
 
 const SelectedIcon = iconMap[props.type] || null
 
-const DEFAULT_COLORS: string[] = ['white', 'yellow', 'orange', 'red', 'pink', 'blue', 'green', 'brown', 'grey', 'black']
-
 const toggleColor = (color: string) => {
   store.toggleFilter(props.type, color)
 }
@@ -52,8 +50,6 @@ const subtitle = () => {
   }
 }
 
-const colors: string[] = props.colors ? props.colors : DEFAULT_COLORS
-
 const svgStyle = computed(() => ({
   '--primary': toHexColor(selectedColors.value[0]), // selected color
   '--secondary': '#78716c', // grey: bg-stone-500
@@ -68,7 +64,7 @@ const svgStyle = computed(() => ({
       <span class="text-sm text-stone-500 italic inline-block">{{ subtitle() }}</span>
     </h2>
     <div class="flex flex-wrap gap-2 items-center h-8">
-      <button v-for="color in colors" :key="color" @click="toggleColor(color)"
+      <button v-for="color in props.colors" :key="color" @click="toggleColor(color)"
         class="rounded-full flex items-center justify-center cursor-pointer" :class="[
           'w-6 h-6',
           toTwColorClass(color),
