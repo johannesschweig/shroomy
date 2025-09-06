@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import Card from '@/components/Card.vue'
 import FilterIcon from '@/assets/filter.svg'
 import { useStore } from '@/stores/store'
@@ -26,6 +26,18 @@ function clearSearch() {
   searchInput.value = ''
   store.setSearch('')
 }
+
+// Set initial search value
+onMounted(() => {
+  searchInput.value = store.search
+})
+
+// Change search if genus search from detail page
+watch(() => store.search, (newSearch) => {
+  if (newSearch !== searchInput.value) {
+    searchInput.value = newSearch
+  }
+})
 </script>
 
 <template>

@@ -1,34 +1,31 @@
 # TODO
-- Nicht filter und, oder filter ??
-- Verwechslungspartner mit Unterscheidungsmerkmalen , fotos und Anleitung zum sicheren Bestimmen
 - Weniger Text zu Merkmalen, mehr Bilder (dunkles Netz am Stiel)
+  - Vlt erklärbilder zu den Merkmalen (so sieht ein Netz aus?)
 - Haftungsausschluss 
-- Offline Modus
-- Fundbuch: bild, gps,bäume, Zeigerpflanzen, boden ph, substrate, Geruch, wann gefunden, erster Saisonfund
-- Fotographie: Color mapping und Korrektur mit farbstandard
-- Merkmale anhand Foto vorausfüllen (Farbe der Kappe z.B.)
-- gesetzlicher Schutz: nicht essen da gefährdet.
-- mehr bilder
 - zurücksetzen button außen
-- hier könnten pfifferlinge wachsen: bäume, landwirtschaft, bodenbeschaffenheit
+- Seite mit den Gattungen und untergattungen
+- Fundbuch: bild, gps,bäume, Zeigerpflanzen, boden ph, substrate, Geruch, wann gefunden, erster Saisonfund
+  - connection with inaturalist?
 - domain and change product name
   - Anderer Name, weniger magic shrooms
-
 - detail: lightbox for images
 - detail: cap.shape.other does nothing. remove
-- detail: capitalize them (hard when it is in a str join)
 - detail: hide cc if cc0 license
 - better search:
   - show search hit probability and what matched
 - xs: lamellenfarbe: change to Röhrenfarbe if poroid
-- Seite mit den Gattungen und untergattungen
+- BLOCKED gesetzlicher Schutz: nicht essen da gefährdet.
+- BLOCKEDVerwechslungspartner mit Unterscheidungsmerkmalen, fotos und Anleitung zum sicheren Bestimmen
 ## data quality:
-- duplicate photos
+- duplicate photos: dont collect
 - more fine grained edibility from the other file
-- 5% of latin names/pictures are missing from inaturalist
 - gills.color should be null for stäublinge
+- new data: gesetzlicher Schutz: nicht essen da gefährdet.
+- new data: false friends
 
 # DONE
+- detail: click genus to set in search
+- mehr bilder
 - Suche in einer Gattung oder Bessere suche/Matches der lateinischen Namen
   - add attribution for inaturalist images
     - default_photo: attribution
@@ -62,3 +59,13 @@
 - search with features
   - month
   - diameter
+- Fotographie: Color mapping und Korrektur mit farbstandard
+  - too specific/niche
+- Nicht filter und, oder filter ??
+- Offline Modus
+  - not right now
+- Merkmale anhand Foto vorausfüllen (Farbe der Kappe z.B.)
+  - first: filters should be easy to fill
+- hier könnten pfifferlinge wachsen: bäume, landwirtschaft, bodenbeschaffenheit
+  - not for now. needs more insight
+- detail: capitalize them (hard when it is in a str join)

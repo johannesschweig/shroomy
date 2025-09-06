@@ -12,6 +12,7 @@ import StemIcon from '@/assets/stem.svg'
 import FleshIcon from '@/assets/flesh.svg'
 import { useI18n } from 'vue-i18n'
 import MushroomImage from '@/components/MushroomImage.vue'
+import router from '@/router'
 
 const route = useRoute()
 const store = useStore()
@@ -47,6 +48,13 @@ function svgStyle(attr: string) {
     '--secondary': '#78716c', // grey: bg-stone-500
   }
 }
+
+function searchGenus() {
+  if (shroom.value) {
+    store.setSearch(shroom.value.name.split(' ')[0])
+    router.push('/')
+  }
+}
 </script>
 
 <template>
@@ -55,7 +63,10 @@ function svgStyle(attr: string) {
       Zurück
     </router-link>
     <h1 class="text-3xl font-bold">{{ shroom.preferred_common_name }}</h1>
-    <h2 class="text-lg text-stone-600 italic">{{ shroom.name }}</h2>
+    <h2 class="text-lg text-stone-600 italic flex gap-1">
+      <button class="cursor-pointer hover:underline hover:text-stone-800" @click="searchGenus()">{{ shroom.name.split(' ')[0] }}</button>
+      <span>{{ shroom.name.split(' ').slice(1)[0] }}</span>
+      </h2>
 
     <div v-if="shroom.photos" class="md:flex md:gap-4 md:h-[500px]">
       <!-- Left large image -->
