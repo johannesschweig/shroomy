@@ -31,7 +31,7 @@ const iconData = computed(() => getMushroomIcon(props.shroom))
     </div>
 
     <!-- Edibility & Toxicity icons -->
-    <div class="hidden md:block mx-4 w-8 h-8">
+    <div class="mx-2 w-6 h-6 md:mx-4 md:w-8 md:h-8">
       <component v-if="iconData.icon" :is="iconData.icon" :class="iconData.class" />
     </div>
   </router-link>
