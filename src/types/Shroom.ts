@@ -50,4 +50,5 @@ export default interface Shroom {
   frequency?: string
   ancestry: string
   observations_count: number
+  look_alikes?: number[]
 }

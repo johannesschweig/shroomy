@@ -24,7 +24,15 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    // Only scroll to top when navigating to MushroomDetail
+    if (to.name === 'MushroomDetail') {
+      return { top: 0 }
+    }
+    // Default behavior (e.g., use browser back button)
+    return savedPosition || { top: 0 }
+  }
 })
 
 export default router

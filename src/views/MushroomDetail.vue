@@ -13,11 +13,15 @@ import FleshIcon from '@/assets/flesh.svg'
 import { useI18n } from 'vue-i18n'
 import MushroomImage from '@/components/MushroomImage.vue'
 import router from '@/router'
+import Card from '@/components/Card.vue'
 
 const route = useRoute()
 const store = useStore()
 const { t } = useI18n()
 
+defineOptions({
+  name: 'MushroomDetail'
+})
 
 const shroom = ref<Shroom | null>(null)
 
@@ -66,18 +70,19 @@ function searchGenus() {
     <h2 class="text-lg text-stone-600 italic flex gap-1">
       <button class="cursor-pointer hover:underline hover:text-stone-800" @click="searchGenus()">{{ shroom.name.split(' ')[0] }}</button>
       <span>{{ shroom.name.split(' ').slice(1)[0] }}</span>
-      </h2>
+    </h2>
 
     <div v-if="shroom.photos" class="md:flex md:gap-4 md:h-[500px]">
       <!-- Left large image -->
       <div class="w-full md:w-2/3">
-        <MushroomImage :shroom="shroom" :index="0" class="w-full h-full object-cover" />
+        <MushroomImage :shroom="shroom" :index="0" :key="`${shroom.id}-0`" class="w-full h-full object-cover" />
       </div>
-
-      <!-- Right stacked small images - hide on mobile -->
+      <!-- Right stacked small images -->
       <div class="hidden md:flex md:flex-col md:w-1/3 md:gap-4">
-        <MushroomImage v-if="shroom.photos.length > 1" :shroom="shroom" :index="1" class="w-full h-1/2 object-cover" />
-        <MushroomImage v-if="shroom.photos.length > 2" :shroom="shroom" :index="2" class="w-full h-1/2 object-cover" />
+        <MushroomImage v-if="shroom.photos.length > 1" :shroom="shroom" :index="1" :key="`${shroom.id}-1`"
+          class="w-full h-1/2 object-cover" />
+        <MushroomImage v-if="shroom.photos.length > 2" :shroom="shroom" :index="2" :key="`${shroom.id}-2`"
+          class="w-full h-1/2 object-cover" />
       </div>
     </div>
 
@@ -213,15 +218,26 @@ function searchGenus() {
         </div>
       </div>
 
-      <div class="flex gap-2">
-        <a :href="`https://www.inaturalist.org/taxa/${shroom.id}`" target="_blank"
-          class="mt-4 text-amber-600 underline text-sm">
-          iNaturalist
-        </a>
-        <a v-if="shroom.id_123" :href="`https://www.123pilzsuche.de/daten/details/${shroom.id_123}`" target="_blank"
-          class="mt-4 text-amber-600 underline text-sm">
-          123Pilzsuche
-        </a>
+      <div v-if="shroom.look_alikes">
+        <div class="text-lg text-stone-700 mb-4">Verwechslungspartner</div>
+        <div class="flex flex-col gap-2">
+          <Card v-for="lookalikeId in shroom.look_alikes" :key="lookalikeId"
+            :shroom="store.shrooms.find(s => s.id === lookalikeId)!" />
+        </div>
+      </div>
+
+      <div>
+        <div class="text-lg text-stone-700">Mehr Infos</div>
+        <div class="flex gap-2">
+          <a :href="`https://www.inaturalist.org/taxa/${shroom.id}`" target="_blank"
+            class="text-amber-600 underline text-sm">
+            iNaturalist
+          </a>
+          <a v-if="shroom.id_123" :href="`https://www.123pilzsuche.de/daten/details/${shroom.id_123}`" target="_blank"
+            class="text-amber-600 underline text-sm">
+            123Pilzsuche
+          </a>
+        </div>
       </div>
     </div>
 
