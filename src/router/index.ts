@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/Home.vue'
 import FilterPage from '@/components/FilterPage.vue'
 import MushroomDetail from '@/views/MushroomDetail.vue'
+import Disclaimer from '@/views/Disclaimer.vue'
 
 const routes = [
   {
@@ -16,9 +17,13 @@ const routes = [
   },
   {
     path: '/mushroom/:id',
-    name: 'mushroom-detail',
     component: MushroomDetail,
     props: true
+  },
+  {
+    path: '/disclaimer',
+    name: 'disclaimer',
+    component: Disclaimer
   }
 ]
 

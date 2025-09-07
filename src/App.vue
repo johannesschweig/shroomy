@@ -20,4 +20,7 @@ onMounted(() => {
       <component :is="Component" />
     </keep-alive>
   </router-view>
+  <div class="max-w-xl mx-auto mt-4 py-2 border-t-1 border-gray-300">
+    <router-link to="/disclaimer" class="link text-sm">Haftungsauschluss</router-link>
+  </div>
 </template>

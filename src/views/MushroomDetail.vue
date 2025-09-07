@@ -62,7 +62,7 @@ function searchGenus() {
 </script>
 
 <template>
-  <div v-if="shroom" class="max-w-xl mx-auto p-4 flex flex-col gap-4">
+  <div v-if="shroom" class="max-w-xl mx-auto flex flex-col gap-4">
     <router-link to="/" class="btn btn-secondary w-fit">
       Zurück
     </router-link>
@@ -218,8 +218,9 @@ function searchGenus() {
         </div>
       </div>
 
+      <!-- Look alikes -->
       <div v-if="shroom.look_alikes">
-        <div class="text-lg text-stone-700 mb-4">Verwechslungspartner</div>
+        <div class="text-lg text-stone-700 mb-2">Verwechslungspartner</div>
         <div class="flex flex-col gap-2">
           <Card v-for="lookalikeId in shroom.look_alikes" :key="lookalikeId"
             :shroom="store.shrooms.find(s => s.id === lookalikeId)!" />

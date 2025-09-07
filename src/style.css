@@ -11,3 +11,7 @@
 .btn-secondary {
   @apply border border-amber-500 text-amber-600 hover:bg-amber-100;
 }
+
+.link {
+  @apply text-gray-600 hover:text-gray-800;
+}
