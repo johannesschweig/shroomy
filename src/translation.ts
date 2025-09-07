@@ -79,4 +79,5 @@ export const translations: Record<string, string> = {
   lichenized: 'flechten',
   other_genus: 'andere Gattung',
   purple: 'violett',
+  hard: 'hart',
 }

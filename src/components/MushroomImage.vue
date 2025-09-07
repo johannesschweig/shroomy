@@ -12,6 +12,10 @@ const props = defineProps({
   index: {
     type: Number,
     default: 0
+  },
+  moreImages: {
+    type: Number,
+    default: 0
   }
 })
 const showAttribution = ref(false)
@@ -19,18 +23,21 @@ const photo = props.shroom.photos ? props.shroom.photos[props.index] : { 'url': 
 </script>
 
 <template>
-  <div class="relative w-full h-full rounded-lg shadow-md md:aspect-[3/2] overflow-hidden">
+  <div class="relative rounded-lg shadow-md md:aspect-[3/2] overflow-hidden cursor-pointer md:border-2 md:border-transparent md:hover:border-amber-600">
     <!-- Mushroom image -->
     <img
       :src="getInaturalistImageUrl(photo.url, 'medium')"
       :alt="shroom.preferred_common_name"
       class="w-full h-full object-cover"
     />
-    <!-- CC icon button bottom-right -->
+    <div v-if="moreImages > 0" class="absolute bottom-0 right-0 bg-stone-800 text-white p-2 rounded-br-lg rounded-tl-lg text-sm">
+      +{{ moreImages }}
+    </div>
+    <!-- CC icon button bottom-left -->
     <button
       v-if="!showAttribution"
-      @click="showAttribution = true"
-      class="absolute bottom-2 right-2 bg-white opacity-70 rounded-full p-1 hover:opacity-100 transition text-xs cursor-pointer z-10"
+      @click.stop="showAttribution = true"
+      class="absolute bottom-2 left-2 bg-white opacity-70 rounded-full p-1 hover:opacity-100 transition text-xs cursor-pointer z-10"
       title="Show attribution"
       aria-label="Toggle attribution"
     >
@@ -40,7 +47,7 @@ const photo = props.shroom.photos ? props.shroom.photos[props.index] : { 'url': 
     <transition name="fade">
       <div
         v-if="showAttribution && photo.attribution"
-        @click="showAttribution = false"
+        @click.stop="showAttribution = false"
         class="absolute bottom-0 left-0 bg-[rgba(0,0,0,0.7)]  text-white min-h-8 min-w-full flex flex-wrap items-center px-2 py-2 text-xs cursor-pointer z-20"
       >
         {{ photo.attribution }}

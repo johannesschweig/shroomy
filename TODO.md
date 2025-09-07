@@ -1,29 +1,29 @@
 # TODO
+- detail: Swipe to next photos
+  - detail: lightbox for images
 - Weniger Text zu Merkmalen, mehr Bilder (dunkles Netz am Stiel)
   - Vlt erklärbilder zu den Merkmalen (so sieht ein Netz aus?)
-- Haftungsausschluss 
 - zurücksetzen button außen
 - Seite mit den Gattungen und untergattungen
 - Fundbuch: bild, gps,bäume, Zeigerpflanzen, boden ph, substrate, Geruch, wann gefunden, erster Saisonfund
   - connection with inaturalist?
-- domain and change product name
-  - Anderer Name, weniger magic shrooms
-- detail: lightbox for images
 - detail: cap.shape.other does nothing. remove
 - detail: hide cc if cc0 license
 - better search:
   - show search hit probability and what matched
 - xs: lamellenfarbe: change to Röhrenfarbe if poroid
 - BLOCKED gesetzlicher Schutz: nicht essen da gefährdet.
-- BLOCKEDVerwechslungspartner mit Unterscheidungsmerkmalen, fotos und Anleitung zum sicheren Bestimmen
+- Verwechslungspartner mit Unterscheidungsmerkmalen, fotos und Anleitung zum sicheren Bestimmen
 ## data quality:
 - duplicate photos: dont collect
 - more fine grained edibility from the other file
 - gills.color should be null for stäublinge
 - new data: gesetzlicher Schutz: nicht essen da gefährdet.
-- new data: false friends
+- look alikes: the shroom itself cannot be a look alike to itself. clean it
 
 # DONE
+- Haftungsausschluss 
+- new data: false friends
 - detail: click genus to set in search
 - mehr bilder
 - Suche in einer Gattung oder Bessere suche/Matches der lateinischen Namen
@@ -69,3 +69,5 @@
 - hier könnten pfifferlinge wachsen: bäume, landwirtschaft, bodenbeschaffenheit
   - not for now. needs more insight
 - detail: capitalize them (hard when it is in a str join)
+- domain and change product name
+  - Anderer Name, weniger magic shrooms

@@ -14,6 +14,7 @@ import { useI18n } from 'vue-i18n'
 import MushroomImage from '@/components/MushroomImage.vue'
 import router from '@/router'
 import Card from '@/components/Card.vue'
+import VueEasyLightbox from 'vue-easy-lightbox'
 
 const route = useRoute()
 const store = useStore()
@@ -23,7 +24,17 @@ defineOptions({
   name: 'MushroomDetail'
 })
 
+const mobileScrollContainer = ref<HTMLElement | null>(null)
 const shroom = ref<Shroom | null>(null)
+const lightboxVisible = ref(false)
+const currentIndex = ref(0)
+const images = computed(() =>
+  shroom.value?.photos?.map(p => ({
+    src: getInaturalistImageUrl(p.url, "medium"),
+    title: p.attribution || ''
+  })) || []
+)
+function openLightbox(i: number) { currentIndex.value = i; lightboxVisible.value = true }
 
 onMounted(() => {
   setTimeout(() => {
@@ -40,6 +51,13 @@ watch(() => route.params.id, () => {
     setTimeout(() => {
       shroom.value = store.shrooms.find(s => s['id'] === Number(route.params.id)) || null
     }, 500)
+  }
+})
+
+// reset x scroll pos of mobile scroll container
+watch(() => shroom.value?.id, () => {
+  if (mobileScrollContainer.value) {
+    mobileScrollContainer.value.scrollLeft = 0
   }
 })
 
@@ -72,17 +90,29 @@ function searchGenus() {
       <span>{{ shroom.name.split(' ').slice(1)[0] }}</span>
     </h2>
 
-    <div v-if="shroom.photos" class="md:flex md:gap-4 md:h-[500px]">
-      <!-- Left large image -->
-      <div class="w-full md:w-2/3">
-        <MushroomImage :shroom="shroom" :index="0" :key="`${shroom.id}-0`" class="w-full h-full object-cover" />
+    <VueEasyLightbox :visible="lightboxVisible" :imgs="images" :index="currentIndex" @hide="lightboxVisible = false" />
+
+    <div v-if="shroom.photos">
+      <!-- Mobile image area -->
+      <div ref="mobileScrollContainer" class="flex md:hidden flex-row overflow-x-auto w-screen gap-x-2 pr-2">
+        <MushroomImage v-for="(photo, index) in shroom.photos" :key="`${shroom.id}-${index}`" :shroom="shroom"
+          :index="index" class="flex-shrink-0 w-64 h-48 object-cover rounded-lg cursor-pointer"
+          @click="openLightbox(index)" />
       </div>
-      <!-- Right stacked small images -->
-      <div class="hidden md:flex md:flex-col md:w-1/3 md:gap-4">
-        <MushroomImage v-if="shroom.photos.length > 1" :shroom="shroom" :index="1" :key="`${shroom.id}-1`"
-          class="w-full h-1/2 object-cover" />
-        <MushroomImage v-if="shroom.photos.length > 2" :shroom="shroom" :index="2" :key="`${shroom.id}-2`"
-          class="w-full h-1/2 object-cover" />
+      <!-- Desktop image area -->
+      <div class="hidden md:flex md:gap-4 md:h-[500px]">
+        <!-- Left large image -->
+        <div class="w-2/3">
+          <MushroomImage :shroom="shroom" :index="0" :key="`${shroom.id}-0`" class="w-full h-full object-cover"
+            @click="openLightbox(0)" />
+        </div>
+        <!-- Right stacked small images -->
+        <div class="flex flex-col w-1/3 gap-4">
+          <MushroomImage v-if="shroom.photos.length > 1" :shroom="shroom" :index="1" :key="`${shroom.id}-1`"
+            class="w-full h-1/2 object-cover" @click="openLightbox(1)" />
+          <MushroomImage v-if="shroom.photos.length > 2" :shroom="shroom" :index="2" :key="`${shroom.id}-2`"
+            :moreImages="shroom.photos.length - 3" class="w-full h-1/2 object-cover" @click="openLightbox(2)" />
+        </div>
       </div>
     </div>
 
@@ -123,8 +153,7 @@ function searchGenus() {
             <CapIcon class="w-8 h-8" :style="svgStyle('cap.color')" />
             {{shroom.cap.color.map(c => t(c)).join(', ')}}
           </div>
-          <div v-if="shroom.cap.shape" class="text-sm">Form: {{shroom.cap.shape.map(s => t(s)).join(', ')}} {{
-            shroom.cap.shape.includes('grooved_cap') ? t('grooved_cap') : '' }}</div>
+          <div v-if="shroom.cap.shape" class="text-sm">Form: {{shroom.cap.shape.map(s => t(s)).join(', ')}}</div>
         </div>
         <!-- Gills -->
         <div v-if="shroom.gills" class="mb-4">
@@ -144,7 +173,7 @@ function searchGenus() {
         <div v-if="shroom.stem" class="mb-4">
           <div class="text-lg">Stiel</div>
           <div class="flex items-center gap-2 mb-2">
-            <div v-if="shroom.stem" class="flex items-center gap-2">
+            <div v-if="shroom.stem.color" class="flex items-center gap-2">
               <StemIcon class="w-8 h-8" :style="svgStyle('stem.color')" />
               {{shroom.stem.color.map(c => t(c)).join(', ')}}
             </div>
@@ -162,7 +191,7 @@ function searchGenus() {
             <FleshIcon class="w-8 h-8" :style="svgStyle('flesh.color')" />
             {{shroom.flesh.color.map(c => t(c)).join(', ')}}
           </div>
-          <div class="flex items-center gap-2">
+          <div v-if="shroom.flesh.bruising_color" class="flex items-center gap-2">
             <FleshIcon class="w-8 h-8" :style="svgStyle('flesh.bruising_color')" />
             Verfärbung:<br />{{shroom.flesh.bruising_color?.map(c => t(c)).join(', ')}}
           </div>
