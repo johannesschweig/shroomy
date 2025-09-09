@@ -6,10 +6,7 @@ import { useStore } from '@/stores/store'
 const store = useStore()
 
 onMounted(() => {
-  // Load shrooms data into store
-  fetch('/data/shrooms.json')
-    .then(res => res.json())
-    .then(data => store.setShrooms(data))
+  store.loadShrooms()
 })
 
 </script>

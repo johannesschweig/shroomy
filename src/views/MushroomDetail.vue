@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { onMounted, watch, ref, computed } from 'vue'
-import { useRoute, onBeforeRouteLeave } from 'vue-router'
+import { watch, ref, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { useStore } from '@/stores/store'
-import type Shroom from '@/types/Shroom'
 import { GERMAN_MONTHS, getMushroomIcon, toHexColor, getNested, getInaturalistImageUrl } from '@/utils'
 import PoroidIcon from '@/assets/poroid.svg'
 import GilledIcon from '@/assets/gills.svg'
@@ -15,6 +14,7 @@ import MushroomImage from '@/components/MushroomImage.vue'
 import router from '@/router'
 import Card from '@/components/Card.vue'
 import VueEasyLightbox from 'vue-easy-lightbox'
+import type Shroom from '@/types/Shroom'
 
 const route = useRoute()
 const store = useStore()
@@ -25,7 +25,6 @@ defineOptions({
 })
 
 const mobileScrollContainer = ref<HTMLElement | null>(null)
-const shroom = ref<Shroom | null>(null)
 const lightboxVisible = ref(false)
 const currentIndex = ref(0)
 const images = computed(() =>
@@ -36,22 +35,8 @@ const images = computed(() =>
 )
 function openLightbox(i: number) { currentIndex.value = i; lightboxVisible.value = true }
 
-onMounted(() => {
-  setTimeout(() => {
-    shroom.value = store.shrooms.find(s => s['id'] === Number(route.params.id)) || null
-  }, 500)
-})
-
-onBeforeRouteLeave(async (_to, _from) => {
-  shroom.value = null
-})
-
-watch(() => route.params.id, () => {
-  if (route.params.id) {
-    setTimeout(() => {
-      shroom.value = store.shrooms.find(s => s['id'] === Number(route.params.id)) || null
-    }, 500)
-  }
+const shroom = computed<Shroom | null>(() => {
+  return store.shrooms.find(s => s.id === Number(route.params.id)) || null
 })
 
 // reset x scroll pos of mobile scroll container

@@ -3,6 +3,7 @@ import type Shroom from '@/types/Shroom'
 
 export const useStore = defineStore('store', {
   state: () => ({
+    isLoading: false,
     filters: {} as Record<string, string[]>,
     search: '' as string,
     shrooms: [] as any[],
@@ -99,8 +100,6 @@ export const useStore = defineStore('store', {
       this.search = query
     },
     setShrooms(data: any[]) {
-      this.shrooms = data
-      console.log(`Loaded ${this.shrooms.length} shrooms`)
     },
     setMonthFilter(from: number, to: number) {
       this.monthFrom = from
@@ -108,6 +107,20 @@ export const useStore = defineStore('store', {
     },
     setSizeCm(val: number) {
       this.sizeCm = val
+    },
+    async loadShrooms() {
+      this.isLoading = true
+      try {
+        // Load shrooms data into store
+        fetch('/data/shrooms.json')
+          .then(res => res.json())
+          .then(data => {
+            this.shrooms = data
+            console.log(`Loaded ${this.shrooms.length} shrooms`)
+          })
+      } finally {
+        this.isLoading = false
+      }
     }
   }
 })

@@ -1,5 +1,4 @@
 # TODO
-- Pilz nicht gefunden when loading detail page
 - Weniger Text zu Merkmalen, mehr Bilder (dunkles Netz am Stiel)
   - Vlt erklärbilder zu den Merkmalen (so sieht ein Netz aus?)
 - zurücksetzen button außen
@@ -19,6 +18,7 @@
 - look alikes: the shroom itself cannot be a look alike to itself. clean it
 
 # DONE
+- Pilz nicht gefunden when loading detail page
 - lazy loading images
 - detail: cap.shape.other does nothing. remove
 - detail: hide cc if cc0 license
