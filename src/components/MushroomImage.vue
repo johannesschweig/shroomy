@@ -19,7 +19,7 @@ const props = defineProps({
   }
 })
 const showAttribution = ref(false)
-const photo = props.shroom.photos ? props.shroom.photos[props.index] : { 'url': '', 'attribution': '' }
+const photo = props.shroom.photos ? props.shroom.photos[props.index] : { 'url': '', 'attribution': '', 'license_code': '' }
 </script>
 
 <template>
@@ -29,13 +29,14 @@ const photo = props.shroom.photos ? props.shroom.photos[props.index] : { 'url': 
       :src="getInaturalistImageUrl(photo.url, 'medium')"
       :alt="shroom.preferred_common_name"
       class="w-full h-full object-cover"
+      loading="lazy"
     />
     <div v-if="moreImages > 0" class="absolute bottom-0 right-0 bg-stone-800 text-white p-2 rounded-br-lg rounded-tl-lg text-sm">
       +{{ moreImages }}
     </div>
     <!-- CC icon button bottom-left -->
     <button
-      v-if="!showAttribution"
+      v-if="!showAttribution && photo.license_code != 'cc0'"
       @click.stop="showAttribution = true"
       class="absolute bottom-2 left-2 bg-white opacity-70 rounded-full p-1 hover:opacity-100 transition text-xs cursor-pointer z-10"
       title="Show attribution"

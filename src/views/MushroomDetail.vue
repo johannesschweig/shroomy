@@ -153,7 +153,7 @@ function searchGenus() {
             <CapIcon class="w-8 h-8" :style="svgStyle('cap.color')" />
             {{shroom.cap.color.map(c => t(c)).join(', ')}}
           </div>
-          <div v-if="shroom.cap.shape" class="text-sm">Form: {{shroom.cap.shape.map(s => t(s)).join(', ')}}</div>
+          <div v-if="shroom.cap.shape" class="text-sm">Form: {{shroom.cap.shape.filter(e => e != 'other').map(s => t(s)).join(', ')}}</div>
         </div>
         <!-- Gills -->
         <div v-if="shroom.gills" class="mb-4">

@@ -1,12 +1,11 @@
 # TODO
+- Pilz nicht gefunden when loading detail page
 - Weniger Text zu Merkmalen, mehr Bilder (dunkles Netz am Stiel)
   - Vlt erklärbilder zu den Merkmalen (so sieht ein Netz aus?)
 - zurücksetzen button außen
 - Seite mit den Gattungen und untergattungen
 - Fundbuch: bild, gps,bäume, Zeigerpflanzen, boden ph, substrate, Geruch, wann gefunden, erster Saisonfund
   - connection with inaturalist?
-- detail: cap.shape.other does nothing. remove
-- detail: hide cc if cc0 license
 - better search:
   - show search hit probability and what matched
 - xs: lamellenfarbe: change to Röhrenfarbe if poroid
@@ -20,6 +19,9 @@
 - look alikes: the shroom itself cannot be a look alike to itself. clean it
 
 # DONE
+- lazy loading images
+- detail: cap.shape.other does nothing. remove
+- detail: hide cc if cc0 license
 - detail: Swipe to next photos
   - detail: lightbox for images
 - Haftungsausschluss 

@@ -80,7 +80,7 @@ watch(() => store.search, (newSearch) => {
             class="relative w-22 h-22 rounded-lg border-2 border-transparent hover:border-amber-600"
             v-for="shroom in getRandomSeededSample(store.shrooms.filter((s: Shroom) => (s.photos && s.id_123 && s.observations_count > 500)), 12)">
             <img :src="getInaturalistImageUrl(shroom.photos?.[0].url ?? '', 'small')"
-              class="absolute inset-0 w-full h-full object-cover rounded-[6px]" />
+              class="absolute inset-0 w-full h-full object-cover rounded-[6px]" loading="lazy" />
           </router-link>
         </div>
         <div class="text-stone-600 mt-2">Pilze des Tages</div>
