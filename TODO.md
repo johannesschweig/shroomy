@@ -1,6 +1,4 @@
 # TODO
-- detail: Swipe to next photos
-  - detail: lightbox for images
 - Weniger Text zu Merkmalen, mehr Bilder (dunkles Netz am Stiel)
   - Vlt erklärbilder zu den Merkmalen (so sieht ein Netz aus?)
 - zurücksetzen button außen
@@ -22,6 +20,8 @@
 - look alikes: the shroom itself cannot be a look alike to itself. clean it
 
 # DONE
+- detail: Swipe to next photos
+  - detail: lightbox for images
 - Haftungsausschluss 
 - new data: false friends
 - detail: click genus to set in search
