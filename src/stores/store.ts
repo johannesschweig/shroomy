@@ -77,8 +77,10 @@ export const useStore = defineStore('store', {
           return value ? current === value : current != null
         })
       }
+    },
+    filtersActive(state) {
+      return Object.keys(state.filters).length
     }
-
   },
   actions: {
     toggleFilter(key: string, value: string) {
@@ -86,6 +88,10 @@ export const useStore = defineStore('store', {
       const idx = this.filters[key].indexOf(value)
       if (idx >= 0) {
         this.filters[key].splice(idx, 1)
+        // if last filter for this key was removed, delete the key
+        if (this.filters[key].length === 0) {
+          delete this.filters[key]
+        }
       } else {
         this.filters[key].push(value)
       }

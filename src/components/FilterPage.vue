@@ -18,7 +18,7 @@ const store = useStore()
         }} Ergebisse</span>
       </div>
       <div class="flex gap-4">
-        <button v-if="Object.keys(store.filters).length" @click="store.clearFilters()"
+        <button v-if="store.filtersActive" @click="store.clearFilters()"
           class="btn btn-secondary">Zurücksetzen</button>
         <router-link to="/" class="btn btn-secondary">Schließen</router-link>
       </div>

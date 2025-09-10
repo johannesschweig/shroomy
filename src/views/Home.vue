@@ -5,6 +5,7 @@ import FilterIcon from '@/assets/filter.svg'
 import { useStore } from '@/stores/store'
 import { getRandomSeededSample, getInaturalistImageUrl } from '@/utils'
 import type Shroom from '@/types/Shroom'
+import DeleteIcon from '@/assets/delete.svg'
 
 defineOptions({
   name: 'HomeView'
@@ -62,14 +63,19 @@ watch(() => store.search, (newSearch) => {
     </div>
 
     <!-- Filter Button -->
-    <router-link to="/filter" class="btn btn-secondary mb-4 flex items-center gap-2 self-start w-fit">
-      <FilterIcon class="w-5 h-5" />
-      Filter
-      <div v-if="store.totalFilters > 0"
-        class="w-4 h-4 leading-4 text-xs font-bold rounded-full bg-amber-600 text-white text-center">
-        {{ store.totalFilters }}
-      </div>
-    </router-link>
+    <div class="flex items-center mb-4 ">
+      <router-link to="/filter" class="self-start w-fit btn btn-secondary h-11" :class="{ '!rounded-r-none': store.filtersActive }">
+        <FilterIcon class="w-5 h-5" />
+        Filter
+        <div v-if="store.totalFilters > 0"
+          class="w-4 h-4 leading-4 text-xs font-bold rounded-full bg-amber-600 text-white text-center">
+          {{ store.totalFilters }}
+        </div>
+      </router-link>
+      <button v-if="store.filtersActive" class="h-11 btn btn-secondary" :class="{ '!rounded-l-none !border-l-0': store.filtersActive }" @click="store.clearFilters()">
+        <DeleteIcon class="w-5 h-5 text-amber-600" />
+      </button>
+    </div>
 
     <!-- Results Wrapper -->
     <div class="flex-1 overflow-y-auto">
@@ -91,7 +97,7 @@ watch(() => store.search, (newSearch) => {
           {{ store.filteredShrooms.length }} Treffer
         </div>
         <div class="flex flex-col gap-2">
-          <Card v-for="shroom in store.filteredShrooms" :key="shroom.url" :shroom="shroom" />
+          <Card v-for="shroom in store.filteredShrooms" :key="shroom.url" :shroom="shroom" :highlight="true"/>
         </div>
       </div>
       <!-- Empty: Nothing found -->

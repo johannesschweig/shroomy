@@ -3,12 +3,31 @@ import MushroomIcon from '@/assets/mushroom.svg'
 import type Shroom from '@/types/Shroom'
 import { computed } from 'vue';
 import { getMushroomIcon, getInaturalistImageUrl } from '@/utils';
+import { useStore } from '@/stores/store'
 
 const props = defineProps<{
-  shroom: Shroom
+  shroom: Shroom,
+  highlight?: Boolean
 }>()
 
+const store = useStore()
+
 const iconData = computed(() => getMushroomIcon(props.shroom))
+
+function highlightMatch(text: string) {
+  if (!props.highlight) return text
+  const query = store.search
+  if (!query) return text
+  const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
+  const parts = text.split(regex)
+  return parts.map((part, _idx) => {
+    if (part.toLowerCase() === query.toLowerCase()) {
+      return `<span class="bg-amber-100 text-stone-950 rounded-lg py-1">${part}</span>`
+    } else {
+      return part
+    }
+  }).join('')
+}
 
 </script>
 
@@ -22,12 +41,8 @@ const iconData = computed(() => getMushroomIcon(props.shroom))
     </div>
 
     <div>
-      <div class="text-lg text-stone-900 font-semibold">
-        {{ shroom.preferred_common_name }}
-      </div>
-      <div class="text-sm md:text-base italic text-stone-500 max-w-[25ch] truncate">
-        {{ shroom.name }}
-      </div>
+      <div class="text-lg text-stone-900 font-semibold" v-html="highlightMatch(shroom.preferred_common_name)"></div>
+      <div class="text-sm md:text-base italic text-stone-500 max-w-[25ch] truncate" v-html="highlightMatch(shroom.name)"></div>
     </div>
 
     <!-- Edibility & Toxicity icons -->

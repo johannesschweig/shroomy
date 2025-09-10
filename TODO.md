@@ -1,15 +1,14 @@
 # TODO
 - Weniger Text zu Merkmalen, mehr Bilder (dunkles Netz am Stiel)
   - Vlt erklärbilder zu den Merkmalen (so sieht ein Netz aus?)
-- zurücksetzen button außen
 - Seite mit den Gattungen und untergattungen
 - Fundbuch: bild, gps,bäume, Zeigerpflanzen, boden ph, substrate, Geruch, wann gefunden, erster Saisonfund
   - connection with inaturalist?
-- better search:
-  - show search hit probability and what matched
 - xs: lamellenfarbe: change to Röhrenfarbe if poroid
 - BLOCKED gesetzlicher Schutz: nicht essen da gefährdet.
 - Verwechslungspartner mit Unterscheidungsmerkmalen, fotos und Anleitung zum sicheren Bestimmen
+- Eine Möglichkeit durch alle Pilze zu blättern ohne zuerst den Namen zu kennen wäre ganz praktisch
+  - maybe all the mushrooms grouped together by genus with popular mushrooms highlighted?
 ## data quality:
 - duplicate photos: dont collect
 - more fine grained edibility from the other file
@@ -18,6 +17,8 @@
 - look alikes: the shroom itself cannot be a look alike to itself. clean it
 
 # DONE
+- zurücksetzen button außen
+- search show what matched
 - Pilz nicht gefunden when loading detail page
 - lazy loading images
 - detail: cap.shape.other does nothing. remove
@@ -73,3 +74,4 @@
 - detail: capitalize them (hard when it is in a str join)
 - domain and change product name
   - Anderer Name, weniger magic shrooms
+- show search hit probability
