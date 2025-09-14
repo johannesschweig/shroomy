@@ -1,4 +1,8 @@
 # TODO
+- Side scroll Bilder l wie bei spotify
+- Risenschrimling linkt zu falschem 123
+- disable color buttons if not available
+- show small indication on season what is the current month
 - Weniger Text zu Merkmalen, mehr Bilder (dunkles Netz am Stiel)
   - Vlt erklärbilder zu den Merkmalen (so sieht ein Netz aus?)
 - Seite mit den Gattungen und untergattungen

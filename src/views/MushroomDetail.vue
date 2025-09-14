@@ -15,6 +15,7 @@ import router from '@/router'
 import Card from '@/components/Card.vue'
 import VueEasyLightbox from 'vue-easy-lightbox'
 import type Shroom from '@/types/Shroom'
+import ChevronIcon from '@/assets/chevron.svg'
 
 const route = useRoute()
 const store = useStore()
@@ -47,6 +48,7 @@ watch(() => shroom.value?.id, () => {
 })
 
 const iconData = computed(() => shroom.value ? getMushroomIcon(shroom.value) : { icon: null, class: '', text: '' })
+const currentMonth = computed(() => new Date().getMonth())
 
 function svgStyle(attr: string) {
   const value = getNested(shroom.value, attr)
@@ -138,7 +140,8 @@ function searchGenus() {
             <CapIcon class="w-8 h-8" :style="svgStyle('cap.color')" />
             {{shroom.cap.color.map(c => t(c)).join(', ')}}
           </div>
-          <div v-if="shroom.cap.shape" class="text-sm">Form: {{shroom.cap.shape.filter(e => e != 'other').map(s => t(s)).join(', ')}}</div>
+          <div v-if="shroom.cap.shape" class="text-sm">Form: {{shroom.cap.shape.filter(e => e != 'other').map(s =>
+            t(s)).join(', ')}}</div>
         </div>
         <!-- Gills -->
         <div v-if="shroom.gills" class="mb-4">
@@ -206,10 +209,11 @@ function searchGenus() {
         <div v-if="shroom.season" class="mb-4">
           <div class="text-lg">Jahreszeit</div>
           <div class="flex flex-wrap gap-1">
-            <div v-for="i in 12" class="w-8 h-8 rounded-lg text-sm text-center leading-8"
-              :class='i >= shroom.season[0] && i <= shroom.season[1] ? "bg-amber-300 text-stone-800 " : "bg-stone-100 text-stone-600"'
-              :key="i">
+            <div v-for="i in 12" class="w-8 h-8 rounded-lg text-sm text-center leading-8 relative"
+            :class='[i >= shroom.season[0] && i <= shroom.season[1] ? "bg-amber-300 text-stone-800 " : "bg-stone-100 text-stone-600",
+            i === currentMonth ? "border border-stone-600" : ""]' :key="i">
               {{ GERMAN_MONTHS[i - 1].slice(0, 3) }}
+              <ChevronIcon v-if="i === currentMonth" class="text-stone-800 w-1.5 h-1.5 absolute bottom-0 left-3"/>
             </div>
 
           </div>
