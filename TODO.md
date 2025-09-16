@@ -1,5 +1,4 @@
 # TODO
-- disable color buttons if not available
 - Seite mit den Gattungen und untergattungen
 - Side scroll Bilder wie bei spotify
 - Weniger Text zu Merkmalen, mehr Bilder (dunkles Netz am Stiel)
@@ -19,6 +18,7 @@
 - look alikes: the shroom itself cannot be a look alike to itself. clean it
 
 # DONE
+- disable color buttons if not available
 - Parasol linkt zu falschem 123
 - show small indication on season what is the current month
 - zurücksetzen button außen
