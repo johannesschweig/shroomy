@@ -1,44 +1,16 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
 import Card from '@/components/Card.vue'
-import FilterIcon from '@/assets/filter.svg'
 import { useStore } from '@/stores/store'
 import { getRandomSeededSample, getInaturalistImageUrl } from '@/utils'
 import type Shroom from '@/types/Shroom'
-import DeleteIcon from '@/assets/delete.svg'
+import SearchBar from '@/components/SearchBar.vue'
 
 defineOptions({
   name: 'HomeView'
 })
 
 const store = useStore()
-const searchInput = ref('')
 
-function onInput(e: Event) {
-  const value = (e.target as HTMLInputElement).value
-  searchInput.value = value
-}
-
-function applySearch() {
-  store.setSearch(searchInput.value)
-}
-
-function clearSearch() {
-  searchInput.value = ''
-  store.setSearch('')
-}
-
-// Set initial search value
-onMounted(() => {
-  searchInput.value = store.search
-})
-
-// Change search if genus search from detail page
-watch(() => store.search, (newSearch) => {
-  if (newSearch !== searchInput.value) {
-    searchInput.value = newSearch
-  }
-})
 </script>
 
 <template>
@@ -48,34 +20,7 @@ watch(() => store.search, (newSearch) => {
       <h2 class="hidden md:block text-xl text-stone-600">Schnelle und einfache Pilzsuche</h2>
     </div>
 
-    <!-- Search Bar -->
-    <div class="flex items-center gap-2 mb-2 relative">
-      <input :value="searchInput" @input="onInput" @keyup.enter="applySearch" placeholder="Suche nach Namen (de, lat.)"
-        class="w-full px-4 py-2 border border-stone-300 rounded-lg bg-stone-50 text-stone-800 placeholder-stone-400 focus:outline-none focus:ring focus:ring-amber-400" />
-      <button v-if="searchInput" @click="clearSearch"
-        class="cursor-pointer absolute right-28 top-1/2 transform -translate-y-1/2 text-stone-400 hover:text-stone-600"
-        aria-label="Clear search">
-        ✕
-      </button>
-      <button @click="applySearch" class="btn btn-primary">
-        Suchen
-      </button>
-    </div>
-
-    <!-- Filter Button -->
-    <div class="flex items-center mb-4 ">
-      <router-link to="/filter" class="self-start w-fit btn btn-secondary h-11" :class="{ '!rounded-r-none': store.filtersActive }">
-        <FilterIcon class="w-5 h-5" />
-        Filter
-        <div v-if="store.totalFilters > 0"
-          class="w-4 h-4 leading-4 text-xs font-bold rounded-full bg-amber-600 text-white text-center">
-          {{ store.totalFilters }}
-        </div>
-      </router-link>
-      <button v-if="store.filtersActive" class="h-11 btn btn-secondary" :class="{ '!rounded-l-none !border-l-0': store.filtersActive }" @click="store.clearFilters()">
-        <DeleteIcon class="w-5 h-5 text-amber-600" />
-      </button>
-    </div>
+    <SearchBar />
 
     <!-- Results Wrapper -->
     <div class="flex-1 overflow-y-auto">

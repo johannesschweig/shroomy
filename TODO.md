@@ -1,5 +1,6 @@
 # TODO
 - Seite mit den Gattungen und untergattungen
+- clear search: focus on the textfield again. hard with the combobox
 - Side scroll Bilder wie bei spotify
 - Weniger Text zu Merkmalen, mehr Bilder (dunkles Netz am Stiel)
   - Vlt erklärbilder zu den Merkmalen (so sieht ein Netz aus?)
@@ -18,6 +19,7 @@
 - look alikes: the shroom itself cannot be a look alike to itself. clean it
 
 # DONE
+- autocomplete search
 - disable color buttons if not available
 - Parasol linkt zu falschem 123
 - show small indication on season what is the current month
