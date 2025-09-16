@@ -54,6 +54,10 @@ const svgStyle = computed(() => ({
   '--primary': toHexColor(selectedColors.value[0]), // selected color
   '--secondary': '#78716c', // grey: bg-stone-500
 }))
+
+const getMatchesCount = (color: string) => {
+  return store.getMatches(props.type, color).length
+}
 </script>
 
 <template>
@@ -64,13 +68,20 @@ const svgStyle = computed(() => ({
       <span class="text-sm text-stone-500 italic inline-block">{{ subtitle() }}</span>
     </h2>
     <div class="flex flex-wrap gap-2 items-center h-8">
-      <button v-for="color in props.colors" :key="color" @click="toggleColor(color)"
-        class="rounded-full flex items-center justify-center cursor-pointer" :class="[
+      <button
+        v-for="color in props.colors"
+        :key="color"
+        @click="toggleColor(color)"
+        :disabled="getMatchesCount(color) === 0"
+        class="rounded-full flex items-center justify-center cursor-pointer"
+        :class="[
           'w-6 h-6',
           toTwColorClass(color),
           { 'w-8 h-8': isSelected(color) },
-          (color === 'white' || color === 'none') ? 'border border-stone-300' : ''
-        ]">
+          (color === 'white' || color === 'none') ? 'border border-stone-300' : '',
+          getMatchesCount(color) === 0 ? 'opacity-50 cursor-not-allowed' : ''
+        ]"
+      >
         <div v-if="isSelected(color) && color !== 'none'" class="w-2 h-2 rounded-full"
           :class="color === 'white' ? 'bg-stone-400' : 'bg-white'"></div>
         <div v-if="color === 'none'" class="h-full w-px bg-stone-300 rotate-45"></div>
