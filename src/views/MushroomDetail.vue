@@ -106,7 +106,7 @@ function searchGenus() {
 
     <div class="flex gap-2 flex-wrap">
       <!-- edibility/toxicity -->
-      <div class="p-3 rounded-lg bg-stone-200 flex w-fit gap-2 items-center">
+      <div v-if="shroom.edibility || shroom.toxicity" class="p-3 rounded-lg bg-stone-200 flex w-fit gap-2 items-center">
         <component v-if="iconData.icon" :is="iconData.icon" :class="iconData.class" class="w-8 h-8" />
         {{ iconData.text }}
       </div>
@@ -131,7 +131,7 @@ function searchGenus() {
           shroom.observations_count < 2500 ? 'Häufig' : 'Sehr häufig' }} </div>
       </div>
 
-      <div class="text-xl mt-6 text-stone-800">Details</div>
+      <div v-if="shroom.id_123" class="text-xl mt-6 text-stone-800">Details</div>
       <div class="flex flex-col gap-3 text-stone-700">
         <!-- Cap -->
         <div v-if="shroom.cap" class="mb-4">

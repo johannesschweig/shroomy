@@ -1,11 +1,9 @@
 # TODO
-- Side scroll Bilder l wie bei spotify
-- Risenschrimling linkt zu falschem 123
 - disable color buttons if not available
-- show small indication on season what is the current month
+- Seite mit den Gattungen und untergattungen
+- Side scroll Bilder wie bei spotify
 - Weniger Text zu Merkmalen, mehr Bilder (dunkles Netz am Stiel)
   - Vlt erklärbilder zu den Merkmalen (so sieht ein Netz aus?)
-- Seite mit den Gattungen und untergattungen
 - Fundbuch: bild, gps,bäume, Zeigerpflanzen, boden ph, substrate, Geruch, wann gefunden, erster Saisonfund
   - connection with inaturalist?
 - xs: lamellenfarbe: change to Röhrenfarbe if poroid
@@ -21,6 +19,8 @@
 - look alikes: the shroom itself cannot be a look alike to itself. clean it
 
 # DONE
+- Parasol linkt zu falschem 123
+- show small indication on season what is the current month
 - zurücksetzen button außen
 - search show what matched
 - Pilz nicht gefunden when loading detail page

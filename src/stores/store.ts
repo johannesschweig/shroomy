@@ -7,9 +7,6 @@ export const useStore = defineStore('store', {
     filters: {} as Record<string, string[]>,
     search: '' as string,
     shrooms: [] as any[],
-    monthFrom: 1,
-    monthTo: 12,
-    sizeCm: 0 // 0 means "not set"
   }),
   getters: {
     totalFilters(state) {
@@ -36,23 +33,7 @@ export const useStore = defineStore('store', {
           return values.every(v => v === val) // must match exactly if scalar
         })
 
-        // Month filter
-        const matchesMonth =
-          Array.isArray(shroom.season) &&
-          shroom.season[0] <= state.monthTo &&
-          shroom.season[1] >= state.monthFrom
-
-        // Size filter
-        const size = shroom.size || { min_diameter_cm: 1, max_diameter_cm: 100 }
-        let matchesSize = true
-        if (state.sizeCm > 0) {
-          matchesSize =
-            Array.isArray(size) &&
-            state.sizeCm >= size[0] &&
-            state.sizeCm <= size[1]
-        }
-
-        return matchesSearch && matchesFilters && matchesMonth && matchesSize
+        return matchesSearch && matchesFilters
       })
     }
     ,
@@ -98,21 +79,11 @@ export const useStore = defineStore('store', {
     },
     clearFilters() {
       this.filters = {}
-      this.monthFrom = 1
-      this.monthTo = 12
-      this.sizeCm = 0
     },
     setSearch(query: string) {
       this.search = query
     },
     setShrooms(data: any[]) {
-    },
-    setMonthFilter(from: number, to: number) {
-      this.monthFrom = from
-      this.monthTo = to
-    },
-    setSizeCm(val: number) {
-      this.sizeCm = val
     },
     async loadShrooms() {
       this.isLoading = true
