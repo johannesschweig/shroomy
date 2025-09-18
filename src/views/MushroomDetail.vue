@@ -48,7 +48,7 @@ watch(() => shroom.value?.id, () => {
 })
 
 const iconData = computed(() => shroom.value ? getMushroomIcon(shroom.value) : { icon: null, class: '', text: '' })
-const currentMonth = computed(() => new Date().getMonth())
+const currentMonth = computed(() => new Date().getMonth() + 1)
 
 function svgStyle(attr: string) {
   const value = getNested(shroom.value, attr)

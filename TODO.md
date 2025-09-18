@@ -1,5 +1,6 @@
 # TODO
 - Seite mit den Gattungen und untergattungen
+- show better images (assess qualty with ai)
 - clear search: focus on the textfield again. hard with the combobox
 - Side scroll Bilder wie bei spotify
 - Weniger Text zu Merkmalen, mehr Bilder (dunkles Netz am Stiel)
