@@ -14,8 +14,8 @@ import MushroomImage from '@/components/MushroomImage.vue'
 import router from '@/router'
 import Card from '@/components/Card.vue'
 import VueEasyLightbox from 'vue-easy-lightbox'
-import type Shroom from '@/types/Shroom'
 import ChevronIcon from '@/assets/chevron.svg'
+import { useMushroomById } from '@/graphql/composables'
 
 const route = useRoute()
 const store = useStore()
@@ -24,7 +24,9 @@ const { t } = useI18n()
 defineOptions({
   name: 'MushroomDetail'
 })
+const id = ref(Number(route.params.id))
 
+const { shroom } = useMushroomById(id)
 const mobileScrollContainer = ref<HTMLElement | null>(null)
 const lightboxVisible = ref(false)
 const currentIndex = ref(0)
@@ -36,12 +38,10 @@ const images = computed(() =>
 )
 function openLightbox(i: number) { currentIndex.value = i; lightboxVisible.value = true }
 
-const shroom = computed<Shroom | null>(() => {
-  return store.shrooms.find(s => s.id === Number(route.params.id)) || null
-})
+
 
 // reset x scroll pos of mobile scroll container
-watch(() => shroom.value?.id, () => {
+watch(() => id, () => {
   if (mobileScrollContainer.value) {
     mobileScrollContainer.value.scrollLeft = 0
   }
@@ -73,13 +73,13 @@ function searchGenus() {
     </router-link>
     <h1 class="text-3xl font-bold">{{ shroom.preferred_common_name }}</h1>
     <h2 class="text-lg text-stone-600 italic flex gap-1">
-      <button class="cursor-pointer hover:underline hover:text-stone-800" @click="searchGenus()">{{ shroom.name.split(' ')[0] }}</button>
+      <button class="cursor-pointer hover:underline hover:text-stone-800 capitalize" @click="searchGenus()">{{ shroom.name.split(' ')[0] }}</button>
       <span>{{ shroom.name.split(' ').slice(1)[0] }}</span>
     </h2>
 
     <VueEasyLightbox :visible="lightboxVisible" :imgs="images" :index="currentIndex" @hide="lightboxVisible = false" />
 
-    <div v-if="shroom.photos">
+    <div v-if="shroom.photos && shroom.photos.length">
       <!-- Mobile image area -->
       <div ref="mobileScrollContainer" class="flex md:hidden flex-row overflow-x-auto w-screen gap-x-2 pr-2">
         <MushroomImage v-for="(photo, index) in shroom.photos" :key="`${shroom.id}-${index}`" :shroom="shroom"
@@ -120,13 +120,13 @@ function searchGenus() {
       </div>
 
       <!-- milky -->
-      <div v-if="shroom.gills && shroom.gills.traits && shroom.gills.traits.includes('milky')"
+      <div v-if="shroom.gills_traits && shroom.gills_traits.includes('milky')"
         class="p-3 rounded-lg bg-stone-200 flex w-fit gap-2 items-center">
         Milchend
       </div>
 
       <!-- frequency -->
-      <div class="p-3 rounded-lg bg-stone-200 flex w-fit gap-2 items-center" :title="String(shroom.observations_count)">
+      <div v-if="shroom.observations_count" class="p-3 rounded-lg bg-stone-200 flex w-fit gap-2 items-center" :title="String(shroom.observations_count)">
         {{ shroom.observations_count < 100 ? 'Sehr selten' : shroom.observations_count < 500 ? 'Selten' :
           shroom.observations_count < 2500 ? 'Häufig' : 'Sehr häufig' }} </div>
       </div>
@@ -134,54 +134,54 @@ function searchGenus() {
       <div v-if="shroom.id_123" class="text-xl mt-6 text-stone-800">Details</div>
       <div class="flex flex-col gap-3 text-stone-700">
         <!-- Cap -->
-        <div v-if="shroom.cap" class="mb-4">
+        <div v-if="shroom.cap_color" class="mb-4">
           <div class="text-lg">Hut</div>
           <div class="flex items-center gap-2 mb-2">
             <CapIcon class="w-8 h-8" :style="svgStyle('cap.color')" />
-            {{shroom.cap.color.map(c => t(c)).join(', ')}}
+            {{shroom.cap_color.map(c => t(c)).join(', ')}}
           </div>
-          <div v-if="shroom.cap.shape" class="text-sm">Form: {{shroom.cap.shape.filter(e => e != 'other').map(s =>
+          <div v-if="shroom.cap_shape" class="text-sm">Form: {{shroom.cap_shape.filter(e => e != 'other').map(s =>
             t(s)).join(', ')}}</div>
         </div>
         <!-- Gills -->
-        <div v-if="shroom.gills" class="mb-4">
+        <div v-if="shroom.gills_color" class="mb-4">
           <div class="text-lg">Lamellen</div>
-          <div v-if="shroom.gills.color" class="flex items-center gap-2 mb-2">
+          <div v-if="shroom.gills_color" class="flex items-center gap-2 mb-2">
             <GillsColorIcon class="w-8 h-8" :style="svgStyle('gills.color')" />
-            {{shroom.gills.color.map(c => t(c)).join(', ')}}
+            {{shroom.gills_color.map(c => t(c)).join(', ')}}
           </div>
-          <div class="text-sm">{{shroom.gills.attachment?.map(s => t(s)).join(', ')}}
-            {{shroom.gills.traits?.map(s => t(s)).join(', ')}}
+          <div class="text-sm">{{shroom.gills_attachment?.map(s => t(s)).join(', ')}}
+            {{shroom.gills_traits?.map(s => t(s)).join(', ')}}
           </div>
           <div v-if="shroom.spore_color" class="text-sm">
             Sporenpulverfarbe: {{shroom.spore_color.map(s => t(s)).join(', ')}}
           </div>
         </div>
         <!-- Stem -->
-        <div v-if="shroom.stem" class="mb-4">
+        <div v-if="shroom.stem_color" class="mb-4">
           <div class="text-lg">Stiel</div>
           <div class="flex items-center gap-2 mb-2">
-            <div v-if="shroom.stem.color" class="flex items-center gap-2">
+            <div v-if="shroom.stem_color" class="flex items-center gap-2">
               <StemIcon class="w-8 h-8" :style="svgStyle('stem.color')" />
-              {{shroom.stem.color.map(c => t(c)).join(', ')}}
+              {{shroom.stem_color.map(c => t(c)).join(', ')}}
             </div>
           </div>
           <div class="text-sm flex gap-1">
-            <span v-for='trait in shroom.stem.traits' class="capitalize" :key="trait">
+            <span v-for='trait in shroom.stem_traits' class="capitalize" :key="trait">
               {{ t(trait) }}
             </span>
           </div>
         </div>
         <!-- Flesh -->
-        <div v-if="shroom.flesh" class="mb-4">
+        <div v-if="shroom.flesh_color" class="mb-4">
           <div class="text-lg">Fleisch</div>
           <div class="flex items-center gap-2">
             <FleshIcon class="w-8 h-8" :style="svgStyle('flesh.color')" />
-            {{shroom.flesh.color.map(c => t(c)).join(', ')}}
+            {{shroom.flesh_color.map(c => t(c)).join(', ')}}
           </div>
-          <div v-if="shroom.flesh.bruising_color" class="flex items-center gap-2">
+          <div v-if="shroom.flesh_bruising_color" class="flex items-center gap-2">
             <FleshIcon class="w-8 h-8" :style="svgStyle('flesh.bruising_color')" />
-            Verfärbung:<br />{{shroom.flesh.bruising_color?.map(c => t(c)).join(', ')}}
+            Verfärbung:<br />{{shroom.flesh_bruising_color?.map(c => t(c)).join(', ')}}
           </div>
         </div>
         <!-- Smell -->
@@ -206,11 +206,11 @@ function searchGenus() {
           </div>
         </div>
         <!-- Season -->
-        <div v-if="shroom.season" class="mb-4">
+        <div v-if="shroom.season_from && shroom.season_to" class="mb-4">
           <div class="text-lg">Jahreszeit</div>
           <div class="flex flex-wrap gap-1">
             <div v-for="i in 12" class="w-8 h-8 rounded-lg text-sm text-center leading-8 relative"
-            :class='[i >= shroom.season[0] && i <= shroom.season[1] ? "bg-amber-300 text-stone-800 " : "bg-stone-100 text-stone-600",
+            :class='[i >= shroom.season_from && i <= shroom.season_to ? "bg-amber-300 text-stone-800 " : "bg-stone-100 text-stone-600",
             i === currentMonth ? "border border-stone-600" : ""]' :key="i">
               {{ GERMAN_MONTHS[i - 1].slice(0, 3) }}
               <ChevronIcon v-if="i === currentMonth" class="text-stone-800 w-1.5 h-1.5 absolute bottom-0 left-3"/>
@@ -219,10 +219,10 @@ function searchGenus() {
           </div>
         </div>
         <!-- Size -->
-        <div v-if="shroom.size" class="mb-4">
+        <div v-if="shroom.size_from && shroom.size_to" class="mb-4">
           <div class="text-lg">Größe</div>
           <div>
-            {{ `${shroom.size[0]}–${shroom.size[1]} cm` }}
+            {{ `${shroom.size_from}–${shroom.size_to} cm` }}
           </div>
         </div>
         <!-- Further details -->
@@ -240,8 +240,9 @@ function searchGenus() {
       <div v-if="shroom.look_alikes">
         <div class="text-lg text-stone-700 mb-2">Verwechslungspartner</div>
         <div class="flex flex-col gap-2">
-          <Card v-for="lookalikeId in shroom.look_alikes" :key="lookalikeId"
-            :shroom="store.shrooms.find(s => s.id === lookalikeId)!" />
+          <!-- TODO -->
+          <!-- <Card v-for="lookalikeId in shroom.look_alikes" :key="lookalikeId"
+            :shroom="store.shrooms.find(s => s.id === lookalikeId)!" /> -->
         </div>
       </div>
 

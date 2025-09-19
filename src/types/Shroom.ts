@@ -12,34 +12,30 @@ export default interface Shroom {
   id: number
   rank_level?: number
   name: string
-  preferred_common_name: string
-  english_common_name: string
-  type?: ('gilled' | 'poroid' | 'lichenized' | 'spiny' | 'round' | 'coral-like' | 'gelatinous' | 'other_genus')[]
+  preferred_common_name?: string
+  english_common_name?: string
+  ancestry: string
+  observations_count: number
   photos?: {
     url: string
     attribution: string
     license_code: string
   }[]
   id_123?: string
-  season?: [number, number] // months as numbers (1-12)
-  size?: [number, number] // diameter in cm
-  gills?: {
-    color: Color[]
-    attachment: ('free' | 'attached' | 'decurrent')[]
-    traits: GillTrait[]
-  }
-  stem?: {
-    color: Color[]
-    traits: StemTrait[]
-  }
-  cap?: {
-    color: Color[]
-    shape: ('round' | 'flat' | 'funnel' | 'conical' | 'coral-like' | 'grooved_cap' | 'other')[]
-  }
-  flesh?: {
-    color: Color[]
-    bruising_color: BruisingColor[]
-  }
+  type?: ('gilled' | 'poroid' | 'lichenized' | 'spiny' | 'round' | 'coral-like' | 'gelatinous' | 'other_genus')[]
+  season_from?: number // months as numbers (1-12)
+  season_to?: number 
+  size_from?: number // diameter in cm
+  size_to?: number
+  gills_color?: Color[]
+  gills_attachment?:('free' | 'attached' | 'decurrent')[]
+  gills_traits?: GillTrait[]
+  stem_color?: Color[]
+  stem_traits?: StemTrait[]
+  cap_color?: Color[]
+  cap_shape?: ('round' | 'flat' | 'funnel' | 'conical' | 'coral-like' | 'grooved_cap' | 'other')[]
+  flesh_color?: Color[]
+  flesh_bruising_color?: BruisingColor[]
   edibility?: 'excellent' | 'good' | 'inedible'
   toxicity?: 'toxic' | 'deadly'
   taste?: ('mild' | 'bitter' | 'spicy' | 'mushroomy' | 'other')[]
@@ -47,8 +43,5 @@ export default interface Shroom {
   spore_color?: ('white' | 'yellow' | 'red' | 'brown' | 'purple' | 'black')[]
   habitat?: ('wood' | 'soil' | 'meadow')[]
   traits?: ('tufted' | 'hygrophanous' | 'slimy' | 'hard')[]
-  frequency?: string
-  ancestry: string
-  observations_count: number
   look_alikes?: number[]
 }

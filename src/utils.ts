@@ -52,6 +52,7 @@ export function toHexColor(
   return HEX_COLOR_MAP[color] || '#78716c'
 }
 
+// random number from 0-1 with seed
 function seededRandom(seed: number) {
   let value = seed
   return function () {
@@ -60,14 +61,13 @@ function seededRandom(seed: number) {
   }
 }
 
-export function getRandomSeededSample(arr: Array<Shroom>, sampleSize: number) {
+export function seedToday(max: number) {
   // seed
   const now = new Date()
   const dayFrom1980 = Math.floor(now.getTime() / (1000 * 60 * 60 * 24))
 
   const random = seededRandom(dayFrom1980);
-  const shuffled = [...arr].sort(() => random() - 0.5);
-  return shuffled.slice(0, sampleSize);
+  return Math.floor(random() * max)
 }
 
 export type MushroomIconData = {

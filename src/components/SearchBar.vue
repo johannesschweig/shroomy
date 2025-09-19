@@ -1,49 +1,15 @@
 <script setup lang="ts">
-import { ref, computed, watch, nextTick } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { Combobox, ComboboxInput, ComboboxOptions, ComboboxOption } from '@headlessui/vue'
 import DeleteIcon from '@/assets/delete.svg'
 import FilterIcon from '@/assets/filter.svg'
 import { useStore } from '@/stores/store'
+import { useSearchMushroomNames } from '@/graphql/composables'
 
 const store = useStore()
 const query = ref('')
 const selected = ref('')
-
-const UNIQUE_NAMES = computed(() => {
-  return Array.from(new Set(store.shrooms
-    .flatMap(shroom => {
-      const nameParts = shroom.name ? shroom.name.split(' ') : []
-      return [...nameParts, shroom.preferred_common_name].filter(Boolean)
-    })
-    .map(n => n.toLowerCase())
-  ))
-})
-
-const suggestions = computed(() => {
-  const q = query.value.trim().toLowerCase()
-  if (!q) return []
-
-  const uniqueNames = UNIQUE_NAMES.value.filter(n => n.includes(q))
-
-  // Assign scoring function: exact match highest, then startsWith, then includes
-  function score(name: string): number {
-    if (name === q) return 3
-    if (name.startsWith(q)) return 2
-    if (name.includes(q)) return 1
-    return 0
-  }
-
-  // Sort by score descending, then alphabetically
-  const sorted = uniqueNames.sort((a, b) => {
-    const diff = score(b) - score(a)
-    return diff !== 0 ? diff : a.localeCompare(b)
-  })
-
-  // Limit to 8 suggestions
-  return sorted.slice(0, 8)
-})
-
-
+const { suggestions } = useSearchMushroomNames(query)
 
 // When selected changes, update search
 watch(selected, (val) => {
@@ -106,7 +72,7 @@ watch(() => store.search, (newSearch) => {
     </button>
   </div>
   <!-- Filter Button -->
-  <div class="flex items-center mb-4">
+  <!-- <div class="flex items-center mb-4">
     <router-link to="/filter" class="self-start w-fit btn btn-secondary h-11"
       :class="{ '!rounded-r-none': store.filtersActive }">
       <FilterIcon class="w-5 h-5" />
@@ -120,5 +86,5 @@ watch(() => store.search, (newSearch) => {
       :class="{ '!rounded-l-none !border-l-0': store.filtersActive }" @click="store.clearFilters()" type="button">
       <DeleteIcon class="w-5 h-5 text-amber-600" />
     </button>
-  </div>
+  </div> -->
 </template>

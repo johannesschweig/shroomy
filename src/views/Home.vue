@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import Card from '@/components/Card.vue'
 import { useStore } from '@/stores/store'
-import { getRandomSeededSample, getInaturalistImageUrl } from '@/utils'
-import type Shroom from '@/types/Shroom'
+import { getInaturalistImageUrl } from '@/utils'
 import SearchBar from '@/components/SearchBar.vue'
+import { useRandomFungiWithPhoto } from '@/graphql/composables'
+import { useSearchShrooms } from '@/graphql/composables'
 
 defineOptions({
   name: 'HomeView'
@@ -11,6 +12,9 @@ defineOptions({
 
 const store = useStore()
 
+const { filteredShrooms, totalCount } = useSearchShrooms()
+
+const { mushroomsOfTheDay } = useRandomFungiWithPhoto()
 </script>
 
 <template>
@@ -29,7 +33,7 @@ const store = useStore()
         <div class="flex flex-wrap gap-2">
           <router-link :to="`/mushroom/${shroom.id}`"
             class="relative w-22 h-22 rounded-lg border-2 border-transparent hover:border-amber-600"
-            v-for="shroom in getRandomSeededSample(store.shrooms.filter((s: Shroom) => (s.photos && s.id_123 && s.observations_count > 500)), 12)">
+            v-for="shroom in mushroomsOfTheDay">
             <img :src="getInaturalistImageUrl(shroom.photos?.[0].url ?? '', 'small')"
               class="absolute inset-0 w-full h-full object-cover rounded-[6px]" loading="lazy" />
           </router-link>
@@ -37,16 +41,17 @@ const store = useStore()
         <div class="text-stone-600 mt-2">Pilze des Tages</div>
       </div>
       <!-- Results -->
-      <div v-else-if="store.filteredShrooms.length > 0">
+      <div v-else-if="filteredShrooms.length > 0">
         <div class="text-sm text-stone-500 mb-2">
-          {{ store.filteredShrooms.length }} Treffer
+          {{ totalCount }} Treffer
+          {{ totalCount > 30 ? '(30 angezeigt)' : '' }}
         </div>
         <div class="flex flex-col gap-2">
-          <Card v-for="shroom in store.filteredShrooms" :key="shroom.url" :shroom="shroom" :highlight="true"/>
+          <Card v-for="shroom in filteredShrooms" :key="shroom.id" :shroom="shroom" :highlight="true" />
         </div>
       </div>
       <!-- Empty: Nothing found -->
-      <div v-else-if="store.filteredShrooms.length === 0" class="text-stone-500">
+      <div v-else-if="filteredShrooms.length === 0" class="text-stone-500">
         Keine Pilze gefunden.
       </div>
     </div>

@@ -1,4 +1,9 @@
 # TODO
+- home: mushrooms of the day. show mushrooms with data
+- capitalize card taxon name
+- isloading state
+- photo 567812787 and 567812725 are the same :(
+- mobile: somehow to wide. lightbox scrolls off viewport
 - Seite mit den Gattungen und untergattungen
 - show better images (assess qualty with ai)
 - clear search: focus on the textfield again. hard with the combobox
@@ -20,6 +25,7 @@
 - look alikes: the shroom itself cannot be a look alike to itself. clean it
 
 # DONE
+- Leccinum scabrum falsches 123
 - autocomplete search
 - disable color buttons if not available
 - Parasol linkt zu falschem 123

@@ -1,42 +1,44 @@
 import { defineStore } from 'pinia'
 import type Shroom from '@/types/Shroom'
+import { supabase } from '@/supabase'
 
 export const useStore = defineStore('store', {
   state: () => ({
-    isLoading: false,
     filters: {} as Record<string, string[]>,
-    search: '' as string,
-    shrooms: [] as any[],
+    search: '',
+    filteredShrooms: [] as Shroom[],
   }),
   getters: {
     totalFilters(state) {
       return Object.values(state.filters).reduce((sum, arr) => sum + arr.length, 0)
     },
-    filteredShrooms(state) {
-      const q = state.search.trim().toLowerCase()
+    // filteredShrooms(state) {
+    //   const q = state.search.trim().toLowerCase()
+    //   const { filteredShrooms } = useSearchShrooms(q)
+    //   return filteredShrooms.value
 
-      return state.shrooms.filter((shroom: Shroom) => {
-        // Search condition
-        const matchesSearch =
-          !q ||
-          (shroom.preferred_common_name?.toLowerCase().includes(q)) ||
-          (shroom.name?.toLowerCase().includes(q))
 
-        // Attribute filters (must match ALL values for a given key)
-        const matchesFilters = Object.entries(state.filters).every(([key, values]) => {
-          if (!values.length) return true
-          const val = getNestedValue(shroom, key)
+      // return state.shrooms.filter((shroom: Shroom) => {
+      //   // Search condition
+      //   const matchesSearch =
+      //     !q ||
+      //     (shroom.preferred_common_name?.toLowerCase().includes(q)) ||
+      //     (shroom.name?.toLowerCase().includes(q))
 
-          if (Array.isArray(val)) {
-            return values.every(v => val.includes(v)) // all selected values must be present
-          }
-          return values.every(v => v === val) // must match exactly if scalar
-        })
+      //   // Attribute filters (must match ALL values for a given key)
+      //   const matchesFilters = Object.entries(state.filters).every(([key, values]) => {
+      //     if (!values.length) return true
+      //     const val = getNestedValue(shroom, key)
 
-        return matchesSearch && matchesFilters
-      })
-    }
-    ,
+      //     if (Array.isArray(val)) {
+      //       return values.every(v => val.includes(v)) // all selected values must be present
+      //     }
+      //     return values.every(v => v === val) // must match exactly if scalar
+      //   })
+
+      //   return matchesSearch && matchesFilters
+      // })
+    // },
     getMatches() {
       return (attributePath: string, value?: string) => {
         const keys = attributePath.split('.')
@@ -83,21 +85,19 @@ export const useStore = defineStore('store', {
     setSearch(query: string) {
       this.search = query
     },
-    setShrooms(data: any[]) {
-    },
-    async loadShrooms() {
-      this.isLoading = true
-      try {
-        // Load shrooms data into store
-        fetch('/data/shrooms.json')
-          .then(res => res.json())
-          .then(data => {
-            this.shrooms = data
-            console.log(`Loaded ${this.shrooms.length} shrooms`)
-          })
-      } finally {
-        this.isLoading = false
+    async getMushroomsOfTheDay() {
+      const { data, error } = await supabase
+        .from('fungi')
+        .select('*')
+        .limit(12)
+
+      if (error) {
+        console.error('Supabase fetch error:', error)
+        return []
       }
+      console.log('Fetched mushrooms:', data)
+
+      return data ?? []
     }
   }
 })
