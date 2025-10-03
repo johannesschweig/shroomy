@@ -102,3 +102,8 @@ export function getNested(obj: any, path: string) {
 export function getInaturalistImageUrl(photo: string, size: "square" | "small" | "medium" | "large") {
   return photo.replace("square", size)
 }
+
+export function capitalizeFirstLetter(str: string): string {
+  if (!str) return ''
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}

@@ -23,7 +23,7 @@ const routes = [
   {
     path: '/disclaimer',
     name: 'disclaimer',
-    component: Disclaimer
+    component: Disclaimer,
   }
 ]
 
@@ -39,5 +39,11 @@ const router = createRouter({
     return savedPosition || { top: 0 }
   }
 })
+
+router.afterEach(async (to) => {
+  // will be overwritten in MushroomDetail.vue
+  document.title = "Shroomy"
+})
+
 
 export default router

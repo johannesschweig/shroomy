@@ -2,7 +2,7 @@
 import { watch, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from '@/stores/store'
-import { GERMAN_MONTHS, getMushroomIcon, toHexColor, getNested, getInaturalistImageUrl } from '@/utils'
+import { GERMAN_MONTHS, getMushroomIcon, toHexColor, getNested, getInaturalistImageUrl, capitalizeFirstLetter } from '@/utils'
 import PoroidIcon from '@/assets/poroid.svg'
 import GilledIcon from '@/assets/gills.svg'
 import CapIcon from '@/assets/cap.svg'
@@ -25,7 +25,6 @@ defineOptions({
   name: 'MushroomDetail'
 })
 const id = ref(Number(route.params.id))
-
 const { shroom } = useMushroomById(id)
 const mobileScrollContainer = ref<HTMLElement | null>(null)
 const lightboxVisible = ref(false)
@@ -38,6 +37,16 @@ const images = computed(() =>
 )
 function openLightbox(i: number) { currentIndex.value = i; lightboxVisible.value = true }
 
+watch(
+  () => shroom.value,
+  (newShroom) => {
+    if (newShroom) {
+      document.title = newShroom.preferred_common_name ? 
+      newShroom.preferred_common_name : capitalizeFirstLetter(newShroom.name)
+    }
+  },
+  { immediate: true }
+)
 
 
 // reset x scroll pos of mobile scroll container
@@ -137,7 +146,7 @@ function searchGenus() {
         <div v-if="shroom.cap_color" class="mb-4">
           <div class="text-lg">Hut</div>
           <div class="flex items-center gap-2 mb-2">
-            <CapIcon class="w-8 h-8" :style="svgStyle('cap.color')" />
+            <CapIcon class="w-8 h-8" :style="svgStyle('cap_color')" />
             {{shroom.cap_color.map(c => t(c)).join(', ')}}
           </div>
           <div v-if="shroom.cap_shape" class="text-sm">Form: {{shroom.cap_shape.filter(e => e != 'other').map(s =>
@@ -147,7 +156,7 @@ function searchGenus() {
         <div v-if="shroom.gills_color" class="mb-4">
           <div class="text-lg">Lamellen</div>
           <div v-if="shroom.gills_color" class="flex items-center gap-2 mb-2">
-            <GillsColorIcon class="w-8 h-8" :style="svgStyle('gills.color')" />
+            <GillsColorIcon class="w-8 h-8" :style="svgStyle('gills_color')" />
             {{shroom.gills_color.map(c => t(c)).join(', ')}}
           </div>
           <div class="text-sm">{{shroom.gills_attachment?.map(s => t(s)).join(', ')}}
@@ -162,7 +171,7 @@ function searchGenus() {
           <div class="text-lg">Stiel</div>
           <div class="flex items-center gap-2 mb-2">
             <div v-if="shroom.stem_color" class="flex items-center gap-2">
-              <StemIcon class="w-8 h-8" :style="svgStyle('stem.color')" />
+              <StemIcon class="w-8 h-8" :style="svgStyle('stem_color')" />
               {{shroom.stem_color.map(c => t(c)).join(', ')}}
             </div>
           </div>
@@ -176,11 +185,11 @@ function searchGenus() {
         <div v-if="shroom.flesh_color" class="mb-4">
           <div class="text-lg">Fleisch</div>
           <div class="flex items-center gap-2">
-            <FleshIcon class="w-8 h-8" :style="svgStyle('flesh.color')" />
+            <FleshIcon class="w-8 h-8" :style="svgStyle('flesh_color')" />
             {{shroom.flesh_color.map(c => t(c)).join(', ')}}
           </div>
           <div v-if="shroom.flesh_bruising_color" class="flex items-center gap-2">
-            <FleshIcon class="w-8 h-8" :style="svgStyle('flesh.bruising_color')" />
+            <FleshIcon class="w-8 h-8" :style="svgStyle('flesh_bruising_color')" />
             Verfärbung:<br />{{shroom.flesh_bruising_color?.map(c => t(c)).join(', ')}}
           </div>
         </div>
@@ -240,9 +249,8 @@ function searchGenus() {
       <div v-if="shroom.look_alikes">
         <div class="text-lg text-stone-700 mb-2">Verwechslungspartner</div>
         <div class="flex flex-col gap-2">
-          <!-- TODO -->
-          <!-- <Card v-for="lookalikeId in shroom.look_alikes" :key="lookalikeId"
-            :shroom="store.shrooms.find(s => s.id === lookalikeId)!" /> -->
+          <!-- <Card v-for="lookalike in lookAlikes" :key="lookalike.id"
+            :shroom="lookalike" /> -->
         </div>
       </div>
 
