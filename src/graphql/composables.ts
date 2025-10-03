@@ -27,7 +27,7 @@ export function useRandomFungiWithPhoto() {
 
   const mushroomsOfTheDay = computed(() =>
     (result.value?.fungiCollection.edges ?? [])
-      .map(edge => {
+      .map((edge: any) => {
         const fungi = edge.node
         const photoEdges = fungi.photosCollection.edges
         const photos = photoEdges.length > 0 ? [photoEdges[0].node] : null
@@ -66,7 +66,7 @@ export function useSearchMushroomNames(queryRef: Ref<string>) { // pass ref, not
   const suggestions = computed(() => {
     if (!variables.value.search || !result.value) return []
     return result.value.fungiCollection.edges
-      .map(e => [e.node.name, e.node.preferred_common_name])
+      .map((e: any) => [e.node.name, e.node.preferred_common_name])
       .flat()
       .filter(Boolean)
   })
@@ -96,7 +96,7 @@ export function useSearchShrooms() {
   const filteredShrooms = computed(() => {
     if (!result.value || !result.value.fungiCollection) return []
 
-    return (result.value.fungiCollection.edges ?? []).map(e => {
+    return (result.value.fungiCollection.edges ?? []).map((e: any) => {
       const fungi = e.node
       const photoEdges = fungi.photosCollection?.edges || []
       const photos = photoEdges.length > 0 ? [photoEdges[0].node] : null
