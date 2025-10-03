@@ -1,6 +1,7 @@
 import { gql } from 'graphql-tag'
 import { seedToday } from '@/utils'
 
+// for detail page
 export const GET_SHROOM_BY_ID = gql`
   query GetShroomById($id: Int!) {
   fungiCollection(filter: {id: {eq: $id}}) {
@@ -13,7 +14,6 @@ export const GET_SHROOM_BY_ID = gql`
         observations_count
         ancestry
         observations_count
-        
         photosCollection(first: 10) {
           edges {
             node {
@@ -56,6 +56,7 @@ export const GET_SHROOM_BY_ID = gql`
 
 const OFFSET = seedToday(9900) // max 9991 rows - some wiggle room
 
+// for mushrooms of the day
 export const GET_RANDOM_FUNGI = gql`
   query GetRandomFungiWithPhoto {
     fungiCollection(first: 20, offset:${OFFSET}) {
@@ -76,6 +77,7 @@ export const GET_RANDOM_FUNGI = gql`
 }
 `
 
+// for autocomplete search suggestions
 export const SEARCH_MUSHROOM_NAMES = gql`
 query SearchMushroomNames($search: String) {
   fungiCollection(
@@ -96,6 +98,8 @@ query SearchMushroomNames($search: String) {
   }
 }
 `
+
+// for full search results page
 export const SEARCH_MUSHROOMS = gql`
 query SearchMushroom($search: String) {
   fungiCollection(
@@ -126,3 +130,30 @@ query SearchMushroom($search: String) {
     }
   }
 }`
+
+// get look alikes by ids
+export const GET_LOOK_ALIKE_FUNGI = gql`
+  query GetLookAlikeFungi($ids: [String!]) {
+    attributesCollection(filter: { id_123: { in: $ids } }) {
+      edges {
+        node {
+          fungi_id
+          fungi {
+            id
+            name
+            preferred_common_name
+            observations_count
+            photosCollection(first: 1) {
+              edges {
+                node {
+                  url
+                  fungi_id
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`

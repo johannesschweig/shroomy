@@ -15,7 +15,7 @@ import router from '@/router'
 import Card from '@/components/Card.vue'
 import VueEasyLightbox from 'vue-easy-lightbox'
 import ChevronIcon from '@/assets/chevron.svg'
-import { useMushroomById } from '@/graphql/composables'
+import { useMushroomById, useMushroomLookAlikes } from '@/graphql/composables'
 
 const route = useRoute()
 const store = useStore()
@@ -26,6 +26,10 @@ defineOptions({
 })
 const id = ref(Number(route.params.id))
 const { shroom } = useMushroomById(id)
+
+const lookAlikeIds = ref<number[]>([])
+const { lookAlikes } = useMushroomLookAlikes(lookAlikeIds)
+
 const mobileScrollContainer = ref<HTMLElement | null>(null)
 const lightboxVisible = ref(false)
 const currentIndex = ref(0)
@@ -37,6 +41,22 @@ const images = computed(() =>
 )
 function openLightbox(i: number) { currentIndex.value = i; lightboxVisible.value = true }
 
+// when shroom changes, update lookAlikeIds
+watch(shroom, (val) => {
+  if (val?.look_alikes) {
+    lookAlikeIds.value = val.look_alikes
+  }
+})
+
+// on route change, change id, so shroom is refetched
+watch(
+  () => route.params.id,
+  (newId) => {
+    id.value = Number(newId)
+  }
+)
+
+// change tab title
 watch(
   () => shroom.value,
   (newShroom) => {
@@ -47,7 +67,6 @@ watch(
   },
   { immediate: true }
 )
-
 
 // reset x scroll pos of mobile scroll container
 watch(() => id, () => {
@@ -249,8 +268,8 @@ function searchGenus() {
       <div v-if="shroom.look_alikes">
         <div class="text-lg text-stone-700 mb-2">Verwechslungspartner</div>
         <div class="flex flex-col gap-2">
-          <!-- <Card v-for="lookalike in lookAlikes" :key="lookalike.id"
-            :shroom="lookalike" /> -->
+          <Card v-for="lookalike in lookAlikes" :key="lookalike.id"
+            :shroom="lookalike" />
         </div>
       </div>
 

@@ -1,11 +1,14 @@
 # TODO
-- home: mushrooms of the day. show mushrooms with data
+- sort results by observations_count
+- look alikes for pantherpilz are only 1 (in org data 11)
+- filter is off
+- observations per state/germany/europe and not world-wide
 - capitalize card taxon name
 - isloading state
 - photo 567812787 and 567812725 are the same :(
 - mobile: somehow to wide. lightbox scrolls off viewport
 - Seite mit den Gattungen und untergattungen
-- show better images (assess qualty with ai)
+- show better images (assess quality with ai)
 - clear search: focus on the textfield again. hard with the combobox
 - Side scroll Bilder wie bei spotify
 - Weniger Text zu Merkmalen, mehr Bilder (dunkles Netz am Stiel)
@@ -25,6 +28,9 @@
 - look alikes: the shroom itself cannot be a look alike to itself. clean it
 
 # DONE
+- look_alikes missing
+- change browser title on detail page
+- colors for icons in detail page dont work
 - Leccinum scabrum falsches 123
 - autocomplete search
 - disable color buttons if not available
@@ -72,6 +78,8 @@
   - some mushrooms are missing images (maybe use the ones from 123pilze)
 
 # DROPPED
+- home: mushrooms of the day. show mushrooms with data
+  - this is not trivial to do in graphql. need to filter in the backend. probably not worth it
 - search with features
   - month
   - diameter
