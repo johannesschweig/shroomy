@@ -11,9 +11,8 @@ export const GET_SHROOM_BY_ID = gql`
         rank_level
         name
         preferred_common_name
-        observations_count
+        obs_count_ger
         ancestry
-        observations_count
         photosCollection(first: 10) {
           edges {
             node {
@@ -110,6 +109,7 @@ query SearchMushroom($search: String) {
         { preferred_common_name: { ilike: $search } }
       ]
     }
+    orderBy: [{ obs_count_ger: DescNullsLast }]
   ) {
     totalCount
     edges {
@@ -117,7 +117,7 @@ query SearchMushroom($search: String) {
         id
         name
         preferred_common_name
-        observations_count
+        obs_count_ger
         photosCollection(first: 1) {
           edges {
             node {
@@ -142,7 +142,7 @@ export const GET_LOOK_ALIKE_FUNGI = gql`
             id
             name
             preferred_common_name
-            observations_count
+            obs_count_ger
             photosCollection(first: 1) {
               edges {
                 node {

@@ -15,7 +15,7 @@ export default interface Shroom {
   preferred_common_name?: string
   english_common_name?: string
   ancestry: string
-  observations_count: number
+  obs_count_ger?: number
   photos?: {
     url: string
     attribution: string

@@ -154,9 +154,9 @@ function searchGenus() {
       </div>
 
       <!-- frequency -->
-      <div v-if="shroom.observations_count" class="p-3 rounded-lg bg-stone-200 flex w-fit gap-2 items-center" :title="String(shroom.observations_count)">
-        {{ shroom.observations_count < 100 ? 'Sehr selten' : shroom.observations_count < 500 ? 'Selten' :
-          shroom.observations_count < 2500 ? 'Häufig' : 'Sehr häufig' }} </div>
+      <div v-if="shroom.obs_count_ger" class="p-3 rounded-lg bg-stone-200 flex w-fit gap-2 items-center" :title="String(shroom.obs_count_ger)">
+        {{ shroom.obs_count_ger < 10 ? 'Sehr selten' : shroom.obs_count_ger < 30 ? 'Selten' :
+          shroom.obs_count_ger < 70 ? 'Häufig' : 'Sehr häufig' }} </div>
       </div>
 
       <div v-if="shroom.id_123" class="text-xl mt-6 text-stone-800">Details</div>
@@ -268,7 +268,7 @@ function searchGenus() {
       <div v-if="shroom.look_alikes">
         <div class="text-lg text-stone-700 mb-2">Verwechslungspartner</div>
         <div class="flex flex-col gap-2">
-          <Card v-for="lookalike in lookAlikes" :key="lookalike.id"
+          <Card v-for="lookalike in lookAlikes.sort((a, b) => b.obs_count_ger - a.obs_count_ger)" :key="lookalike.id"
             :shroom="lookalike" />
         </div>
       </div>

@@ -34,7 +34,7 @@ export function flattenFungi(fungi: any): Shroom | null {
     preferred_common_name: fungi.preferred_common_name ?? '',
     english_common_name: fungi.english_common_name ?? '',
     ancestry: fungi.ancestry ?? '',
-    observations_count: fungi.observations_count ?? 0,
+    obs_count_ger: fungi.obs_count_ger ?? 0,
     photos: fungi.photosCollection?.edges?.map((edge: any) => {
       const photo = edge.node
       return {

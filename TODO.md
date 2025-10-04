@@ -1,10 +1,8 @@
 # TODO
-- sort results by observations_count
 - look alikes for pantherpilz are only 1 (in org data 11)
 - filter is off
-- observations per state/germany/europe and not world-wide
 - capitalize card taxon name
-- isloading state
+- isloading state and not keine pilze gefunden
 - photo 567812787 and 567812725 are the same :(
 - mobile: somehow to wide. lightbox scrolls off viewport
 - Seite mit den Gattungen und untergattungen
@@ -28,6 +26,8 @@
 - look alikes: the shroom itself cannot be a look alike to itself. clean it
 
 # DONE
+- observations per state/germany/europe and not world-wide
+- sort results by observations_count
 - look_alikes missing
 - change browser title on detail page
 - colors for icons in detail page dont work

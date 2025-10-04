@@ -88,7 +88,7 @@ export function useSearchShrooms() {
         id: fungi.id,
         name: fungi.name,
         preferred_common_name: fungi.preferred_common_name,
-        observations_count: fungi.observations_count,
+        obs_count_ger: fungi.obs_count_ger,
         photos,
       }
     })
