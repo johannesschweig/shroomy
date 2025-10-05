@@ -12,7 +12,7 @@ defineOptions({
 
 const store = useStore()
 
-const { filteredShrooms, totalCount } = useSearchShrooms()
+const { filteredShrooms, loading, totalCount } = useSearchShrooms()
 
 const { mushroomsOfTheDay } = useRandomFungiWithPhoto()
 </script>
@@ -28,8 +28,12 @@ const { mushroomsOfTheDay } = useRandomFungiWithPhoto()
 
     <!-- Results Wrapper -->
     <div class="flex-1 overflow-y-auto">
+      <!-- Loading state -->
+      <div v-if="loading" class="text-stone-500">
+        Lade Ergebnisse...
+      </div>
       <!-- Mushrooms of the day -->
-      <div v-if="(store.search === '' && store.totalFilters === 0)" class="text-stone-400 ">
+      <div v-else-if="(store.search === '' && store.totalFilters === 0)" class="text-stone-400 ">
         <div class="flex flex-wrap gap-2">
           <router-link :to="`/mushroom/${shroom.id}`"
             class="relative w-22 h-22 rounded-lg border-2 border-transparent hover:border-amber-600"

@@ -2,7 +2,7 @@
 import MushroomIcon from '@/assets/mushroom.svg'
 import type Shroom from '@/types/Shroom'
 import { computed } from 'vue';
-import { getMushroomIcon, getInaturalistImageUrl } from '@/utils';
+import { getMushroomIcon, getInaturalistImageUrl, capitalizeFirstLetter } from '@/utils';
 import { useStore } from '@/stores/store'
 
 const props = defineProps<{
@@ -15,6 +15,7 @@ const store = useStore()
 const iconData = computed(() => getMushroomIcon(props.shroom))
 
 function highlightMatch(text: string) {
+  text = capitalizeFirstLetter(text)
   if (!props.highlight) return text
   const query = store.search
   if (!query) return text

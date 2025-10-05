@@ -25,7 +25,7 @@ defineOptions({
   name: 'MushroomDetail'
 })
 const id = ref(Number(route.params.id))
-const { shroom } = useMushroomById(id)
+const { shroom, loading } = useMushroomById(id)
 
 const lookAlikeIds = ref<number[]>([])
 const { lookAlikes } = useMushroomLookAlikes(lookAlikeIds)
@@ -109,7 +109,7 @@ function searchGenus() {
 
     <div v-if="shroom.photos && shroom.photos.length">
       <!-- Mobile image area -->
-      <div ref="mobileScrollContainer" class="flex md:hidden flex-row overflow-x-auto w-screen gap-x-2 pr-2">
+      <div ref="mobileScrollContainer" class="flex md:hidden flex-row overflow-x-auto w-full gap-x-2 pr-2">
         <MushroomImage v-for="(photo, index) in shroom.photos" :key="`${shroom.id}-${index}`" :shroom="shroom"
           :index="index" class="flex-shrink-0 w-64 h-48 object-cover rounded-lg cursor-pointer"
           @click="openLightbox(index)" />
@@ -288,6 +288,9 @@ function searchGenus() {
       </div>
     </div>
 
+    <div v-else-if="loading" class="text-center p-8 text-stone-500">
+      Lade Pilzdaten...
+    </div>
     <div v-else class="text-center p-8 text-stone-500">
       Pilz nicht gefunden
     </div>

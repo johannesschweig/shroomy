@@ -1,14 +1,10 @@
 # TODO
-- look alikes for pantherpilz are only 1 (in org data 11)
 - filter is off
-- capitalize card taxon name
-- isloading state and not keine pilze gefunden
 - photo 567812787 and 567812725 are the same :(
-- mobile: somehow to wide. lightbox scrolls off viewport
 - Seite mit den Gattungen und untergattungen
 - show better images (assess quality with ai)
 - clear search: focus on the textfield again. hard with the combobox
-- Side scroll Bilder wie bei spotify
+- Side scroll Bilder wie bei spotify mit inertia to center
 - Weniger Text zu Merkmalen, mehr Bilder (dunkles Netz am Stiel)
   - Vlt erklärbilder zu den Merkmalen (so sieht ein Netz aus?)
 - Fundbuch: bild, gps,bäume, Zeigerpflanzen, boden ph, substrate, Geruch, wann gefunden, erster Saisonfund
@@ -26,6 +22,10 @@
 - look alikes: the shroom itself cannot be a look alike to itself. clean it
 
 # DONE
+- isloading state and not keine pilze gefunden (home, detail page)
+- capitalize card taxon name (not super trivial with the highlighting)
+- mobile: somehow to wide. lightbox scrolls off viewport
+- look alikes for pantherpilz are only 1 (in org data 11)
 - observations per state/germany/europe and not world-wide
 - sort results by observations_count
 - look_alikes missing

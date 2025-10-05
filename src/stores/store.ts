@@ -12,33 +12,6 @@ export const useStore = defineStore('store', {
     totalFilters(state) {
       return Object.values(state.filters).reduce((sum, arr) => sum + arr.length, 0)
     },
-    // filteredShrooms(state) {
-    //   const q = state.search.trim().toLowerCase()
-    //   const { filteredShrooms } = useSearchShrooms(q)
-    //   return filteredShrooms.value
-
-
-      // return state.shrooms.filter((shroom: Shroom) => {
-      //   // Search condition
-      //   const matchesSearch =
-      //     !q ||
-      //     (shroom.preferred_common_name?.toLowerCase().includes(q)) ||
-      //     (shroom.name?.toLowerCase().includes(q))
-
-      //   // Attribute filters (must match ALL values for a given key)
-      //   const matchesFilters = Object.entries(state.filters).every(([key, values]) => {
-      //     if (!values.length) return true
-      //     const val = getNestedValue(shroom, key)
-
-      //     if (Array.isArray(val)) {
-      //       return values.every(v => val.includes(v)) // all selected values must be present
-      //     }
-      //     return values.every(v => v === val) // must match exactly if scalar
-      //   })
-
-      //   return matchesSearch && matchesFilters
-      // })
-    // },
     getMatches() {
       return (attributePath: string, value?: string) => {
         const keys = attributePath.split('.')
@@ -85,20 +58,6 @@ export const useStore = defineStore('store', {
     setSearch(query: string) {
       this.search = query
     },
-    async getMushroomsOfTheDay() {
-      const { data, error } = await supabase
-        .from('fungi')
-        .select('*')
-        .limit(12)
-
-      if (error) {
-        console.error('Supabase fetch error:', error)
-        return []
-      }
-      console.log('Fetched mushrooms:', data)
-
-      return data ?? []
-    }
   }
 })
 
