@@ -1,24 +1,24 @@
 # TODO
+- Eine Möglichkeit durch alle Pilze zu blättern ohne zuerst den Namen zu kennen wäre ganz praktisch
+  - maybe all the mushrooms grouped together by genus with popular mushrooms highlighted?
+  - Seite mit den Gattungen und untergattungen
 - filter is off
-- photo 567812787 and 567812725 are the same :(
-- Seite mit den Gattungen und untergattungen
 - show better images (assess quality with ai)
 - clear search: focus on the textfield again. hard with the combobox
 - Side scroll Bilder wie bei spotify mit inertia to center
+  - either embla carousel or self written
 - Weniger Text zu Merkmalen, mehr Bilder (dunkles Netz am Stiel)
   - Vlt erklärbilder zu den Merkmalen (so sieht ein Netz aus?)
 - Fundbuch: bild, gps,bäume, Zeigerpflanzen, boden ph, substrate, Geruch, wann gefunden, erster Saisonfund
   - connection with inaturalist?
 - xs: lamellenfarbe: change to Röhrenfarbe if poroid
-- BLOCKED gesetzlicher Schutz: nicht essen da gefährdet.
 - Verwechslungspartner mit Unterscheidungsmerkmalen, fotos und Anleitung zum sicheren Bestimmen
-- Eine Möglichkeit durch alle Pilze zu blättern ohne zuerst den Namen zu kennen wäre ganz praktisch
-  - maybe all the mushrooms grouped together by genus with popular mushrooms highlighted?
 ## data quality:
+- 8k fungi dont have a german name
 - duplicate photos: dont collect
+  - photo 567812787 and 567812725 are the same :(
 - more fine grained edibility from the other file
 - gills.color should be null for stäublinge
-- new data: gesetzlicher Schutz: nicht essen da gefährdet.
 - look alikes: the shroom itself cannot be a look alike to itself. clean it
 
 # DONE
@@ -78,6 +78,7 @@
   - some mushrooms are missing images (maybe use the ones from 123pilze)
 
 # DROPPED
+- new data: gesetzlicher Schutz: nicht essen da gefährdet.
 - home: mushrooms of the day. show mushrooms with data
   - this is not trivial to do in graphql. need to filter in the backend. probably not worth it
 - search with features

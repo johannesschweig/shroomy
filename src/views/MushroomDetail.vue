@@ -78,6 +78,20 @@ watch(() => id, () => {
 const iconData = computed(() => shroom.value ? getMushroomIcon(shroom.value) : { icon: null, class: '', text: '' })
 const currentMonth = computed(() => new Date().getMonth() + 1)
 
+function isMonthActive(month: number) {
+  const from = shroom.value?.season_from ?? 1
+  const to = shroom.value?.season_to ?? 12
+  var months: number[] = []
+  if (from <= to) {
+    months = Array.from({ length: to - from + 1 }, (_, i) => from + i);
+  } else { // e.g. from 11 (nov) to 3 (mar)
+    const endOfYear = Array.from({ length: 12 - from + 1 }, (_, i) => from + i);
+    const startOfYear = Array.from({ length: to }, (_, i) => i + 1);
+    months = [...endOfYear, ...startOfYear];
+  }
+  return months.includes(month);
+}
+
 function svgStyle(attr: string) {
   const value = getNested(shroom.value, attr)
   return {
@@ -238,7 +252,7 @@ function searchGenus() {
           <div class="text-lg">Jahreszeit</div>
           <div class="flex flex-wrap gap-1">
             <div v-for="i in 12" class="w-8 h-8 rounded-lg text-sm text-center leading-8 relative"
-            :class='[i >= shroom.season_from && i <= shroom.season_to ? "bg-amber-300 text-stone-800 " : "bg-stone-100 text-stone-600",
+            :class='[isMonthActive(i) ? "bg-amber-300 text-stone-800 " : "bg-stone-100 text-stone-600",
             i === currentMonth ? "border border-stone-600" : ""]' :key="i">
               {{ GERMAN_MONTHS[i - 1].slice(0, 3) }}
               <ChevronIcon v-if="i === currentMonth" class="text-stone-800 w-1.5 h-1.5 absolute bottom-0 left-3"/>
