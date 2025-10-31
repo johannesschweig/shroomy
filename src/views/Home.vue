@@ -5,16 +5,26 @@ import { getInaturalistImageUrl } from '@/utils'
 import SearchBar from '@/components/SearchBar.vue'
 import { useRandomFungiWithPhoto } from '@/graphql/composables'
 import { useSearchShrooms } from '@/graphql/composables'
+import { watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
 defineOptions({
   name: 'HomeView'
 })
 
 const store = useStore()
+const router = useRouter()
 
 const { filteredShrooms, loading, totalCount } = useSearchShrooms()
 
 const { mushroomsOfTheDay } = useRandomFungiWithPhoto()
+
+watch (filteredShrooms, (newVal: any) => {
+  if (newVal.length === 1) {
+    console.log('Only one result found, navigating to:', newVal[0].name)
+    router.push(`/mushroom/${newVal[0].id}`)
+  }
+})
 </script>
 
 <template>

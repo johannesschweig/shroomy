@@ -11,11 +11,10 @@ const query = ref('')
 const selected = ref('')
 const { suggestions } = useSearchMushroomNames(query)
 
-// When selected changes, update search
+// When selected suggestion changes, update search
 watch(selected, (val) => {
   if (val) {
-    store.setSearch(val)
-    query.value = val
+    applySearch(val)
   }
 })
 
