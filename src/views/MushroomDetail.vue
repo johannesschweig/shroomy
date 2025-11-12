@@ -157,7 +157,7 @@ function searchGenus() {
       <div v-if="shroom.type" class="p-3 rounded-lg bg-stone-200 flex w-fit gap-2 items-center">
         <PoroidIcon v-if="shroom.type.includes('poroid')" class="w-8 h-8" />
         <GilledIcon v-if="shroom.type.includes('gilled')" class="w-8 h-8" />
-        <div>{{ shroom.type.includes('gilled') ? 'Lamellen' : shroom.type.includes('poroid') ? 'Poren' :
+        <div>{{ shroom.type.includes('gilled') ? 'Lamellen' : shroom.type.includes('poroid') ? 'Röhren' :
           'Andere Gattung' }}</div>
       </div>
 
@@ -187,7 +187,7 @@ function searchGenus() {
         </div>
         <!-- Gills -->
         <div v-if="shroom.gills_color" class="mb-4">
-          <div class="text-lg">Lamellen</div>
+          <div class="text-lg">{{ shroom.type && shroom.type.includes('poroid') ? 'Röhren' : 'Lamellen'}}</div>
           <div v-if="shroom.gills_color" class="flex items-center gap-2 mb-2">
             <GillsColorIcon class="w-8 h-8" :style="svgStyle('gills_color')" />
             {{shroom.gills_color.map(c => t(c)).join(', ')}}
