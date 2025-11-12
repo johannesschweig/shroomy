@@ -78,6 +78,7 @@
   - some mushrooms are missing images (maybe use the ones from 123pilze)
 
 # DROPPED
+- change gills to "Leisten" for cantharellus
 - new data: gesetzlicher Schutz: nicht essen da gefährdet.
 - home: mushrooms of the day. show mushrooms with data
   - this is not trivial to do in graphql. need to filter in the backend. probably not worth it
