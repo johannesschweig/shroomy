@@ -1,3 +1,10 @@
+# TODO Nuxt migration
+- add error.vue at app/
+- explore prerendering
+- use resolveComponent for component :is=...
+- use definePageMeta in compoentn script setup to define title, description
+  - keepalive 
+- connectToDevTools spam: see github issue https://github.com/nuxt-modules/apollo/issues/662
 # TODO
 - Eine Möglichkeit durch alle Pilze zu blättern ohne zuerst den Namen zu kennen wäre ganz praktisch
   - maybe all the mushrooms grouped together by genus with popular mushrooms highlighted?

@@ -4,7 +4,6 @@ import { Combobox, ComboboxInput, ComboboxOptions, ComboboxOption } from '@headl
 import DeleteIcon from '@/assets/delete.svg'
 import FilterIcon from '@/assets/filter.svg'
 import { useStore } from '@/stores/store'
-import { useSearchMushroomNames } from '@/graphql/composables'
 
 const store = useStore()
 const query = ref('')
@@ -72,7 +71,7 @@ watch(() => store.search, (newSearch) => {
   </div>
   <!-- Filter Button -->
   <!-- <div class="flex items-center mb-4">
-    <router-link to="/filter" class="self-start w-fit btn btn-secondary h-11"
+    <NuxtLink to="/filter" class="self-start w-fit btn btn-secondary h-11"
       :class="{ '!rounded-r-none': store.filtersActive }">
       <FilterIcon class="w-5 h-5" />
       Filter
@@ -80,7 +79,7 @@ watch(() => store.search, (newSearch) => {
         class="w-4 h-4 leading-4 text-xs font-bold rounded-full bg-amber-600 text-white text-center">
         {{ store.totalFilters }}
       </div>
-    </router-link>
+    </NuxtLink>
     <button v-if="store.filtersActive" class="h-11 btn btn-secondary"
       :class="{ '!rounded-l-none !border-l-0': store.filtersActive }" @click="store.clearFilters()" type="button">
       <DeleteIcon class="w-5 h-5 text-amber-600" />

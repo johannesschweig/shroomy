@@ -2,7 +2,6 @@
 import { ref } from 'vue'
 import type Shroom from '@/types/Shroom'
 import type { PropType } from 'vue'
-import { getInaturalistImageUrl } from '@/utils'
 
 const props = defineProps({
   shroom: {

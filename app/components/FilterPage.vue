@@ -20,7 +20,7 @@ const store = useStore()
       <div class="flex gap-4">
         <button v-if="store.filtersActive" @click="store.clearFilters()"
           class="btn btn-secondary">Zurücksetzen</button>
-        <router-link to="/" class="btn btn-secondary">Schließen</router-link>
+        <NuxtLink to="/" class="btn btn-secondary">Schließen</NuxtLink>
       </div>
     </div>
     <!-- {{ store.filters }} -->

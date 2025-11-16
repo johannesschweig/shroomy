@@ -40,6 +40,6 @@ const toggleFilter = () => {
       ? 'opacity-50 cursor-not-allowed'
       : ''
   ]">
-    {{ t(optionValue) }}
+    {{ $t(optionValue) }}
   </button>
 </template>

@@ -1,12 +1,8 @@
 <script setup lang="ts">
 import Card from '@/components/Card.vue'
 import { useStore } from '@/stores/store'
-import { getInaturalistImageUrl } from '@/utils'
-import SearchBar from '@/components/SearchBar.vue'
-import { useRandomFungiWithPhoto } from '@/graphql/composables'
-import { useSearchShrooms } from '@/graphql/composables'
+import SearchBar from '~/components/SearchBar.vue'
 import { watch } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
 
 defineOptions({
   name: 'HomeView'
@@ -45,12 +41,12 @@ watch (filteredShrooms, (newVal: any) => {
       <!-- Mushrooms of the day -->
       <div v-else-if="(store.search === '' && store.totalFilters === 0)" class="text-stone-400 ">
         <div class="flex flex-wrap gap-2">
-          <router-link :to="`/mushroom/${shroom.id}`"
+          <NuxtLink :to="`/mushroom/${shroom.id}`"
             class="relative w-22 h-22 rounded-lg border-2 border-transparent hover:border-amber-600"
             v-for="shroom in mushroomsOfTheDay">
             <img :src="getInaturalistImageUrl(shroom.photos?.[0].url ?? '', 'small')"
-              class="absolute inset-0 w-full h-full object-cover rounded-[6px]" loading="lazy" />
-          </router-link>
+              class="absolute inset-0 w-full h-full object-cover rounded-md" loading="lazy" />
+          </NuxtLink>
         </div>
         <div class="text-stone-600 mt-2">Pilze des Tages</div>
       </div>

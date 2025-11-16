@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useStore } from '@/stores/store'
-import { toTwColorClass, toHexColor } from '@/utils'
 import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 import CapIcon from '@/assets/cap.svg'
@@ -46,7 +45,7 @@ const subtitle = () => {
   if (filters.length === 0) {
     return ''
   } else {
-    return filters.map(col => t(col)).join(', ')
+    return filters.map(col => $t(col)).join(', ')
   }
 }
 
@@ -64,7 +63,7 @@ const getMatchesCount = (color: string) => {
   <div>
     <h2 class="text-stone-700 mb-2 flex items-center gap-2">
       <component v-if="SelectedIcon" :is="SelectedIcon" class="w-8 h-8" :style="svgStyle" />
-      {{ t(props.type) }}
+      {{ $t(props.type) }}
       <span class="text-sm text-stone-500 italic inline-block">{{ subtitle() }}</span>
     </h2>
     <div class="flex flex-wrap gap-2 items-center h-8">

@@ -2,7 +2,6 @@
 import MushroomIcon from '@/assets/mushroom.svg'
 import type Shroom from '@/types/Shroom'
 import { computed } from 'vue';
-import { getMushroomIcon, getInaturalistImageUrl, capitalizeFirstLetter } from '@/utils';
 import { useStore } from '@/stores/store'
 
 const props = defineProps<{
@@ -33,7 +32,7 @@ function highlightMatch(text: string) {
 </script>
 
 <template>
-  <router-link :to="`/mushroom/${shroom.id}`" :key="shroom.name"
+  <NuxtLink :to="`/mushroom/${shroom.id}`" :key="shroom.name"
     class="grid grid-cols-[80px_1fr_auto] gap-2 md:gap-3 items-center hover:bg-stone-100 rounded-lg">
     <img v-if="shroom.photos && shroom.photos.length && shroom.photos?.[0].url" :src="getInaturalistImageUrl(shroom.photos?.[0].url, 'small')" alt="mushroom" loading="lazy"
       class="w-20 h-20 object-cover mr-4 rounded-lg" />
@@ -50,5 +49,5 @@ function highlightMatch(text: string) {
     <div class="mx-2 w-6 h-6 md:mx-4 md:w-8 md:h-8">
       <component v-if="iconData.icon" :is="iconData.icon" :class="iconData.class" />
     </div>
-  </router-link>
+  </NuxtLink>
 </template>

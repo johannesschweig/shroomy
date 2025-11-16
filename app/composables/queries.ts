@@ -1,5 +1,4 @@
 import { gql } from 'graphql-tag'
-import { seedToday } from '@/utils'
 
 // for detail page
 export const GET_SHROOM_BY_ID = gql`
