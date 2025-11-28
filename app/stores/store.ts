@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
 import type Shroom from '@/types/Shroom'
-import { supabase } from '@/supabase'
 
 export const useStore = defineStore('store', {
   state: () => ({
     filters: {} as Record<string, string[]>,
     search: '',
+    redirected: false,
     filteredShrooms: [] as Shroom[],
   }),
   getters: {
@@ -57,6 +57,7 @@ export const useStore = defineStore('store', {
     },
     setSearch(query: string) {
       this.search = query
+      this.redirected = false
     },
   }
 })

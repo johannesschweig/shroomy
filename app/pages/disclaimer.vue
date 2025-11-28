@@ -1,3 +1,22 @@
+<script setup lang="ts">
+const title = 'Haftungsausschluss - Shroomy'
+const description = 'Wichtige rechtliche Hinweise zur Nutzung von Shroomy. Bitte vor der Pilzbestimmung lesen.'
+const image = 'https://shroomy.vercel.app/mushroom.png'
+const url = 'https://shroomy.vercel.app/disclaimer'
+
+useHead({
+  title,
+  meta: [
+    { name: 'description', content: description },
+    { property: 'og:title', content: title },
+    { property: 'og:description', content: description },
+    { property: 'og:type', content: 'article' },
+    { property: 'og:url', content: url },
+    { property: 'og:image', content: image },
+  ]
+})
+</script>
+
 <template>
   <div class="max-w-xl mx-auto">
     <NuxtLink to="/" class="btn btn-secondary w-fit mb-2">Zurück</NuxtLink>

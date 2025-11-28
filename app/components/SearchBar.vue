@@ -46,7 +46,7 @@ watch(() => store.search, (newSearch) => {
         <ComboboxInput :displayValue="(val) => typeof val === 'string' ? val : ''" :value="query"
           @input="query = $event.target.value" placeholder="Suche nach Namen (de, lat.)"
           class="w-full px-4 py-2 border border-stone-300 rounded-lg bg-stone-50 text-stone-800 placeholder-stone-400 focus:outline-none focus:ring focus:ring-amber-400"
-          @keyup.enter="applySearch()" />
+          @blur.capture.stop @keyup.enter="applySearch()" />
         <button v-if="query" @click="clearSearch"
           class="cursor-pointer absolute right-2 top-1/2 transform -translate-y-1/2 text-stone-400 hover:text-stone-600"
           aria-label="Clear search" type="button">

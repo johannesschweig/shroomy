@@ -1,32 +1,5 @@
-# TODO Nuxt migration
-- add error.vue at app/
-- explore prerendering
-- use resolveComponent for component :is=...
-- use definePageMeta in compoentn script setup to define title, description
-  - keepalive 
+# NOTES
 - connectToDevTools spam: see github issue https://github.com/nuxt-modules/apollo/issues/662
-# TODO
-- Eine Möglichkeit durch alle Pilze zu blättern ohne zuerst den Namen zu kennen wäre ganz praktisch
-  - maybe all the mushrooms grouped together by genus with popular mushrooms highlighted?
-  - Seite mit den Gattungen und untergattungen
-- filter is off
-- show better images (assess quality with ai)
-- clear search: focus on the textfield again. hard with the combobox
-- Side scroll Bilder wie bei spotify mit inertia to center
-  - either embla carousel or self written
-- Weniger Text zu Merkmalen, mehr Bilder (dunkles Netz am Stiel)
-  - Vlt erklärbilder zu den Merkmalen (so sieht ein Netz aus?)
-- Fundbuch: bild, gps,bäume, Zeigerpflanzen, boden ph, substrate, Geruch, wann gefunden, erster Saisonfund
-  - connection with inaturalist?
-- xs: lamellenfarbe: change to Röhrenfarbe if poroid
-- Verwechslungspartner mit Unterscheidungsmerkmalen, fotos und Anleitung zum sicheren Bestimmen
-## data quality:
-- 8k fungi dont have a german name
-- duplicate photos: dont collect
-  - photo 567812787 and 567812725 are the same :(
-- more fine grained edibility from the other file
-- gills.color should be null for stäublinge
-- look alikes: the shroom itself cannot be a look alike to itself. clean it
 
 # DONE
 - isloading state and not keine pilze gefunden (home, detail page)

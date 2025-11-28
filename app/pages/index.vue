@@ -15,10 +15,29 @@ const { filteredShrooms, loading, totalCount } = useSearchShrooms()
 
 const { mushroomsOfTheDay } = useRandomFungiWithPhoto()
 
+const title = 'Shroomy - Schnelle und einfache Pilzsuche'
+const description = 'Dein moderner Pilzführer: Pilze einfach erkennen, Merkmale vergleichen und Arten verstehen. Perfekt für Waldspaziergänge und Hobby-Sammler.'
+const image = 'https://shroomy.vercel.app/mushroom.png'
+const url = 'https://shroomy.vercel.app'
+
+
+useHead({
+  title,
+  meta: [
+    { name: 'description', content: description },
+    { property: 'og:title', content: title },
+    { property: 'og:description', content: description },
+    { property: 'og:type', content: 'article' },
+    { property: 'og:url', content: url },
+    { property: 'og:image', content: image },
+  ]
+})
+
 watch (filteredShrooms, (newVal: any) => {
-  if (newVal.length === 1) {
+  if (!store.redirected && newVal.length === 1) {
     console.log('Only one result found, navigating to:', newVal[0].name)
     router.push(`/mushroom/${newVal[0].id}`)
+    store.redirected = true
   }
 })
 </script>

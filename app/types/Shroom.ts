@@ -11,7 +11,7 @@ type GillTrait = (typeof gills_traits)[number];
 export default interface Shroom {
   id: number
   rank_level?: number
-  name: string
+  name: string // latin name
   preferred_common_name?: string
   english_common_name?: string
   ancestry: string

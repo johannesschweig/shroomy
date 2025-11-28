@@ -20,6 +20,7 @@ const store = useStore()
 defineOptions({
   name: 'MushroomDetail'
 })
+
 const id = ref(Number(route.params.id))
 const { shroom, loading } = useMushroomById(id)
 
@@ -102,6 +103,51 @@ function searchGenus() {
     router.push('/')
   }
 }
+
+// SEO meta tags
+const url = `https://shroomy.vercel.app/mushroom/${id.value}`
+
+const title = computed(() => {
+  if (!shroom.value) return 'Pilz wird geladen... | Shroomy'
+  const name = shroom.value.preferred_common_name || shroom.value.name
+  return `${name} - Pilzinformationen | Shroomy`
+})
+
+const description = computed(() => {
+  if (!shroom.value) return 'Lade Pilzinformationen...'
+  
+  const name = shroom.value.preferred_common_name || shroom.value.name
+  const latinName = shroom.value.name
+  const edibility = iconData.value.text
+  
+  let desc = `${name} (${latinName})`
+  
+  if (edibility) {
+    desc += ` - ${edibility}`
+  }
+  
+  desc += '. Detaillierte Informationen zu Merkmalen, Lebensraum und Verwechslungsgefahr.'
+  
+  // Truncate to 160 chars for meta description
+  return desc.length > 160 ? desc.substring(0, 157) + '...' : desc
+})
+
+const image = computed(() => {
+  if (!shroom.value?.photos?.[0]?.url) return 'https://shroomy.app/mushroom.png'
+  return getInaturalistImageUrl(shroom.value.photos[0].url, 'medium')
+})
+
+useHead({
+  title,
+  meta: [
+    { name: 'description', content: description },
+    { property: 'og:title', content: title },
+    { property: 'og:description', content: description },
+    { property: 'og:type', content: 'article' },
+    { property: 'og:url', content: url },
+    { property: 'og:image', content: image },
+  ]
+})
 </script>
 
 <template>
