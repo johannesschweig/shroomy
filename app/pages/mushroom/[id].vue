@@ -12,6 +12,7 @@ import Card from '@/components/Card.vue'
 import VueEasyLightbox from 'vue-easy-lightbox'
 import ChevronIcon from '@/assets/chevron.svg'
 import { useMushroomById, useMushroomLookAlikes } from '@/composables/composables'
+import { createSlug } from '@/utils/utils'
 
 const route = useRoute()
 const router = useRouter()
@@ -21,7 +22,18 @@ defineOptions({
   name: 'MushroomDetail'
 })
 
-const id = ref(Number(route.params.id))
+const id = computed(() => {
+  const param = String(route.params.id)
+  
+  // If it contains a dash, take only the part before it
+  if (param.includes('-')) {
+    return Number(param.split('-')[0])
+  }
+  
+  // Otherwise it's just a number
+  return Number(param)
+})
+
 const { shroom, loading } = useMushroomById(id)
 
 const lookAlikeIds = ref<number[]>([])
@@ -53,17 +65,20 @@ watch(
   }
 )
 
-// change tab title
-watch(
-  () => shroom.value,
-  (newShroom) => {
-    if (newShroom) {
-      document.title = newShroom.preferred_common_name ? 
-      newShroom.preferred_common_name : capitalizeFirstLetter(newShroom.name)
+watch(shroom, (newShroom) => {
+  if (newShroom && route.params.id) {
+    const currentParam = String(route.params.id)
+    const slug = createSlug(newShroom.preferred_common_name || newShroom.name)
+    const newParam = `${newShroom.id}-${slug}`
+    
+    // Only update if the slug isn't already in the URL
+    if (currentParam !== newParam) {
+      navigateTo(`/mushroom/${newParam}`, { replace: true })
     }
-  },
-  { immediate: true }
-)
+  }
+}, { immediate: true })
+
+
 
 // reset x scroll pos of mobile scroll container
 watch(() => id, () => {
@@ -115,19 +130,14 @@ const title = computed(() => {
 
 const description = computed(() => {
   if (!shroom.value) return 'Lade Pilzinformationen...'
-  
   const name = shroom.value.preferred_common_name || shroom.value.name
   const latinName = shroom.value.name
   const edibility = iconData.value.text
-  
   let desc = `${name} (${latinName})`
-  
   if (edibility) {
     desc += ` - ${edibility}`
   }
-  
   desc += '. Detaillierte Informationen zu Merkmalen, Lebensraum und Verwechslungsgefahr.'
-  
   // Truncate to 160 chars for meta description
   return desc.length > 160 ? desc.substring(0, 157) + '...' : desc
 })
@@ -156,8 +166,9 @@ useHead({
       Zurück
     </NuxtLink>
     <h1 v-if="shroom.preferred_common_name" class="text-3xl font-bold">{{ shroom.preferred_common_name }}</h1>
-    <component :is="shroom.preferred_common_name ? 'span': 'h1'" class="text-lg text-stone-600 italic flex gap-1">
-      <button class="cursor-pointer hover:underline hover:text-stone-800 capitalize" @click="searchGenus()">{{ shroom.name.split(' ')[0] }}</button>
+    <component :is="shroom.preferred_common_name ? 'span' : 'h1'" class="text-lg text-stone-600 italic flex gap-1">
+      <button class="cursor-pointer hover:underline hover:text-stone-800 capitalize" @click="searchGenus()">{{
+        shroom.name.split(' ')[0] }}</button>
       <span>{{ shroom.name.split(' ').slice(1)[0] }}</span>
     </component>
 
@@ -210,9 +221,10 @@ useHead({
       </div>
 
       <!-- frequency -->
-      <div v-if="shroom.obs_count_ger" class="p-3 rounded-lg bg-stone-200 flex w-fit gap-2 items-center" :title="String(shroom.obs_count_ger)">
-        {{ shroom.obs_count_ger < 10 ? 'Sehr selten' : shroom.obs_count_ger < 30 ? 'Selten' :
-          shroom.obs_count_ger < 70 ? 'Häufig' : 'Sehr häufig' }} </div>
+      <div v-if="shroom.obs_count_ger" class="p-3 rounded-lg bg-stone-200 flex w-fit gap-2 items-center"
+        :title="String(shroom.obs_count_ger)">
+        {{ shroom.obs_count_ger < 10 ? 'Sehr selten' : shroom.obs_count_ger < 30 ? 'Selten' : shroom.obs_count_ger < 70
+          ? 'Häufig' : 'Sehr häufig' }} </div>
       </div>
 
       <h2 v-if="shroom.id_123" class="text-xl mt-6 text-stone-800">Details</h2>
@@ -229,7 +241,7 @@ useHead({
         </div>
         <!-- Gills -->
         <div v-if="shroom.gills_color" class="mb-4">
-          <h3 class="text-lg">{{ shroom.type && shroom.type.includes('poroid') ? 'Röhren' : 'Lamellen'}}</h3>
+          <h3 class="text-lg">{{ shroom.type && shroom.type.includes('poroid') ? 'Röhren' : 'Lamellen' }}</h3>
           <div v-if="shroom.gills_color" class="flex items-center gap-2 mb-2">
             <GillsColorIcon class="w-8 h-8" :style="svgStyle('gills_color')" />
             {{shroom.gills_color.map(c => $t(c)).join(', ')}}
@@ -293,11 +305,10 @@ useHead({
         <div v-if="shroom.season_from && shroom.season_to" class="mb-4">
           <h3 class="text-lg">Jahreszeit</h3>
           <div class="flex flex-wrap gap-1">
-            <div v-for="i in 12" class="w-8 h-8 rounded-lg text-sm text-center leading-8 relative"
-            :class='[isMonthActive(i) ? "bg-amber-300 text-stone-800 " : "bg-stone-100 text-stone-600",
+            <div v-for="i in 12" class="w-8 h-8 rounded-lg text-sm text-center leading-8 relative" :class='[isMonthActive(i) ? "bg-amber-300 text-stone-800 " : "bg-stone-100 text-stone-600",
             i === currentMonth ? "border border-stone-600" : ""]' :key="i">
               {{ GERMAN_MONTHS[i - 1].slice(0, 3) }}
-              <ChevronIcon v-if="i === currentMonth" class="text-stone-800 w-1.5 h-1.5 absolute bottom-0 left-3"/>
+              <ChevronIcon v-if="i === currentMonth" class="text-stone-800 w-1.5 h-1.5 absolute bottom-0 left-3" />
             </div>
 
           </div>
