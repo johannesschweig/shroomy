@@ -120,12 +120,12 @@ function searchGenus() {
 }
 
 // SEO meta tags
-const url = `https://shroomy.vercel.app/mushroom/${id.value}`
+const url = `https://fungio.de/mushroom/${id.value}`
 
 const title = computed(() => {
-  if (!shroom.value) return 'Pilz wird geladen... | Shroomy'
+  if (!shroom.value) return 'Pilz wird geladen... | Fungio'
   const name = shroom.value.preferred_common_name || shroom.value.name
-  return `${name} - Pilzinformationen | Shroomy`
+  return `${name} - Pilzinformationen | Fungio`
 })
 
 const description = computed(() => {
@@ -143,7 +143,7 @@ const description = computed(() => {
 })
 
 const image = computed(() => {
-  if (!shroom.value?.photos?.[0]?.url) return 'https://shroomy.app/mushroom.png'
+  if (!shroom.value?.photos?.[0]?.url) return 'https://fungio.de/mushroom.png'
   return getInaturalistImageUrl(shroom.value.photos[0].url, 'medium')
 })
 

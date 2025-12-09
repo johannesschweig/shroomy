@@ -1,6 +1,6 @@
-# shroomy
+# Fungio
 
-A mushroom search which is fast and mobile friendly. Check it out under shroomy.vercel.app.
+A mushroom search which is fast and mobile friendly. Check it out under fungio.de.
 
 ## Setup
 

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-const title = 'Haftungsausschluss - Shroomy'
-const description = 'Wichtige rechtliche Hinweise zur Nutzung von Shroomy. Bitte vor der Pilzbestimmung lesen.'
-const image = 'https://shroomy.vercel.app/mushroom.png'
-const url = 'https://shroomy.vercel.app/disclaimer'
+const title = 'Haftungsausschluss - Fungio'
+const description = 'Wichtige rechtliche Hinweise zur Nutzung von Fungio. Bitte vor der Pilzbestimmung lesen.'
+const image = 'https://fungio.de/mushroom.png'
+const url = 'https://fungio.de/disclaimer'
 
 useHead({
   title,

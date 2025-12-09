@@ -15,11 +15,10 @@ const { filteredShrooms, loading, totalCount } = useSearchShrooms()
 
 const { mushroomsOfTheDay } = useRandomFungiWithPhoto()
 
-const title = 'Shroomy - Schnelle und einfache Pilzsuche'
+const title = 'Fungio - Schnelle und einfache Pilzsuche'
 const description = 'Dein moderner Pilzführer: Pilze einfach erkennen, Merkmale vergleichen und Arten verstehen. Perfekt für Waldspaziergänge und Hobby-Sammler.'
-const image = 'https://shroomy.vercel.app/mushroom.png'
-const url = 'https://shroomy.vercel.app'
-
+const image = 'https://fungio.de/mushroom.png'
+const url = 'https://fungio.de'
 
 useHead({
   title,
@@ -45,7 +44,7 @@ watch (filteredShrooms, (newVal: any) => {
 <template>
   <div class="max-w-xl md:mx-auto text-stone-900 flex flex-col h-screen">
     <div class="mb-4 flex gap-2 flex-col">
-      <h1 class="text-2xl md:text-3xl font-bold">🍄‍ Shroomy</h1>
+      <h1 class="text-2xl md:text-3xl font-bold">🍄‍ Fungio</h1>
       <h2 class="hidden md:block text-xl text-stone-600">Schnelle und einfache Pilzsuche</h2>
     </div>
 
