@@ -20,19 +20,17 @@ const description = 'Dein moderner Pilzführer: Pilze einfach erkennen, Merkmale
 const image = 'https://fungio.de/mushroom.png'
 const url = 'https://fungio.de'
 
-useHead({
+useSeoMeta({
   title,
-  meta: [
-    { name: 'description', content: description },
-    { property: 'og:title', content: title },
-    { property: 'og:description', content: description },
-    { property: 'og:type', content: 'article' },
-    { property: 'og:url', content: url },
-    { property: 'og:image', content: image },
-  ]
+  ogTitle: title,
+  description,
+  ogDescription: description,
+  ogUrl: url,
+  ogImage: image,
+  ogType: 'article'
 })
 
-watch (filteredShrooms, (newVal: any) => {
+watch(filteredShrooms, (newVal: any) => {
   if (!store.redirected && newVal.length === 1) {
     console.log('Only one result found, navigating to:', newVal[0].name)
     router.push(`/mushroom/${newVal[0].id}`)
@@ -83,6 +81,10 @@ watch (filteredShrooms, (newVal: any) => {
         Keine Pilze gefunden.
       </div>
     </div>
-  </div>
 
+    <!-- All mushrooms -->
+    <NuxtLink to="/all" class="link text-xs">
+      Alle Pilze anzeigen
+    </NuxtLink>
+  </div>
 </template>

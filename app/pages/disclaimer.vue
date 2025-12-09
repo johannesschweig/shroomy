@@ -4,16 +4,14 @@ const description = 'Wichtige rechtliche Hinweise zur Nutzung von Fungio. Bitte 
 const image = 'https://fungio.de/mushroom.png'
 const url = 'https://fungio.de/disclaimer'
 
-useHead({
+useSeoMeta({
   title,
-  meta: [
-    { name: 'description', content: description },
-    { property: 'og:title', content: title },
-    { property: 'og:description', content: description },
-    { property: 'og:type', content: 'article' },
-    { property: 'og:url', content: url },
-    { property: 'og:image', content: image },
-  ]
+  ogTitle: title,
+  description,
+  ogDescription: description,
+  ogUrl: url,
+  ogImage: image,
+  ogType: 'article'
 })
 </script>
 

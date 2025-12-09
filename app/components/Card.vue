@@ -3,7 +3,7 @@ import MushroomIcon from '@/assets/mushroom.svg'
 import type Shroom from '@/types/Shroom'
 import { computed } from 'vue';
 import { useStore } from '@/stores/store'
-import { createSlug } from '#imports';
+import { getMushroomUrl } from '@/utils/utils'
 
 const props = defineProps<{
   shroom: Shroom,
@@ -33,7 +33,7 @@ function highlightMatch(text: string) {
 </script>
 
 <template>
-  <NuxtLink :to="`/mushroom/${shroom.id}-${createSlug(shroom.preferred_common_name || shroom.name)}`" :key="shroom.name"
+  <NuxtLink :to="getMushroomUrl(shroom)" :key="shroom.name"
     class="grid grid-cols-[80px_1fr_auto] gap-2 md:gap-3 items-center hover:bg-stone-100 rounded-lg">
     <img v-if="shroom.photos && shroom.photos.length && shroom.photos?.[0].url" :src="getInaturalistImageUrl(shroom.photos?.[0].url, 'small')" alt="mushroom" loading="lazy"
       class="w-20 h-20 object-cover mr-4 rounded-lg" />

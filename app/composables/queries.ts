@@ -156,3 +156,22 @@ export const GET_LOOK_ALIKE_FUNGI = gql`
     }
   }
 `
+
+export const GET_LETTER_COUNTS = gql`
+  query GetLetterCounts($first: Int!, $after: String) {
+    fungiCollection(first: $first, after: $after) {
+      edges {
+        node {
+          id
+          name
+          preferred_common_name
+        }
+        cursor
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+`

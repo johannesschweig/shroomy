@@ -147,16 +147,14 @@ const image = computed(() => {
   return getInaturalistImageUrl(shroom.value.photos[0].url, 'medium')
 })
 
-useHead({
+useSeoMeta({
   title,
-  meta: [
-    { name: 'description', content: description },
-    { property: 'og:title', content: title },
-    { property: 'og:description', content: description },
-    { property: 'og:type', content: 'article' },
-    { property: 'og:url', content: url },
-    { property: 'og:image', content: image },
-  ]
+  ogTitle: title,
+  description,
+  ogDescription: description,
+  ogUrl: url,
+  ogImage: image,
+  ogType: 'article'
 })
 </script>
 

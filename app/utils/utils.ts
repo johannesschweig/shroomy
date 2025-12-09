@@ -119,3 +119,9 @@ export function createSlug(name: string): string {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
 }
+
+export function getMushroomUrl(shroom: Shroom): string {
+  return `/mushroom/${shroom.id}-${createSlug(shroom.preferred_common_name || shroom.name)}`
+}
+
+export const GERMAN_ALPHABET = 'AÄBCDEFGHIJKLMNOÖPQRSTUÜVWXYZ'
