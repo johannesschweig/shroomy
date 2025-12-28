@@ -2,7 +2,17 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@pinia/nuxt', '@nuxtjs/tailwindcss', '@nuxtjs/i18n', 'nuxt-svgo', '@nuxtjs/apollo'],
+  modules: [
+    '@pinia/nuxt',
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/i18n',
+    'nuxt-svgo',
+    '@nuxtjs/apollo',
+    '@nuxtjs/sitemap',
+  ],
+  site: {
+    url: 'https://fungio.de',
+  },
   runtimeConfig: {
     public: {
       supabaseUrl: process.env.VITE_SUPABASE_URL,
