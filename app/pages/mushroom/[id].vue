@@ -36,7 +36,7 @@ const id = computed(() => {
 
 const { shroom, loading } = useMushroomById(id)
 
-const lookAlikeIds = ref<number[]>([])
+const lookAlikeIds = computed(() => shroom.value?.look_alikes ?? [])
 const { lookAlikes } = useMushroomLookAlikes(lookAlikeIds)
 
 const mobileScrollContainer = ref<HTMLElement | null>(null)
@@ -50,20 +50,8 @@ const images = computed(() =>
 )
 function openLightbox(i: number) { currentIndex.value = i; lightboxVisible.value = true }
 
-// when shroom changes, update lookAlikeIds
-watch(shroom, (val) => {
-  if (val?.look_alikes) {
-    lookAlikeIds.value = val.look_alikes
-  }
-})
-
 // on route change, change id, so shroom is refetched
-watch(
-  () => route.params.id,
-  (newId) => {
-    id.value = Number(newId)
-  }
-)
+// route param is already read from `id` computed; no need to write to it
 
 watch(shroom, (newShroom) => {
   if (newShroom && route.params.id) {
@@ -78,10 +66,8 @@ watch(shroom, (newShroom) => {
   }
 }, { immediate: true })
 
-
-
-// reset x scroll pos of mobile scroll container
-watch(() => id, () => {
+// reset x scroll pos of mobile scroll container when `id` value changes
+watch(id, () => {
   if (mobileScrollContainer.value) {
     mobileScrollContainer.value.scrollLeft = 0
   }
