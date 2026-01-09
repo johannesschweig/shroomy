@@ -24,9 +24,7 @@ const alphabet = GERMAN_ALPHABET.split('')
 </script>
 
 <template>
-  <div class="max-w-xl mx-auto">
-    <NuxtLink to="/" class="btn btn-secondary w-fit mb-4">Zurück</NuxtLink>
-    
+  <div class="max-w-7xl mx-auto">
     <h1 class="text-2xl font-bold mb-2">Alle Pilze auf Fungio</h1>
     <p class="text-stone-600 mb-6">{{ totalCount }} Pilzarten nach Alphabet sortiert</p>
     

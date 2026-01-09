@@ -53,8 +53,8 @@
   "wood": "Holz",
   "soil": "Boden",
   "meadow": "Wiese",
-  "gilled": "mit Lamellen",
-  "poroid": "mit Röhren",
+  "gilled": "Lamellen",
+  "poroid": "Röhren",
   "milky": "milchend",
   "tufted": "büschelig",
   "grooved_cap": "geriefter Hut",
@@ -76,5 +76,6 @@
   "lichenized": "flechten",
   "other_genus": "andere Gattung",
   "purple": "violett",
-  "hard": "hart"
+  "hard": "hart",
+  "unknown": "unbekannt"
 }

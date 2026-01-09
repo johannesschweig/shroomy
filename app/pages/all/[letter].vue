@@ -20,9 +20,7 @@ const alphabet = GERMAN_ALPHABET.split('')
 </script>
 
 <template>
-  <div class="max-w-xl mx-auto">
-    <NuxtLink to="/all" class="btn btn-secondary w-fit mb-4">← Zurück zur Übersicht</NuxtLink>
-
+  <div class="max-w-7xl mx-auto">
     <h1 class="text-2xl font-bold mb-2">Pilze mit {{ letter }}</h1>
     <p class="text-stone-600 mb-6">{{ mushrooms?.length || 0 }} Pilzarten</p>
 

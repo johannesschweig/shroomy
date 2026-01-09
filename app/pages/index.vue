@@ -40,12 +40,7 @@ watch(filteredShrooms, (newVal: any) => {
 </script>
 
 <template>
-  <div class="max-w-xl md:mx-auto text-stone-900 flex flex-col h-screen">
-    <div class="mb-4 flex gap-2 flex-col">
-      <h1 class="text-2xl md:text-3xl font-bold">🍄‍ Fungio</h1>
-      <h2 class="hidden md:block text-xl text-stone-600">Schnelle und einfache Pilzsuche</h2>
-    </div>
-
+  <div class="max-w-7xl md:mx-auto text-stone-900 flex flex-col h-screen">
     <SearchBar />
 
     <!-- Results Wrapper -->
@@ -81,10 +76,5 @@ watch(filteredShrooms, (newVal: any) => {
         Keine Pilze gefunden.
       </div>
     </div>
-
-    <!-- All mushrooms -->
-    <NuxtLink to="/all" class="link text-xs">
-      Alle Pilze anzeigen
-    </NuxtLink>
   </div>
 </template>

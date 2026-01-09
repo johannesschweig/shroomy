@@ -16,8 +16,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="max-w-xl mx-auto">
-    <NuxtLink to="/" class="btn btn-secondary w-fit mb-2">Zurück</NuxtLink>
+  <div class="max-w-7xl mx-auto">
     <div class="text-xl mb-2">Haftungsauschluss</div>
     <p>Die auf dieser Website und in der App zur Verfügung gestellten Informationen zur Pilzbestimmung dienen
       ausschließlich allgemeinen Informationszwecken und erfolgen nach bestem Wissen und Gewissen. Es wird keine Gewähr

@@ -34,7 +34,7 @@ function highlightMatch(text: string) {
 
 <template>
   <NuxtLink :to="getMushroomUrl(shroom)" :key="shroom.name"
-    class="grid grid-cols-[80px_1fr_auto] gap-2 md:gap-3 items-center hover:bg-stone-100 rounded-lg">
+    class="grid grid-cols-[80px_1fr_auto] gap-2 md:gap-3 items-center hover:bg-white rounded-lg">
     <img v-if="shroom.photos && shroom.photos.length && shroom.photos?.[0].url" :src="getInaturalistImageUrl(shroom.photos?.[0].url, 'small')" alt="mushroom" loading="lazy"
       class="w-20 h-20 object-cover mr-4 rounded-lg" />
     <div v-else class="w-20 h-20 bg-stone-200 mr-4 rounded-lg flex items-center justify-center">
