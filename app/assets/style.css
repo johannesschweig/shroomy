@@ -1,5 +1,104 @@
 @import "tailwindcss";
 
+/* merriweather-300 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Merriweather';
+  font-style: normal;
+  font-weight: 300;
+  src: url('/fonts/merriweather-v33-latin-300.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* merriweather-regular - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Merriweather';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts/merriweather-v33-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* merriweather-italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Merriweather';
+  font-style: italic;
+  font-weight: 400;
+  src: url('/fonts/merriweather-v33-latin-italic.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* merriweather-500 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Merriweather';
+  font-style: normal;
+  font-weight: 500;
+  src: url('/fonts/merriweather-v33-latin-500.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* merriweather-600 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Merriweather';
+  font-style: normal;
+  font-weight: 600;
+  src: url('/fonts/merriweather-v33-latin-600.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* inter-300 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300;
+  src: url('/fonts/inter-v20-latin-300.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* inter-regular - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts/inter-v20-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* inter-italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Inter';
+  font-style: italic;
+  font-weight: 400;
+  src: url('/fonts/inter-v20-latin-italic.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* inter-500 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  src: url('/fonts/inter-v20-latin-500.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* inter-600 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  src: url('/fonts/inter-v20-latin-600.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: 'Merriweather', serif;
+
+  --color-tan-50: #f8f4f2;
+  --color-tan-100: #f0eae5;
+  --color-tan-200: #e3d8d0;
+  --color-tan-300: #cfbdae;
+  --color-tan-400: #baa38f;
+  --color-tan-500: #a88c76;
+  --color-tan-600: #90745d;
+  --color-tan-700: #735b47;
+  --color-tan-800: #5f4b3b;
+  --color-tan-900: #514235;
+  --color-tan-950: #2b221a;
+}
+
 .btn {
   @apply px-4 py-2 rounded-lg transition-colors cursor-pointer flex gap-2 items-center font-medium;
 }
@@ -16,8 +115,16 @@
   @apply text-gray-600 hover:text-gray-800;
 }
 
+.link-dark {
+  @apply text-tan-300 hover:text-tan-100;
+}
+
+.
+
 @layer base {
-  html, body {
-    @apply m-0 p-0 bg-stone-50;
+
+  html,
+  body {
+    @apply m-0 p-0 bg-tan-50 font-sans;
   }
 }

@@ -1,8 +1,14 @@
+<script lang="ts">
+import Footer from '@/components/Footer.vue'
+import Navbar from '@/components/Navbar.vue'
+</script>
+
 <template>
-  <div class="m-4 md:mx-0">
-    <NuxtPage />
-    <div class="max-w-xl mx-auto mt-4 py-2 border-t border-gray-300">
-      <NuxtLink to="/disclaimer" class="link text-sm">Haftungsauschluss</NuxtLink>
+  <div>
+    <Navbar />
+    <div class="px-4 xl:px-0 py-4 bg-tan-50">
+      <NuxtPage />
     </div>
+    <Footer />
   </div>
 </template>
