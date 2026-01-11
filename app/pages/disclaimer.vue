@@ -16,8 +16,8 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="max-w-7xl mx-auto">
-    <div class="text-xl mb-2">Haftungsauschluss</div>
+  <div class="max-w-7xl mx-auto text-tan-700">
+    <div class="text-xl mb-2 text-tan-900">Haftungsauschluss</div>
     <p>Die auf dieser Website und in der App zur Verfügung gestellten Informationen zur Pilzbestimmung dienen
       ausschließlich allgemeinen Informationszwecken und erfolgen nach bestem Wissen und Gewissen. Es wird keine Gewähr
       für die Richtigkeit, Vollständigkeit, Aktualität oder Qualität der bereitgestellten Inhalte übernommen. Die
@@ -29,5 +29,6 @@ useSeoMeta({
       bereitgestellten Informationen entstehen, ist ausgeschlossen – es sei denn, es liegt ein nachweislich
       vorsätzliches oder grob fahrlässiges Verschulden seitens des Betreibers vor.</p>
     <p>Die Website enthält ggf. Links zu externen Seiten Dritter. Für deren Inhalte wird keine Haftung übernommen.</p>
+    <p class="mt-4">Kontakt: <a href="mailto:info@fungio.de" class="link">info@fungio.de</a></p>
   </div>
 </template>

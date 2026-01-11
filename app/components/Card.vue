@@ -35,7 +35,7 @@ function highlightMatch(text: string) {
 <template>
   <NuxtLink :to="getMushroomUrl(shroom)" :key="shroom.name"
     class="grid grid-cols-[80px_1fr_auto] gap-2 md:gap-3 items-center hover:bg-white rounded-lg">
-    <img v-if="shroom.photos && shroom.photos.length && shroom.photos?.[0].url" :src="getInaturalistImageUrl(shroom.photos?.[0].url, 'small')" alt="mushroom" loading="lazy"
+    <img v-if="shroom.photos && shroom.photos.length && shroom.photos?.[0].url" :src="getInaturalistImageUrl(shroom.photos?.[0].url, 'small')" :alt="shroom.preferred_common_name || shroom.name" loading="lazy"
       class="w-20 h-20 object-cover mr-4 rounded-lg" />
     <div v-else class="w-20 h-20 bg-stone-200 mr-4 rounded-lg flex items-center justify-center">
       <MushroomIcon class="w-12 h-12 text-stone-400" />
@@ -47,8 +47,9 @@ function highlightMatch(text: string) {
     </div>
 
     <!-- Edibility & Toxicity icons -->
+     <!-- TODO: Currently broken because of missing data -->
     <div class="mx-2 w-6 h-6 md:mx-4 md:w-8 md:h-8">
-      <component v-if="iconData.icon" :is="iconData.icon" :class="iconData.class" />
+      <!-- <component v-if="iconData.icon" :is="iconData.icon" :class="iconData.class" /> -->
     </div>
   </NuxtLink>
 </template>
