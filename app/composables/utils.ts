@@ -2,6 +2,18 @@ import type Shroom from '@/types/Shroom'
 
 export function flattenFungi(fungi: any): Shroom | null {
   if (!fungi) return null
+
+  const sanitizeArray = (input: any) => {
+    if (!input) return []
+    
+    const arr = typeof input === 'string' ? JSON.parse(input) : input
+
+    if (Array.isArray(arr)) {
+      return arr.map(item => typeof item === 'string' ? item.replace(/^"|"$/g, '') : item)
+    }
+    return []
+  }
+
   const attributes = fungi.attributes ? {
     id_123: fungi.attributes?.id_123 ?? null,
     type: JSON.parse(fungi.attributes?.type) ?? null,
@@ -32,6 +44,7 @@ export function flattenFungi(fungi: any): Shroom | null {
     id: fungi.id,
     name: fungi.name,
     preferred_common_name: fungi.preferred_common_name ?? '',
+    alternative_common_names: sanitizeArray(fungi.alternative_common_names),
     english_common_name: fungi.english_common_name ?? '',
     ancestry: fungi.ancestry ?? '',
     obs_count_ger: fungi.obs_count_ger ?? 0,

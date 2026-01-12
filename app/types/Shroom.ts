@@ -13,6 +13,7 @@ export default interface Shroom {
   rank_level?: number
   name: string // latin name
   preferred_common_name?: string
+  alternative_common_names?: string[]
   english_common_name?: string
   ancestry: string
   obs_count_ger?: number

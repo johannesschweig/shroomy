@@ -10,6 +10,7 @@ export const GET_SHROOM_BY_ID = gql`
         rank_level
         name
         preferred_common_name
+        alternative_common_names
         obs_count_ger
         ancestry
         photosCollection(first: 10) {
