@@ -13,6 +13,11 @@ export default defineNuxtConfig({
   site: {
     url: 'https://fungio.de',
   },
+  sitemap: {
+    sources: [
+      '/api/__sitemap__/urls'
+    ]
+  },
   runtimeConfig: {
     public: {
       supabaseUrl: process.env.VITE_SUPABASE_URL,
