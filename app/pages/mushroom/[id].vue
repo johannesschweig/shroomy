@@ -22,7 +22,6 @@ const id = computed(() => {
 
 const { shroom, loading } = useMushroomById(id)
 
-// Lookalikes Logic
 const lookAlikeIds = computed(() => shroom.value?.look_alikes ?? [])
 const { lookAlikes } = useMushroomLookAlikes(lookAlikeIds)
 
@@ -80,27 +79,31 @@ useSeoMeta({
 
     <div class="space-y-6">
       <MushroomHeader :shroom="shroom" />
-      <MushroomGallery :photos="shroom.photos" />
+      <MushroomGallery v-if="shroom.photos && shroom.photos.length" :photos="shroom.photos" />
     </div>
 
-    <MushroomQuickStats :shroom="shroom" />
+    <div v-if="shroom.id_123" class="space-y-12">
+      <MushroomQuickStats :shroom="shroom" />
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-      <div class="lg:col-span-2 space-y-12">
-        <MushroomIntro :shroom="shroom" />
-        <MushroomCharacteristics :shroom="shroom" />
-        <MushroomSensory :shroom="shroom" />
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div class="lg:col-span-2 space-y-12">
+          <MushroomIntro :shroom="shroom" />
+          <MushroomCharacteristics :shroom="shroom" />
+          <MushroomSensory :shroom="shroom" />
+        </div>
+
+        <div class="space-y-8">
+          <MushroomTraitsGrid :shroom="shroom" />
+        </div>
       </div>
 
-      <div class="space-y-8">
-        <MushroomTraitsGrid :shroom="shroom" />
-      </div>
+      <MushroomSeason :from="shroom.season_from" :to="shroom.season_to" />
+      <MushroomLookAlikes :look-alikes="lookAlikes" />
+
     </div>
 
-    <MushroomSeason :from="shroom.season_from" :to="shroom.season_to" />
-    <MushroomLookAlikes :look-alikes="lookAlikes" />
+    <MushroomIntro v-else :shroom="shroom" />
     <MushroomLinks :shroom="shroom" />
-
   </div>
 
   <div v-else-if="loading" class="h-96 flex items-center justify-center text-tan-400">

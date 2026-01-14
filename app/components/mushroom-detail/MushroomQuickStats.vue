@@ -52,7 +52,8 @@ const typeIcon = computed(() => {
       <span class="font-bold text-tan-900">{{ capitalizeFirstLetter($t(shroom.edibility || 'unknown')) }}</span>
       <span class="text-xs text-tan-400 uppercase tracking-wide">Speisewert</span>
     </div>
-    <div
+
+    <div v-if="typeIcon"
       class="bg-white border border-tan-100 shadow-sm rounded-xl p-6 flex flex-col items-center justify-center text-center gap-2">
       <div class="bg-tan-100 rounded-full p-2">
         <component :is="typeIcon" v-if="typeIcon" class="w-6 h-6 text-tan-700" />

@@ -1,6 +1,5 @@
 import { defineSitemapEventHandler } from '#imports'
 import { supabase } from '~/supabase' 
-// import { createSlug } from '~/utils/utils'
 
 function createSlug(name: string): string {
   return name
@@ -16,7 +15,7 @@ function createSlug(name: string): string {
 export default defineSitemapEventHandler(async () => {
   const allShrooms = []
   let from = 0
-  const step = 1000 // Wir holen immer 1000er Pakete
+  const step = 1000
   let hasMore = true
 
   try {
@@ -24,8 +23,8 @@ export default defineSitemapEventHandler(async () => {
       const { data, error } = await supabase
         .from('fungi')
         .select('id, name, preferred_common_name')
-        .range(from, from + step - 1) // Holt z.B. 0-999, dann 1000-1999
-        .order('id', { ascending: true }) // Wichtig für konsistente Ergebnisse
+        .range(from, from + step - 1)
+        .order('id', { ascending: true })
 
       if (error) {
         console.error('Fetch error:', error)
@@ -35,13 +34,11 @@ export default defineSitemapEventHandler(async () => {
       if (data && data.length > 0) {
         allShrooms.push(...data)
         from += step
-        // Wenn wir weniger als 'step' zurückbekommen, sind wir am Ende
         if (data.length < step) hasMore = false
       } else {
         hasMore = false
       }
 
-      // Sicherheitsstopp, damit die Schleife nicht endlos läuft (max 15k)
       if (from > 15000) hasMore = false
     }
 

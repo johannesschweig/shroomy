@@ -26,7 +26,7 @@ function openLightbox(index: number) {
 </script>
 
 <template>
-  <div v-if="photos.length" class="w-full h-full">
+  <div class="w-full h-full">
     <VueEasyLightbox
       :visible="lightboxVisible"
       :imgs="images"
