@@ -176,3 +176,27 @@ export const GET_LETTER_COUNTS = gql`
     }
   }
 `
+
+// for season page - get top 10 mushrooms by observation count for a season
+export const GET_MUSHROOMS_BY_SEASON = gql`
+  query GetMushroomsBySeason($seasonStart: Int!, $seasonEnd: Int!) {
+    fungi_seasonalCollection(
+      first: 12,
+      orderBy: [{ seasonal_priority: DescNullsLast }],
+      filter: {
+        season_from: { lte: $seasonEnd },
+        season_to: { gte: $seasonStart }
+      }
+    ) {
+      edges {
+        node {
+          id
+          name
+          preferred_common_name
+          obs_count_ger
+          photo_url
+        }
+      }
+    }
+  }
+`

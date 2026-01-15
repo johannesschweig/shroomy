@@ -1,0 +1,18 @@
+CREATE OR REPLACE VIEW fungi_seasonal AS
+SELECT 
+  f.id, 
+  f.name, 
+  f.preferred_common_name, 
+  f.obs_count_ger,
+  a.season_from,
+  a.season_to,
+  (SELECT url FROM photos p WHERE p.fungi_id = f.id LIMIT 1) as photo_url,
+  CASE 
+    WHEN (a.season_to - a.season_from + 1) >= 12 THEN f.obs_count_ger * 0.1
+    ELSE f.obs_count_ger 
+  END as seasonal_priority
+FROM fungi f
+JOIN attributes a ON f.id = a.fungi_id;
+
+GRANT SELECT ON public.fungi_seasonal TO anon, authenticated, service_role;
+COMMENT ON VIEW public.fungi_seasonal IS '@graphql({"primary_key_columns": ["id"]})';

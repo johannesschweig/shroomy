@@ -1,4 +1,4 @@
-import { SEARCH_MUSHROOMS, GET_SHROOM_BY_ID, GET_RANDOM_FUNGI, SEARCH_MUSHROOM_NAMES, GET_LOOK_ALIKE_FUNGI, GET_LETTER_COUNTS } from "@/composables/queries"
+import { SEARCH_MUSHROOMS, GET_SHROOM_BY_ID, GET_RANDOM_FUNGI, SEARCH_MUSHROOM_NAMES, GET_LOOK_ALIKE_FUNGI, GET_LETTER_COUNTS, GET_MUSHROOMS_BY_SEASON } from "@/composables/queries"
 import { flattenFungi } from "@/composables/utils"
 import { computed, ref, onMounted } from "vue"
 import type { Ref } from "vue"
@@ -155,17 +155,17 @@ export function useMushroomLookAlikes(lookAlikeIds: Ref<number[]>) {
 export function useLetterCounts() {
   const { data, pending: loading, error } = useAsyncData('letter-counts', async () => {
     const { data: counts } = await supabase.rpc('get_letter_counts')
-    
+
     // Fill missing letters with 0
     const stats: Record<string, number> = {}
     GERMAN_ALPHABET.split('').forEach(l => {
       stats[l] = 0
     })
-    
+
     counts.forEach((row: any) => {
       stats[row.letter] = row.count
     })
-    
+
     return {
       counts: stats,
       total: counts.reduce((sum: number, row: any) => sum + row.count, 0)
@@ -182,14 +182,14 @@ export function useLetterCounts() {
 
 export function useMushroomsByLetter(letter: Ref<string> | string) {
   const effectiveLetter = typeof letter === 'string' ? ref(letter) : letter
-  
+
   const { data, pending: loading, error } = useAsyncData(
     `mushrooms-${effectiveLetter.value}`,
     async () => {
       const { data: mushrooms } = await supabase.rpc('get_mushrooms_by_letter', {
         p_letter: effectiveLetter.value
       })
-      
+
       return mushrooms || []
     }
   )
@@ -201,3 +201,37 @@ export function useMushroomsByLetter(letter: Ref<string> | string) {
   }
 }
 
+export function useMushroomsBySeason(monthFrom: Ref<number> | number, monthTo: Ref<number> | number) {
+  const monthFromRef = isRef(monthFrom) ? monthFrom : computed(() => monthFrom)
+  const monthToRef = isRef(monthTo) ? monthTo : computed(() => monthTo)
+
+  const variables = computed(() => ({
+    seasonStart: monthFromRef.value,
+    seasonEnd: monthToRef.value
+  }))
+
+  const { data, pending: loading, error } = useAsyncQuery(
+    GET_MUSHROOMS_BY_SEASON,
+    variables
+  )
+
+  const seasonalMushrooms = computed(() => {
+    const res = data.value as any
+    if (!res?.fungi_seasonalCollection?.edges) return []
+
+    return res.fungi_seasonalCollection.edges.map((edge: any) => {
+      const node = edge.node
+
+      return {
+        id: node.id,
+        name: node.name,
+        preferred_common_name: node.preferred_common_name,
+        obs_count_ger: node.obs_count_ger,
+        // Mapping the flat URL back to the expected photo object structure
+        photos: node.photo_url ? [{ url: node.photo_url }] : null,
+      }
+    })
+  })
+
+  return { seasonalMushrooms, loading, error }
+}

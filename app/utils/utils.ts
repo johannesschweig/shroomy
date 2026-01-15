@@ -125,3 +125,47 @@ export function getMushroomUrl(shroom: Shroom): string {
 }
 
 export const GERMAN_ALPHABET = 'AÄBCDEFGHIJKLMNOÖPQRSTUÜVWXYZ'
+
+export interface SeasonConfig {
+  key: 'spring' | 'summer' | 'autumn' | 'winter'
+  nameGerman: string
+  headline: string
+  subheadline: string
+  monthFrom: number
+  monthTo: number
+}
+
+export const SEASONS: Record<string, SeasonConfig> = {
+  spring: {
+    key: 'spring',
+    nameGerman: 'Frühling',
+    headline: 'Das Frühlingserwachen',
+    subheadline: 'Startschuss für Feinschmecker.',
+    monthFrom: 3,
+    monthTo: 5
+  },
+  summer: {
+    key: 'summer',
+    nameGerman: 'Sommer',
+    headline: 'Der Sommerwald',
+    subheadline: 'Leuchtendes Gold im grünen Moos.',
+    monthFrom: 6,
+    monthTo: 8
+  },
+  autumn: {
+    key: 'autumn',
+    nameGerman: 'Herbst',
+    headline: 'Der Herbstwald',
+    subheadline: 'Die goldene Zeit für Pilzsammler.',
+    monthFrom: 9,
+    monthTo: 11
+  },
+  winter: {
+    key: 'winter',
+    nameGerman: 'Winter',
+    headline: 'Die Winterruhe',
+    subheadline: 'Verborgene Schätze im Schnee.',
+    monthFrom: 12,
+    monthTo: 2
+  }
+}
