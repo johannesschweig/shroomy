@@ -13,6 +13,7 @@
         <div class="font-bold">Entdecken</div>
         <NuxtLink to="/" class="link-dark block">Pilzsuche</NuxtLink>
         <NuxtLink to="/all" class="link-dark block">Alle Pilze nach Alphabet</NuxtLink>
+        <NuxtLink to="/season" class="link-dark block">Pilze nach Saison</NuxtLink>
       </div>
 
       <div class="text-sm flex gap-4 flex-col">
