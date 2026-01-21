@@ -14,5 +14,6 @@ SELECT
 FROM fungi f
 JOIN attributes a ON f.id = a.fungi_id;
 
+ALTER VIEW public.fungi_seasonal SET (security_invoker = on);
 GRANT SELECT ON public.fungi_seasonal TO anon, authenticated, service_role;
 COMMENT ON VIEW public.fungi_seasonal IS '@graphql({"primary_key_columns": ["id"]})';

@@ -1,5 +1,8 @@
 import { defineSitemapEventHandler } from '#imports'
-import { supabase } from '~/supabase' 
+
+import { supabase } from '~/supabase'
+
+
 
 function createSlug(name: string): string {
   return name
@@ -13,6 +16,15 @@ function createSlug(name: string): string {
 }
 
 export default defineSitemapEventHandler(async () => {
+  // 1. Define your static season pages
+  const seasons = ['spring', 'summer', 'autumn', 'winter'];
+  const seasonPages = seasons.map(season => ({
+    loc: `/season/${season}`,
+    lastmod: new Date().toISOString(),
+    changefreq: 'monthly',
+    priority: 0.8 // Give these a slightly higher priority than individual mushrooms
+  }));
+
   const allShrooms = []
   let from = 0
   const step = 1000
@@ -42,16 +54,22 @@ export default defineSitemapEventHandler(async () => {
       if (from > 15000) hasMore = false
     }
 
-    return allShrooms.map((shroom) => {
+    // 2. Map the mushroom data
+    const mushroomPages = allShrooms.map((shroom) => {
       const displayName = shroom.preferred_common_name || shroom.name
       return {
         loc: `/mushroom/${shroom.id}-${createSlug(displayName)}`,
         lastmod: new Date().toISOString(),
-        changefreq: 'weekly'
+        changefreq: 'weekly',
+        priority: 0.5
       }
     })
+
+    // 3. Combine both arrays
+    return [...seasonPages, ...mushroomPages]
+
   } catch (e) {
     console.error('Sitemap Loop Error:', e)
-    return []
+    return [...seasonPages] // Still return the seasons even if the DB fetch fails
   }
 })

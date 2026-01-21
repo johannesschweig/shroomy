@@ -15,8 +15,8 @@ function goBack() {
 </script>
 
 <template>
-  <div class="bg-white border-b border-tan-300">
-    <div class="max-w-7xl mx-auto px-4 py-3 xl:px-0 flex gap-3 items-center">
+  <div class="bg-white border-b border-tan-300 h-16 py-auto flex items-center">
+    <div class="max-w-7xl mx-auto px-4 xl:px-0 flex gap-3 items-center w-full">
       <button v-if="!isHome" @click="goBack" class="flex cursor-pointer p-3 bg-white hover:bg-tan-100 w-fit">
         <Arrow class="w-4 h-4" />
       </button>
