@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 defineOptions({
-  name: 'SeasonsView'
+  name: 'TopEdibleView'
 })
 
 // Get current season based on current month
@@ -14,7 +14,7 @@ function getCurrentSeason() {
 }
 
 // Redirect to current season
-navigateTo(`/season/${getCurrentSeason()}`, { replace: true })
+navigateTo(`/top-edible/all`, { replace: true })
 </script>
 
 <template>

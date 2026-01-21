@@ -235,3 +235,44 @@ export function useMushroomsBySeason(monthFrom: Ref<number> | number, monthTo: R
 
   return { seasonalMushrooms, loading, error }
 }
+
+export function useTopEdibleMushrooms(seasonSlug: Ref<string> | string = 'all') {
+  const seasonMap: Record<string, { start: number; end: number }> = {
+    all: { start: 1, end: 12 },
+    spring: { start: 3, end: 5 },
+    summer: { start: 6, end: 8 },
+    autumn: { start: 9, end: 11 },
+    winter: { start: 12, end: 2 }
+  }
+
+  const queryVariables = computed(() => {
+    const s = unref(seasonSlug)
+    const months = seasonMap[s] || seasonMap.all
+    return {
+      seasonStart: months.start,
+      seasonEnd: months.end
+    }
+  })
+
+  const { data, pending, error, refresh } = useAsyncQuery(
+    GET_TOP_EDIBLE_MUSHROOMS,
+    queryVariables.value
+  )
+
+  const mushrooms = computed(() => {
+    return data.value?.fungi_seasonalCollection?.edges.map((edge: any) => ({
+      ...edge.node,
+      photos: edge.node.photo_url ? [{ url: edge.node.photo_url }] : []
+    })) || []
+  })
+
+  watch(queryVariables, () => {
+    refresh()
+  })
+
+  return {
+    mushrooms,
+    loading: pending,
+    error
+  }
+}

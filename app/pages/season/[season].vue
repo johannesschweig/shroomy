@@ -2,6 +2,7 @@
 import { useMushroomsBySeason } from '@/composables/composables'
 import { SEASONS } from '@/utils/utils'
 import Card from '@/components/Card.vue'
+import SeasonFilter from '~/components/SeasonFilter.vue'
 
 defineOptions({
   name: 'SeasonView'
@@ -38,21 +39,15 @@ useSeoMeta({
   ogUrl: url,
   ogType: 'article'
 })
-
-const seasonList = Object.values(SEASONS)
-
-function isActive(seasonKey: string): boolean {
-  return seasonKey === season.value?.key
-}
 </script>
 
 <template>
   <div v-if="season" class="min-h-screen">
-    
+
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      
+
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
-        
+
         <div class="space-y-2">
           <span class="text-xs font-bold tracking-widest text-tan-500 uppercase">
             Aktuelle Saison
@@ -65,21 +60,7 @@ function isActive(seasonKey: string): boolean {
           </p>
         </div>
 
-        <div class="inline-flex bg-white rounded-full p-1.5 shadow-sm border border-tan-200">
-          <NuxtLink
-            v-for="s in seasonList"
-            :key="s.key"
-            :to="`/season/${s.key}`"
-            :class="[
-              'px-5 py-2 rounded-full text-sm font-medium transition-all duration-200',
-              isActive(s.key) 
-                ? 'bg-[#3E3832] text-white shadow-md' 
-                : 'text-tan-500 hover:text-tan-900 hover:bg-tan-50'
-            ]"
-          >
-            {{ s.nameGerman }}
-          </NuxtLink>
-        </div>
+        <SeasonFilter :active-season="season.key" base-path="/season" />
       </div>
 
       <div class="mb-8 border-b border-tan-200 pb-4">
@@ -94,14 +75,11 @@ function isActive(seasonKey: string): boolean {
       </div>
 
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <Card
-          v-for="mushroom in seasonalMushrooms"
-          :key="mushroom.id"
-          :shroom="mushroom"
-        />
+        <Card v-for="mushroom in seasonalMushrooms" :key="mushroom.id" :shroom="mushroom" />
       </div>
 
-      <div v-if="!loading && seasonalMushrooms.length === 0" class="text-center py-20 bg-white rounded-xl border border-tan-100 shadow-sm">
+      <div v-if="!loading && seasonalMushrooms.length === 0"
+        class="text-center py-20 bg-white rounded-xl border border-tan-100 shadow-sm">
         <p class="text-tan-500 font-serif italic text-lg">
           Keine Pilze für diese Saison gefunden.
         </p>
