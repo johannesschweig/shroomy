@@ -16,13 +16,22 @@ function createSlug(name: string): string {
 }
 
 export default defineSitemapEventHandler(async () => {
-  // 1. Define your static season pages
+  // season pages
   const seasons = ['spring', 'summer', 'autumn', 'winter'];
   const seasonPages = seasons.map(season => ({
     loc: `/season/${season}`,
     lastmod: new Date().toISOString(),
     changefreq: 'monthly',
-    priority: 0.8 // Give these a slightly higher priority than individual mushrooms
+    priority: 0.8
+  }));
+
+  // top edible pages
+  const pages = ['all', 'spring', 'summer', 'autumn', 'winter'];
+  const topEdiblePages = pages.map(season => ({
+    loc: `/top-edible/${season}`,
+    lastmod: new Date().toISOString(),
+    changefreq: 'monthly',
+    priority: 0.8
   }));
 
   const allShrooms = []
@@ -54,7 +63,7 @@ export default defineSitemapEventHandler(async () => {
       if (from > 15000) hasMore = false
     }
 
-    // 2. Map the mushroom data
+    // Mushroom pages
     const mushroomPages = allShrooms.map((shroom) => {
       const displayName = shroom.preferred_common_name || shroom.name
       return {
@@ -65,11 +74,10 @@ export default defineSitemapEventHandler(async () => {
       }
     })
 
-    // 3. Combine both arrays
-    return [...seasonPages, ...mushroomPages]
+    return [...seasonPages, ...topEdiblePages, ...mushroomPages]
 
   } catch (e) {
     console.error('Sitemap Loop Error:', e)
-    return [...seasonPages] // Still return the seasons even if the DB fetch fails
+    return [...seasonPages, ...topEdiblePages] // Still return the seasons and top edible pages even if the DB fetch fails
   }
 })
