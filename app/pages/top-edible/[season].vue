@@ -45,14 +45,14 @@ const { mushrooms } = useTopEdibleMushrooms(activeSeason)
         </div>
       </div>
 
-      <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 mt-12">
+      <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
         <div v-for="(mushroom, index) in mushrooms" :key="mushroom.id" class="relative group">
           <div
-            class="absolute top-0 left-0 z-10 bg-white/90 border border-tan-200 px-2 py-1 rounded-lg font-serif text-tan-900 font-bold text-sm">
+            class="absolute top-2 left-2 z-10 bg-white/90 border border-tan-200 px-3 py-2 rounded-lg font-serif text-tan-900 font-bold">
             #{{ index + 1 }}
           </div>
 
-          <Card :key="mushroom.id" :shroom="mushroom" />
+          <Card :key="mushroom.id" :shroom="mushroom" variant="large"/>
         </div>
       </main>
 

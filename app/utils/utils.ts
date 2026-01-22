@@ -79,16 +79,16 @@ export type MushroomIconData = {
 export function getMushroomIcon(shroom: Shroom): MushroomIconData {
   if (!shroom) return { icon: null, class: '', text: '' }
 
-  if (shroom.toxicity === 'deadly') return { icon: DeadlyIcon, class: 'text-red-700', text: 'Tödlich giftig' }
-  if (shroom.toxicity === 'toxic') return { icon: ToxicIcon, class: 'text-amber-700', text: 'Giftig' }
+  if (shroom.toxicity === 'deadly') return { icon: DeadlyIcon, class: 'text-red-700 bg-red-100', text: 'Tödlich giftig' }
+  if (shroom.toxicity === 'toxic') return { icon: ToxicIcon, class: 'text-amber-700 bg-amber-100', text: 'Giftig' }
 
   switch (shroom.edibility) {
     case 'excellent':
-      return { icon: EdibleExcellentIcon, class: 'text-emerald-800', text: 'Ausgezeichnet' }
+      return { icon: EdibleExcellentIcon, class: 'text-emerald-800 bg-emerald-100', text: 'Ausgezeichnet' }
     case 'good':
-      return { icon: EdibleGoodIcon, class: 'text-emerald-700', text: 'Gut' }
+      return { icon: EdibleGoodIcon, class: 'text-emerald-700 bg-emerald-50', text: 'Gut' }
     case 'inedible':
-      return { icon: InedibleIcon, class: 'text-stone-700', text: 'Ungenießbar' }
+      return { icon: InedibleIcon, class: 'text-stone-700 bg-stone-100', text: 'Ungenießbar' }
     default:
       return { icon: null, class: '', text: '' }
   }

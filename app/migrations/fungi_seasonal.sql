@@ -7,6 +7,7 @@ SELECT
   a.season_from,
   a.season_to,
   a.edibility,
+  a.toxicity,
   (SELECT url FROM photos p WHERE p.fungi_id = f.id LIMIT 1) as photo_url,
   CASE 
     WHEN (a.season_to - a.season_from + 1) >= 12 THEN f.obs_count_ger * 0.1

@@ -112,6 +112,7 @@ export function useSearchShrooms() {
     if (!enabled.value || !data.value?.fungiCollection) return []
     return (data.value.fungiCollection.edges ?? []).map((e: any) => {
       const fungi = e.node
+      const attributes = fungi.attributes || {}
       const photoEdges = fungi.photosCollection?.edges || []
       const photos = photoEdges.length > 0 ? [photoEdges[0].node] : null
       return {
@@ -119,6 +120,8 @@ export function useSearchShrooms() {
         name: fungi.name,
         preferred_common_name: fungi.preferred_common_name,
         obs_count_ger: fungi.obs_count_ger,
+        edibility: attributes.edibility,
+        toxicity: attributes.toxicity,
         photos,
       }
     })
@@ -223,10 +226,7 @@ export function useMushroomsBySeason(monthFrom: Ref<number> | number, monthTo: R
       const node = edge.node
 
       return {
-        id: node.id,
-        name: node.name,
-        preferred_common_name: node.preferred_common_name,
-        obs_count_ger: node.obs_count_ger,
+        ...edge.node,
         // Mapping the flat URL back to the expected photo object structure
         photos: node.photo_url ? [{ url: node.photo_url }] : null,
       }
@@ -237,20 +237,22 @@ export function useMushroomsBySeason(monthFrom: Ref<number> | number, monthTo: R
 }
 
 export function useTopEdibleMushrooms(seasonSlug: Ref<string> | string = 'all') {
-  const seasonMap: Record<string, { start: number; end: number }> = {
-    all: { start: 1, end: 12 },
-    spring: { start: 3, end: 5 },
-    summer: { start: 6, end: 8 },
-    autumn: { start: 9, end: 11 },
-    winter: { start: 12, end: 2 }
+  const seasonMap: Record<string, { start: number; end: number; levels: string[] }> = {
+    all: { start: 1, end: 12, levels: ['excellent'] },
+    spring: { start: 3, end: 5, levels: ['excellent'] },
+    summer: { start: 6, end: 8, levels: ['excellent'] },
+    autumn: { start: 9, end: 11, levels: ['excellent'] },
+    winter: { start: 12, end: 2, levels: ['excellent', 'good'] }
   }
 
   const queryVariables = computed(() => {
     const s = unref(seasonSlug)
-    const months = seasonMap[s] || seasonMap.all
+    const config = seasonMap[s] || seasonMap.all
+    
     return {
-      seasonStart: months.start,
-      seasonEnd: months.end
+      seasonStart: config.start,
+      seasonEnd: config.end,
+      edibilityLevels: config.levels
     }
   })
 

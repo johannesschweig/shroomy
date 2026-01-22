@@ -118,6 +118,10 @@ query SearchMushroom($search: String) {
         name
         preferred_common_name
         obs_count_ger
+        attributes {
+          edibility
+          toxicity
+        }
         photosCollection(first: 1) {
           edges {
             node {
@@ -195,6 +199,10 @@ export const GET_MUSHROOMS_BY_SEASON = gql`
           preferred_common_name
           obs_count_ger
           photo_url
+          season_from
+          season_to
+          edibility
+          toxicity
         }
       }
     }
@@ -203,12 +211,12 @@ export const GET_MUSHROOMS_BY_SEASON = gql`
 
 // for top edible mushrooms page
 export const GET_TOP_EDIBLE_MUSHROOMS = gql`
-  query GetTopEdibleMushrooms($seasonStart: Int!, $seasonEnd: Int!) {
+  query GetTopEdibleMushrooms($seasonStart: Int!, $seasonEnd: Int!, $edibilityLevels: [String!]) {
     fungi_seasonalCollection(
       first: 10,
       orderBy: [{ seasonal_priority: DescNullsLast }],
       filter: {
-        edibility: { eq: "excellent" },
+        edibility: { in: $edibilityLevels },
         season_from: { lte: $seasonEnd },
         season_to: { gte: $seasonStart }
       }
@@ -222,6 +230,8 @@ export const GET_TOP_EDIBLE_MUSHROOMS = gql`
           photo_url
           season_from
           season_to
+          edibility
+          toxicity
         }
       }
     }
