@@ -11,6 +11,7 @@ import MushroomSeason from '@/components/mushroom-detail/MushroomSeason.vue'
 import MushroomLookAlikes from '~/components/mushroom-detail/MushroomLookAlikes.vue'
 import MushroomSensory from '~/components/mushroom-detail/MushroomSensory.vue'
 import MushroomLinks from '~/components/mushroom-detail/MushroomLinks.vue'
+import type Shroom from '~/types/Shroom'
 
 defineOptions({ name: 'MushroomDetail' })
 
@@ -35,7 +36,7 @@ watch(shroom, (newShroom) => {
   }
 }, { immediate: true })
 
-// SEO meta tags
+// SEO schema and meta tags
 const url = `https://fungio.de/mushroom/${id.value}`
 
 const title = computed(() => {
@@ -62,6 +63,30 @@ const image = computed(() => {
   if (!shroom.value?.photos?.[0]?.url) return 'https://fungio.de/mushroom.png'
   return getInaturalistImageUrl(shroom.value.photos[0].url, 'medium')
 })
+
+useSchemaOrg([
+  () => ({
+    '@type': 'Taxon',
+    '@id': `${url}#taxon`,
+    name: shroom.value?.preferred_common_name,
+    scientificName: shroom.value?.name,
+    description: description.value,
+    image: image.value,
+    url: url,
+    taxonRank: 'Species',
+    mainEntityOfPage: { '@id': `${url}#webpage` }
+  }),
+
+  () => defineArticle({
+    headline: title.value,
+    description: description.value,
+    image: image.value,
+    datePublished: '2025-09-01', // Ideally pull from your DB if you have a created_at
+    author: [{ name: 'Fungio Experten-Team', url: 'https://fungio.de' }],
+  }),
+
+  // TODO look alikes not working
+])
 
 useSeoMeta({
   title,

@@ -77,5 +77,9 @@
   "other_genus": "other genus",
   "purple": "purple",
   "hard": "hard",
-  "unknown": "unknown"
+  "unknown": "unknown",
+  "spring": "spring",
+  "summer": "summer",
+  "autumn": "autumn",
+  "winter": "winter"
 }

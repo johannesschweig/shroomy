@@ -6,6 +6,7 @@ const letter = computed(() => String(route.params.letter).toUpperCase())
 
 const { mushrooms } = useMushroomsByLetter(letter) 
 
+// SEO schema and meta tags helper
 const title = () => `Pilze mit ${letter.value} - Fungio`
 const description = () => `${mushrooms.value?.length || 0} Pilzarten mit Anfangsbuchstabe ${letter.value}. Vollständige Liste mit deutschen und lateinischen Namen.`
 

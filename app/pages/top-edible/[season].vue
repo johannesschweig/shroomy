@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import SeasonFilter from '@/components/SeasonFilter.vue'
 import Card from '@/components/Card.vue'
-
+import type Shroom from '~/types/Shroom'
+import { getMushroomUrl } from '~/utils/utils'
 
 const route = useRoute()
 
@@ -11,7 +12,55 @@ const activeSeason = computed(() => {
 })
 
 const { mushrooms } = useTopEdibleMushrooms(activeSeason)
+
+// SEO schema and meta tags
+const seasonLabel = (season: string) => {
+  if (season === 'all') {
+    return ''
+  } else {
+    return ` im ${$t(season)}`
+  }
+}
+
+useSchemaOrg([
+  () => defineItemList({
+    name: `Die 10 besten Speisepilze${seasonLabel(activeSeason.value)}`,
+    description: `Eine kuratierte Liste der schmackhaftesten Speisepilze Deutschlands${seasonLabel(activeSeason.value)}.`,
+    itemListElement: mushrooms.value.map((shroom: Shroom, index: number) => ({
+      position: index + 1,
+      name: shroom.preferred_common_name || shroom.name,
+      url: `https://fungio.de${getMushroomUrl(shroom)}`,
+      image: shroom.photos?.[0]?.url || '',
+    }))
+  })
+])
+
+const title = computed(() => {
+  const label = 'Top 10 Speisepilze' + seasonLabel(activeSeason.value)
+  return `${label} | Fungio`
+})
+
+const description = computed(() => {
+  const label = 'Top 10 Speisepilze' + seasonLabel(activeSeason.value)
+  return `${label} entdecken: Eine kuratierte Liste der schmackhaftesten Pilze Deutschlands mit Merkmalen und Verwechslungsgefahren.`
+})
+
+const url = computed(() => {
+  return activeSeason.value === 'all' 
+    ? 'https://fungio.de/top-edible' 
+    : `https://fungio.de/top-edible/${activeSeason.value}`
+})
+
+useSeoMeta({
+  title,
+  ogTitle: title,
+  description,
+  ogDescription: description,
+  ogUrl: url,
+  ogType: 'website',
+})
 </script>
+
 <template>
   <div class="bg-tan-50 min-h-screen pb-20">
     <div class="max-w-7xl mx-auto px-4 xl:px-0">

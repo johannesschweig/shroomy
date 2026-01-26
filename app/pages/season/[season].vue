@@ -3,6 +3,8 @@ import { useMushroomsBySeason } from '@/composables/composables'
 import { SEASONS } from '@/utils/utils'
 import Card from '@/components/Card.vue'
 import SeasonFilter from '~/components/SeasonFilter.vue'
+import type Shroom from '~/types/Shroom'
+import { getMushroomUrl } from '~/utils/utils'
 
 defineOptions({
   name: 'SeasonView'
@@ -26,10 +28,34 @@ const { seasonalMushrooms, loading } = useMushroomsBySeason(
   computed(() => season.value?.monthTo ?? 5)
 )
 
-// SEO meta tags
+// SEO schema and meta tags helper
+const seasonalTitle = computed(() => {
+  const s = season.value?.key
+  return s ? `Häufige Pilze im ${$t(s)}` : 'Häufige Pilzfunde'
+})
+
 const title = computed(() => season.value ? `${season.value.headline} | Fungio` : 'Saison | Fungio')
 const description = computed(() => season.value ? `${season.value.headline} - ${season.value.subheadline}` : '')
 const url = computed(() => `https://fungio.de/season/${season.value?.key}`)
+
+useSchemaOrg([
+  () => defineWebPage({
+    '@type': 'CollectionPage',
+    name: title.value,
+    description: description.value,
+  }),
+  
+  () => defineItemList({
+    name: seasonalTitle.value,
+    description: `Übersicht der am häufigsten vorkommenden Pilze Deutschlands für die Jahreszeit: ${$t(season.value?.key)}.`,
+    itemListElement: seasonalMushrooms.value.map((shroom: Shroom, index: number) => ({
+      position: index + 1,
+      name: shroom.preferred_common_name || shroom.name,
+      url: `https://fungio.de${getMushroomUrl(shroom)}`,
+      image: shroom.photos?.[0]?.url || '',
+    }))
+  })
+])
 
 useSeoMeta({
   title,
@@ -37,7 +63,7 @@ useSeoMeta({
   description,
   ogDescription: description,
   ogUrl: url,
-  ogType: 'article'
+  ogType: 'website'
 })
 </script>
 

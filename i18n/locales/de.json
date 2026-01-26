@@ -77,5 +77,9 @@
   "other_genus": "andere Gattung",
   "purple": "violett",
   "hard": "hart",
-  "unknown": "unbekannt"
+  "unknown": "unbekannt",
+  "spring": "Frühling",
+  "summer": "Sommer",
+  "autumn": "Herbst",
+  "winter": "Winter"
 }
