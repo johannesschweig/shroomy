@@ -1,4 +1,4 @@
-import { SEARCH_MUSHROOMS, GET_SHROOM_BY_ID, GET_RANDOM_FUNGI, SEARCH_MUSHROOM_NAMES, GET_LOOK_ALIKE_FUNGI, GET_LETTER_COUNTS, GET_MUSHROOMS_BY_SEASON } from "@/composables/queries"
+import { SEARCH_MUSHROOMS, GET_SHROOM_BY_ID, GET_RANDOM_FUNGI, SEARCH_MUSHROOM_NAMES, GET_LOOK_ALIKE_FUNGI, GET_MUSHROOMS_BY_SEASON, GET_TOP_REGIONAL } from "@/composables/queries"
 import { flattenFungi } from "@/composables/utils"
 import { computed, ref, onMounted } from "vue"
 import type { Ref } from "vue"
@@ -277,4 +277,36 @@ export function useTopEdibleMushrooms(seasonSlug: Ref<string> | string = 'all') 
     loading: pending,
     error
   }
+}
+
+export function useRegionalMushrooms(regionCode: Ref<string>) {
+  const variables = computed(() => ({ 
+    code: regionCode.value.toUpperCase() 
+  }))
+
+  const { data, pending: loading, error } = useAsyncQuery(
+    GET_TOP_REGIONAL,
+    variables
+  )
+
+  // Transform the GraphQL nesting into a flat Shroom object
+  const mushrooms = computed(() => {
+    if (!data.value?.fungi_regional_statsCollection?.edges) return []
+
+    return data.value.fungi_regional_statsCollection.edges.map((edge: any) => {
+      const node = edge.node
+      const fungiNode = node.fungi
+
+      // Flatten the photos collection into the standard array format your Card expects
+      const photos = fungiNode.photosCollection?.edges.map((p: any) => p.node) || []
+
+      return {
+        ...fungiNode,
+        photos, // Card component usually expects shroom.photos[0].url
+        regional_obs_count: node.obs_count
+      }
+    })
+  })
+
+  return { mushrooms, loading, error }
 }

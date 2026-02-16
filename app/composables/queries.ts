@@ -162,25 +162,6 @@ export const GET_LOOK_ALIKE_FUNGI = gql`
   }
 `
 
-export const GET_LETTER_COUNTS = gql`
-  query GetLetterCounts($first: Int!, $after: String) {
-    fungiCollection(first: $first, after: $after) {
-      edges {
-        node {
-          id
-          name
-          preferred_common_name
-        }
-        cursor
-      }
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
-    }
-  }
-`
-
 // for season page - get top 10 mushrooms by observation count for a season
 export const GET_MUSHROOMS_BY_SEASON = gql`
   query GetMushroomsBySeason($seasonStart: Int!, $seasonEnd: Int!) {
@@ -232,6 +213,34 @@ export const GET_TOP_EDIBLE_MUSHROOMS = gql`
           season_to
           edibility
           toxicity
+        }
+      }
+    }
+  }
+`
+
+export const GET_TOP_REGIONAL = gql`
+  query GetRegionalTopTen($code: String!) {
+    fungi_regional_statsCollection(
+      filter: { region_code: { eq: $code } }
+      orderBy: [{ obs_count: DescNullsLast }]
+      first: 10
+    ) {
+      edges {
+        node {
+          fungi {
+            id
+            name
+            preferred_common_name
+            rank_level
+            photosCollection(first: 1) {
+              edges {
+                node {
+                  url
+                }
+              }
+            }
+          }
         }
       }
     }

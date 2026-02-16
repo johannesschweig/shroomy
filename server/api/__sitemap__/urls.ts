@@ -1,8 +1,5 @@
 import { defineSitemapEventHandler } from '#imports'
-
 import { supabase } from '~/supabase'
-
-
 
 function createSlug(name: string): string {
   return name
@@ -16,11 +13,13 @@ function createSlug(name: string): string {
 }
 
 export default defineSitemapEventHandler(async () => {
+  const now = new Date().toISOString()
+
   // season pages
   const seasons = ['spring', 'summer', 'autumn', 'winter'];
   const seasonPages = seasons.map(season => ({
     loc: `/season/${season}`,
-    lastmod: new Date().toISOString(),
+    lastmod: now,
     changefreq: 'monthly',
     priority: 0.8
   }));
@@ -29,10 +28,24 @@ export default defineSitemapEventHandler(async () => {
   const pages = ['all', 'spring', 'summer', 'autumn', 'winter'];
   const topEdiblePages = pages.map(season => ({
     loc: `/top-edible/${season}`,
-    lastmod: new Date().toISOString(),
+    lastmod: now,
     changefreq: 'monthly',
     priority: 0.8
   }));
+
+  // regional pages
+  const stateCodes = [
+    'de-bw', 'de-by', 'de-be', 'de-bb', 'de-hb', 'de-hh', 'de-he', 'de-mv',
+    'de-ni', 'de-nw', 'de-rp', 'de-sl', 'de-sn', 'de-st', 'de-sh', 'de-th'
+  ]
+
+  const regionPages = stateCodes.map(code => ({
+    loc: `/region/${code}`,
+    lastmod: now,
+    changefreq: 'monthly',
+    priority: 0.9
+  }))
+
 
   const allShrooms = []
   let from = 0
@@ -68,13 +81,18 @@ export default defineSitemapEventHandler(async () => {
       const displayName = shroom.preferred_common_name || shroom.name
       return {
         loc: `/mushroom/${shroom.id}-${createSlug(displayName)}`,
-        lastmod: new Date().toISOString(),
+        lastmod: now,
         changefreq: 'weekly',
         priority: 0.5
       }
     })
 
-    return [...seasonPages, ...topEdiblePages, ...mushroomPages]
+    return [
+      ...seasonPages,
+      ...topEdiblePages,
+      ...mushroomPages,
+      ...regionPages
+    ]
 
   } catch (e) {
     console.error('Sitemap Loop Error:', e)

@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     '@nuxtjs/apollo',
     '@nuxtjs/sitemap',
     'nuxt-schema-org',
+    '@vueuse/nuxt',
   ],
   site: {
     url: 'https://fungio.de',
