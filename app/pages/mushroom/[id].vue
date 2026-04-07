@@ -36,9 +36,12 @@ watch(shroom, (newShroom) => {
   }
 }, { immediate: true })
 
+const fullUrl = computed(() => {
+  if (!shroom.value) return `https://fungio.de/mushroom/${id.value}`
+  const slug = createSlug(shroom.value.preferred_common_name || shroom.value.name)
+  return `https://fungio.de/mushroom/${shroom.value.id}-${slug}`
+})
 // SEO schema and meta tags
-const url = `https://fungio.de/mushroom/${id.value}`
-
 const title = computed(() => {
   if (!shroom.value) return 'Pilz wird geladen... | Fungio'
   const name = shroom.value.preferred_common_name || shroom.value.name
@@ -67,14 +70,14 @@ const image = computed(() => {
 useSchemaOrg([
   () => ({
     '@type': 'Taxon',
-    '@id': `${url}#taxon`,
+    '@id': `${fullUrl.value}#taxon`,
     name: shroom.value?.preferred_common_name,
     scientificName: shroom.value?.name,
     description: description.value,
     image: image.value,
-    url: url,
+    url: fullUrl.value,
     taxonRank: 'Species',
-    mainEntityOfPage: { '@id': `${url}#webpage` }
+    mainEntityOfPage: { '@id': `${fullUrl.value}#webpage` }
   }),
 
   () => defineArticle({
@@ -93,9 +96,15 @@ useSeoMeta({
   ogTitle: title,
   description,
   ogDescription: description,
-  ogUrl: url,
+  ogUrl: fullUrl.value,
   ogImage: image,
   ogType: 'article'
+})
+
+useHead({
+  link: [
+    { rel: 'canonical', href: fullUrl }
+  ]
 })
 </script>
 
