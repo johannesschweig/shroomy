@@ -224,7 +224,7 @@ export const GET_TOP_REGIONAL = gql`
     fungi_regional_statsCollection(
       filter: { region_code: { eq: $code } }
       orderBy: [{ obs_count: DescNullsLast }]
-      first: 10
+      first: 30
     ) {
       edges {
         node {
@@ -233,6 +233,13 @@ export const GET_TOP_REGIONAL = gql`
             name
             preferred_common_name
             rank_level
+            ancestry
+            attributes {
+              edibility
+              toxicity
+              season_from
+              season_to
+            }
             photosCollection(first: 1) {
               edges {
                 node {

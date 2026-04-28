@@ -248,7 +248,7 @@ export function useTopEdibleMushrooms(seasonSlug: Ref<string> | string = 'all') 
   const queryVariables = computed(() => {
     const s = unref(seasonSlug)
     const config = seasonMap[s] || seasonMap.all
-    
+
     return {
       seasonStart: config.start,
       seasonEnd: config.end,
@@ -280,8 +280,8 @@ export function useTopEdibleMushrooms(seasonSlug: Ref<string> | string = 'all') 
 }
 
 export function useRegionalMushrooms(regionCode: Ref<string>) {
-  const variables = computed(() => ({ 
-    code: regionCode.value.toUpperCase() 
+  const variables = computed(() => ({
+    code: regionCode.value.toUpperCase()
   }))
 
   const { data, pending: loading, error } = useAsyncQuery(
@@ -296,16 +296,29 @@ export function useRegionalMushrooms(regionCode: Ref<string>) {
     return data.value.fungi_regional_statsCollection.edges.map((edge: any) => {
       const node = edge.node
       const fungiNode = node.fungi
+      const attributes = fungiNode.attributes || {}
 
       // Flatten the photos collection into the standard array format your Card expects
       const photos = fungiNode.photosCollection?.edges.map((p: any) => p.node) || []
 
       return {
         ...fungiNode,
+        ...attributes,
         photos, // Card component usually expects shroom.photos[0].url
         regional_obs_count: node.obs_count
       }
     })
+      .filter((shroom: any) => {
+        if (!shroom.ancestry) return true
+
+        // exclude lichens and small mushrooms
+        const isLichen = shroom.ancestry.includes('54743') ||
+          shroom.ancestry.includes('48250') ||
+          shroom.ancestry.includes('416490') 
+
+        return !isLichen
+      })
+      .slice(0, 10)
   })
 
   return { mushrooms, loading, error }

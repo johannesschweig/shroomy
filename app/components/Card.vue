@@ -51,6 +51,7 @@ const seasonRange = computed(() => {
 </script>
 
 <template>
+  <!-- Variant list (small) -->
   <NuxtLink v-if="variant === 'list'" :to="getMushroomUrl(shroom)" :key="`${shroom.name}-list`"
     class="grid grid-cols-[80px_1fr_auto] gap-2 md:gap-3 items-center hover:bg-white rounded-lg">
     <img v-if="shroom.photos && shroom.photos.length && shroom.photos?.[0].url"
@@ -73,6 +74,7 @@ const seasonRange = computed(() => {
     </div>
   </NuxtLink>
 
+  <!-- Variant grid (big) -->
   <NuxtLink v-else :to="getMushroomUrl(shroom)" :key="`${shroom.name}-large`"
     class="bg-white rounded-2xl border border-tan-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
     <div class="relative h-48 w-full overflow-hidden">
@@ -100,8 +102,8 @@ const seasonRange = computed(() => {
         </span>
       </div>
 
-      <h3 class="text-xl text-stone-900 font-bold font-serif mb-1">{{ shroom.preferred_common_name ||
-        capitalizeFirstLetter(shroom.name) }}</h3>
+      <h2 class="text-xl text-stone-900 font-bold font-serif mb-1">{{ shroom.preferred_common_name ||
+        capitalizeFirstLetter(shroom.name) }}</h2>
       <p v-if="shroom.preferred_common_name" class="text-sm italic text-stone-500 mb-4">{{
         capitalizeFirstLetter(shroom.name) }}</p>
     </div>
