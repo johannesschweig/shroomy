@@ -45,7 +45,7 @@ watch(() => props.ancestry, () => {
 
 <template>
   <nav v-if="sortedTaxa.length > 0" class="flex items-center overflow-x-auto no-scrollbar text-sm">
-    <ol class="flex items-center whitespace-nowrap">
+    <ol class="flex md:items-center whitespace-nowrap flex-col md:flex-row">
       <li v-for="(taxon, index) in sortedTaxa" :key="taxon.id" class="flex items-center">
         <span v-if="index > 0" class="mx-2 text-tan-400 select-none">/</span>
 
