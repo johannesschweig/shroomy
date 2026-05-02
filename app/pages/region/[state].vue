@@ -3,6 +3,7 @@ import Card from '@/components/Card.vue'
 import type Shroom from '@/types/Shroom'
 import { getMushroomUrl, stateNames } from '@/utils/utils'
 import RegionFilter from '~/components/RegionFilter.vue'
+import RegionSeoContent from '~/components/RegionSeoContent.vue'
 
 const route = useRoute()
 
@@ -79,5 +80,7 @@ useSeoMeta({
       </main>
 
     </div>
+
+    <RegionSeoContent :region-code="activeState" :region-name="stateName" :total-species="mushrooms.length" :total-observations="mushrooms.reduce((sum: number, shroom: Shroom) => sum + (shroom.regional_obs_count || 0), 0)" />
   </div>
 </template>
