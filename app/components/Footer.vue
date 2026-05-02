@@ -20,7 +20,8 @@
 
       <div class="text-sm flex gap-4 flex-col">
         <div class="font-bold">Rechtliches</div>
-        <NuxtLink to="/disclaimer" class="link-dark block">Haftungsauschluss</NuxtLink>
+        <NuxtLink to="/imprint" class="link-dark block">Impressum</NuxtLink>
+        <NuxtLink to="/privacy" class="link-dark block">Datenschutz</NuxtLink>
       </div>
     </div>
   </div>
