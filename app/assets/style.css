@@ -112,7 +112,7 @@
 }
 
 .link {
-  @apply text-gray-600 hover:text-gray-800;
+  @apply text-tan-600 hover:text-tan-800;
 }
 
 .link-dark {

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type Shroom from '@/types/Shroom'
 import { capitalizeFirstLetter } from '@/utils/utils';
+import MushroomBreadcrumb from '~/components/mushroom-detail/MushroomBreadcrumb.vue'
 
 defineProps<{ shroom: Shroom }>()
 </script>
@@ -8,6 +9,7 @@ defineProps<{ shroom: Shroom }>()
 <template>
   <div class="space-y-2">
     <div class="flex flex-col gap-4">
+      <MushroomBreadcrumb :ancestry="shroom.ancestry" />
       <h1 class="text-4xl md:text-5xl font-serif font-bold text-tan-900">
         {{ shroom.preferred_common_name || shroom.name }}
       </h1>
