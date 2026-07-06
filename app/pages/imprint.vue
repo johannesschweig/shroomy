@@ -47,10 +47,10 @@ useSeoMeta({
     </section>
 
     <section class="mb-8">
-      <p>
       <h2 class="text-xl font-bold text-tan-900 mb-2">Verbraucherstreitbeilegung / Universalschlichtungsstelle</h2>
-      Wir nehmen nicht an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teil und sind dazu auch
-      nicht verpflichtet.
+      <p>
+        Wir nehmen nicht an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teil und sind dazu auch
+        nicht verpflichtet.
       </p>
     </section>
 

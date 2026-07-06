@@ -16,7 +16,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <div>
+  <div class="max-w-4xl mx-auto px-4 py-12 text-tan-800 leading-relaxed">
     <h1 class="text-3xl font-bold text-tan-900 mb-8">Datenschutzerklärung</h1>
 
     <h2 class="text-2xl font-bold text-tan-900 mb-4 border-b border-tan-200 pb-2">1. Datenschutz auf einen Blick</h2>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Footer from '@/components/Footer.vue'
 import Navbar from '@/components/Navbar.vue'
+import { Analytics } from '@vercel/analytics/vue'
 </script>
 
 <template>
@@ -10,5 +11,6 @@ import Navbar from '@/components/Navbar.vue'
       <NuxtPage />
     </div>
     <Footer />
+    <Analytics />
   </div>
 </template>
