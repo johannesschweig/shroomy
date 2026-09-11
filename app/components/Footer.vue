@@ -16,6 +16,7 @@
         <NuxtLink to="/season" class="link-dark block">Pilze nach Saison</NuxtLink>
         <NuxtLink to="/top-edible" class="link-dark block">Die 10 besten Speisepilze</NuxtLink>
         <NuxtLink to="/region" class="link-dark block">Pilze nach Region</NuxtLink>
+        <NuxtLink to="/taxa" class="link-dark block">Pilz-Taxonomie</NuxtLink>
       </div>
 
       <div class="text-sm flex gap-4 flex-col">

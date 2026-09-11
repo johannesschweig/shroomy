@@ -1,10 +1,12 @@
 import { SEARCH_MUSHROOMS, GET_SHROOM_BY_ID, GET_RANDOM_FUNGI, SEARCH_MUSHROOM_NAMES, GET_LOOK_ALIKE_FUNGI, GET_MUSHROOMS_BY_SEASON, GET_TOP_REGIONAL } from "@/composables/queries"
 import { flattenFungi } from "@/composables/utils"
-import { computed, ref, onMounted } from "vue"
+import { computed, ref, onMounted, watch } from "vue"
 import type { Ref } from "vue"
 import { useStore } from "@/stores/store"
 import { supabase } from "~/supabase"
 import { GERMAN_ALPHABET } from "@/utils/utils"
+import type { Taxon } from "@/utils/utils"
+import type Shroom from "@/types/Shroom"
 
 export function useMushroomById(id: Ref<number> | number) {
   const idRef = typeof id === 'number' ? computed(() => id) : id
@@ -322,4 +324,221 @@ export function useRegionalMushrooms(regionCode: Ref<string>) {
   })
 
   return { mushrooms, loading, error }
+}
+
+// --- Taxon pages (Ordnung/Familie/Gattung) ---
+// `taxa` has no ancestry/parent_id column, so ancestors and children are derived
+// from the `ancestry` string on `fungi` (species-level, iNaturalist convention).
+
+type TaxonDescendantFungi = {
+  id: number
+  name: string
+  preferred_common_name: string | null
+  ancestry: string
+  obs_count_ger: number | null
+}
+
+// shaped to satisfy the existing Shroom type (used by <Card>) wherever fields overlap
+export type TaxonChildMushroom = Shroom & { id: number, name: string }
+
+// one entry per child taxon (or, on a genus page, per child species), paired with its
+// most popular example mushroom so the template never has to zip parallel arrays
+export type TaxonChildEntry = {
+  id: number
+  name: string
+  preferred_common_name?: string | null
+  rank_level: number
+  mushroom: TaxonChildMushroom
+}
+
+async function enrichFungi(rows: TaxonDescendantFungi[]): Promise<TaxonChildMushroom[]> {
+  const ids = rows.map(r => r.id)
+  if (ids.length === 0) return []
+
+  const [{ data: attrs }, { data: photos }] = await Promise.all([
+    supabase.from('attributes').select('fungi_id, edibility, toxicity, season_from, season_to').in('fungi_id', ids),
+    supabase.from('photos').select('fungi_id, url, attribution, license_code').in('fungi_id', ids)
+  ])
+
+  const attrsById = new Map((attrs ?? []).map((a: any) => [a.fungi_id, a]))
+  const photosById = new Map<number, any[]>()
+  ;(photos ?? []).forEach((p: any) => {
+    const list = photosById.get(p.fungi_id) ?? []
+    list.push(p)
+    photosById.set(p.fungi_id, list)
+  })
+
+  return rows.map(row => {
+    const attr = attrsById.get(row.id) as any
+    return {
+      ...row,
+      preferred_common_name: row.preferred_common_name ?? undefined,
+      obs_count_ger: row.obs_count_ger ?? undefined,
+      edibility: attr?.edibility ?? undefined,
+      toxicity: attr?.toxicity ?? undefined,
+      season_from: attr?.season_from ?? undefined,
+      season_to: attr?.season_to ?? undefined,
+      photos: photosById.get(row.id) ?? []
+    } as TaxonChildMushroom
+  })
+}
+
+export function useTaxonById(id: Ref<number> | number) {
+  const idRef = typeof id === 'number' ? computed(() => id) : id
+  const taxon = ref<Taxon | null>(null)
+  const loading = ref(true)
+  const error = ref(null)
+
+  const fetchTaxon = async () => {
+    loading.value = true
+    try {
+      const { data, error: err } = await supabase
+        .from('taxa')
+        .select('id, name, preferred_common_name, rank_level')
+        .eq('id', idRef.value)
+        .single()
+
+      if (err) throw err
+      taxon.value = data
+    } catch (e) {
+      console.error('Fehler beim Laden des Taxons:', e)
+      error.value = e as any
+      taxon.value = null
+    } finally {
+      loading.value = false
+    }
+  }
+
+  onMounted(fetchTaxon)
+  watch(idRef, fetchTaxon)
+
+  return { taxon, loading, error }
+}
+
+export function useTaxonPage(taxon: Ref<Taxon | null>) {
+  // ancestry string of one descendant fungus, handed to <MushroomBreadcrumb> as-is so it can
+  // resolve/render the ancestor chain exactly like it does on the mushroom detail page
+  const representativeAncestry = ref('')
+  const childEntries = ref<TaxonChildEntry[]>([])
+  const loading = ref(true)
+  const error = ref(null)
+
+  const childRankLevel = computed(() => taxon.value ? taxon.value.rank_level - 10 : null)
+  const childrenAreSpecies = computed(() => childRankLevel.value === 10)
+
+  const fetchPageData = async () => {
+    if (!taxon.value) return
+    loading.value = true
+    representativeAncestry.value = ''
+    childEntries.value = []
+
+    try {
+      // one fetch covers both the ancestor chain (via any descendant's ancestry string)
+      // and the direct children (grouped by which id in that string matches the child rank)
+      const pattern = `(^|/)${taxon.value.id}(/|$)`
+      const { data: descendants, error: err } = await supabase
+        .from('fungi')
+        .select('id, name, preferred_common_name, ancestry, obs_count_ger')
+        .filter('ancestry', 'match', pattern)
+        .order('obs_count_ger', { ascending: false, nullsFirst: false })
+
+      if (err) throw err
+
+      const rows: TaxonDescendantFungi[] = descendants ?? []
+
+      if (rows.length > 0) {
+        representativeAncestry.value = rows[0].ancestry
+      }
+
+      if (childRankLevel.value === null) {
+        // nothing below species level
+      } else if (childrenAreSpecies.value) {
+        // genus page: each descendant fungus IS a child, already sorted by popularity,
+        // and is its own "example mushroom"
+        const enriched = await enrichFungi(rows)
+        childEntries.value = enriched.map(mushroom => ({
+          id: mushroom.id,
+          name: mushroom.name,
+          preferred_common_name: mushroom.preferred_common_name,
+          rank_level: 10,
+          mushroom
+        }))
+      } else {
+        // order/family page: group descendant ids by the child taxon (family/genus) they belong to
+        const childIds = new Set<number>()
+        rows.forEach(row => {
+          row.ancestry.split('/').map(id => parseInt(id)).filter(id => !isNaN(id)).forEach(id => childIds.add(id))
+        })
+
+        if (childIds.size > 0) {
+          const { data: childTaxa, error: childErr } = await supabase
+            .from('taxa')
+            .select('id, name, preferred_common_name, rank_level')
+            .in('id', Array.from(childIds))
+            .eq('rank_level', childRankLevel.value)
+
+          if (childErr) throw childErr
+
+          // rows are already sorted by obs_count_ger desc, so the first match per child is its most popular example
+          const exampleByChildId = new Map<number, TaxonDescendantFungi>()
+          for (const child of childTaxa ?? []) {
+            const example = rows.find(row => row.ancestry.split('/').includes(String(child.id)))
+            if (example) exampleByChildId.set(child.id, example)
+          }
+
+          const enriched = await enrichFungi(Array.from(exampleByChildId.values()))
+          const enrichedById = new Map(enriched.map(e => [e.id, e]))
+
+          childEntries.value = (childTaxa ?? [])
+            .map(child => {
+              const example = exampleByChildId.get(child.id)
+              const mushroom = example ? enrichedById.get(example.id) : undefined
+              return mushroom ? { id: child.id, name: child.name, preferred_common_name: child.preferred_common_name, rank_level: child.rank_level, mushroom } : undefined
+            })
+            .filter((entry): entry is TaxonChildEntry => !!entry)
+        }
+      }
+    } catch (e) {
+      console.error('Fehler beim Laden der Taxon-Seite:', e)
+      error.value = e as any
+    } finally {
+      loading.value = false
+    }
+  }
+
+  onMounted(fetchPageData)
+  watch(() => taxon.value?.id, fetchPageData)
+
+  return { representativeAncestry, childEntries, childRankLevel, childrenAreSpecies, loading, error }
+}
+
+// /taxa overview page — all orders (rank_level 40), just the taxa themselves (no per-order
+// example mushroom: that would mean one full ancestry scan per order, far too slow for an
+// overview page — see the perf note on useTaxonPage)
+export function useAllOrders() {
+  const orders = ref<Taxon[]>([])
+  const loading = ref(true)
+  const error = ref(null)
+
+  onMounted(async () => {
+    try {
+      const { data, error: err } = await supabase
+        .from('taxa')
+        .select('id, name, preferred_common_name, rank_level')
+        .eq('rank_level', 40)
+
+      if (err) throw err
+
+      orders.value = (data ?? []).sort((a: Taxon, b: Taxon) =>
+        (a.preferred_common_name || a.name).localeCompare(b.preferred_common_name || b.name)
+      )
+    } catch (e) {
+      console.error('Fehler beim Laden der Ordnungen:', e)
+      error.value = e as any
+    } finally {
+      loading.value = false
+    }
+  })
+
+  return { orders, loading, error }
 }

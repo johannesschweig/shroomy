@@ -87,11 +87,38 @@ export default defineSitemapEventHandler(async () => {
       }
     })
 
+    // taxa pages (Ordnung/Familie/Gattung)
+    const { data: taxa, error: taxaError } = await supabase
+      .from('taxa')
+      .select('id, name, preferred_common_name')
+      .in('rank_level', [20, 30, 40])
+
+    if (taxaError) console.error('Taxa fetch error:', taxaError)
+
+    const taxaPages = (taxa ?? []).map((taxon) => {
+      const displayName = taxon.preferred_common_name || taxon.name
+      return {
+        loc: `/taxa/${taxon.id}-${createSlug(displayName)}`,
+        lastmod: now,
+        changefreq: 'monthly',
+        priority: 0.6
+      }
+    })
+
+    const taxaOverviewPage = [{
+      loc: `/taxa`,
+      lastmod: now,
+      changefreq: 'monthly',
+      priority: 0.7
+    }]
+
     return [
       ...seasonPages,
       ...topEdiblePages,
       ...mushroomPages,
-      ...regionPages
+      ...regionPages,
+      ...taxaOverviewPage,
+      ...taxaPages
     ]
 
   } catch (e) {

@@ -124,6 +124,40 @@ export function getMushroomUrl(shroom: Shroom): string {
   return `/mushroom/${shroom.id}-${createSlug(shroom.preferred_common_name || shroom.name)}`
 }
 
+export interface Taxon {
+  id: number
+  name: string
+  preferred_common_name?: string | null
+  rank_level: number
+}
+
+// rank_levels that get their own /taxa/ page (iNaturalist scheme: order/family/genus)
+export const TAXON_PAGE_RANKS: number[] = [40, 30, 20]
+
+export function getTaxonUrl(taxon: Pick<Taxon, 'id' | 'name' | 'preferred_common_name'>): string {
+  return `/taxa/${taxon.id}-${createSlug(taxon.preferred_common_name || taxon.name)}`
+}
+
+export function getRankLabelKey(rankLevel: number): string {
+  switch (rankLevel) {
+    case 40: return 'rank.order'
+    case 30: return 'rank.family'
+    case 20: return 'rank.genus'
+    case 10: return 'rank.species'
+    default: return 'rank.other'
+  }
+}
+
+export function getRankLabelPluralKey(rankLevel: number): string {
+  switch (rankLevel) {
+    case 40: return 'rank.order.plural'
+    case 30: return 'rank.family.plural'
+    case 20: return 'rank.genus.plural'
+    case 10: return 'rank.species.plural'
+    default: return 'rank.other.plural'
+  }
+}
+
 export const GERMAN_ALPHABET = 'AÄBCDEFGHIJKLMNOÖPQRSTUÜVWXYZ'
 
 export interface SeasonConfig {
