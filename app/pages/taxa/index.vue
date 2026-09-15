@@ -23,9 +23,6 @@ useSeoMeta({
   <div class="bg-tan-50 min-h-screen pb-20">
     <div class="max-w-7xl mx-auto px-4 xl:px-0">
       <header class="pt-16 pb-12 max-w-3xl">
-        <nav class="mb-4">
-          <NuxtLink to="/" class="text-tan-500 hover:text-tan-700 text-sm font-medium">← Zurück zur Übersicht</NuxtLink>
-        </nav>
         <h1 class="font-serif text-5xl text-tan-900 leading-tight">
           Pilz-<span class="text-emerald-800">Taxonomie</span>
         </h1>

@@ -456,13 +456,15 @@ export function useTaxonPage(taxon: Ref<Taxon | null>) {
         // genus page: each descendant fungus IS a child, already sorted by popularity,
         // and is its own "example mushroom"
         const enriched = await enrichFungi(rows)
-        childEntries.value = enriched.map(mushroom => ({
-          id: mushroom.id,
-          name: mushroom.name,
-          preferred_common_name: mushroom.preferred_common_name,
-          rank_level: 10,
-          mushroom
-        }))
+        childEntries.value = enriched
+          .map(mushroom => ({
+            id: mushroom.id,
+            name: mushroom.name,
+            preferred_common_name: mushroom.preferred_common_name,
+            rank_level: 10,
+            mushroom
+          }))
+          .sort((a, b) => a.name.localeCompare(b.name))
       } else {
         // order/family page: group descendant ids by the child taxon (family/genus) they belong to
         const childIds = new Set<number>()
@@ -496,6 +498,7 @@ export function useTaxonPage(taxon: Ref<Taxon | null>) {
               return mushroom ? { id: child.id, name: child.name, preferred_common_name: child.preferred_common_name, rank_level: child.rank_level, mushroom } : undefined
             })
             .filter((entry): entry is TaxonChildEntry => !!entry)
+            .sort((a, b) => a.name.localeCompare(b.name))
         }
       }
     } catch (e) {
@@ -529,9 +532,7 @@ export function useAllOrders() {
 
       if (err) throw err
 
-      orders.value = (data ?? []).sort((a: Taxon, b: Taxon) =>
-        (a.preferred_common_name || a.name).localeCompare(b.preferred_common_name || b.name)
-      )
+      orders.value = (data ?? []).sort((a: Taxon, b: Taxon) => a.name.localeCompare(b.name))
     } catch (e) {
       console.error('Fehler beim Laden der Ordnungen:', e)
       error.value = e as any
