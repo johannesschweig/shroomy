@@ -48,13 +48,15 @@ export function flattenFungi(fungi: any): Shroom | null {
     english_common_name: fungi.english_common_name ?? '',
     ancestry: fungi.ancestry ?? '',
     obs_count_ger: fungi.obs_count_ger ?? 0,
+    needs_photo_review: fungi.needs_photo_review ?? false,
     photos: fungi.photosCollection?.edges?.map((edge: any) => {
       const photo = edge.node
       return {
         id: photo.id,
         url: photo.url,
         attribution: photo.attribution,
-        license_code: photo.license_code
+        license_code: photo.license_code,
+        quality_score: photo.quality_score ?? null
       }
     }) ?? [],
     ...attributes

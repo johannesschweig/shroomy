@@ -22,6 +22,25 @@ export function useMushroomById(id: Ref<number> | number) {
     shroom.value ? flattenFungi(shroom.value.fungiCollection.edges[0]?.node) : null
   )
 
+  // photo pipeline hook: flag fungi whose photos haven't been quality-scored yet
+  // (none at all, or none scored) so the pipeline knows to fetch/score them later.
+  // Allowed for the publishable-key client only via a narrow RLS policy + column grant
+  // (see migrations/fungi_needs_photo_review.sql) — it can flip this one column
+  // false -> true and nothing else.
+  watch(flatShroom, (newShroom) => {
+    if (!newShroom || newShroom.needs_photo_review) return
+    const hasScoredPhoto = newShroom.photos?.some(p => p.quality_score != null)
+    if (hasScoredPhoto) return
+
+    supabase.from('fungi')
+      .update({ needs_photo_review: true })
+      .eq('id', newShroom.id)
+      .eq('needs_photo_review', false)
+      .then(({ error: err }) => {
+        if (err) console.error('Fehler beim Setzen von needs_photo_review:', err)
+      })
+  }, { immediate: true })
+
   return { shroom: flatShroom, loading, error }
 }
 

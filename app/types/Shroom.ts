@@ -17,10 +17,12 @@ export default interface Shroom {
   english_common_name?: string
   ancestry: string
   obs_count_ger?: number
+  needs_photo_review?: boolean
   photos?: {
     url: string
     attribution: string
     license_code: string
+    quality_score?: number | null
   }[]
   id_123?: string
   type?: ('gilled' | 'poroid' | 'lichenized' | 'spiny' | 'round' | 'coral-like' | 'gelatinous' | 'other_genus')[]

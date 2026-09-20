@@ -13,6 +13,7 @@ export const GET_SHROOM_BY_ID = gql`
         alternative_common_names
         obs_count_ger
         ancestry
+        needs_photo_review
         photosCollection(first: 10) {
           edges {
             node {
@@ -20,6 +21,7 @@ export const GET_SHROOM_BY_ID = gql`
               url
               attribution
               license_code
+              quality_score
             }
           }
         }
