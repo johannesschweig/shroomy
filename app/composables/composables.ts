@@ -7,6 +7,16 @@ import { supabase } from "~/supabase"
 import { GERMAN_ALPHABET } from "@/utils/utils"
 import type { Taxon } from "@/utils/utils"
 import type Shroom from "@/types/Shroom"
+import { isbot } from "isbot"
+
+// crawlers (search engines, uptime checks, scrapers) render pages via SSR just like real
+// visitors and would otherwise flood the photo pipeline queue — see useMushroomById below
+function isBotRequest(): boolean {
+  const userAgent = import.meta.server
+    ? useRequestHeaders(['user-agent'])['user-agent']
+    : navigator.userAgent
+  return isbot(userAgent)
+}
 
 export function useMushroomById(id: Ref<number> | number) {
   const idRef = typeof id === 'number' ? computed(() => id) : id
@@ -31,6 +41,7 @@ export function useMushroomById(id: Ref<number> | number) {
     if (!newShroom || newShroom.needs_photo_review) return
     const hasScoredPhoto = newShroom.photos?.some(p => p.quality_score != null)
     if (hasScoredPhoto) return
+    if (isBotRequest()) return
 
     supabase.from('fungi')
       .update({ needs_photo_review: true })
