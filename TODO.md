@@ -1,7 +1,11 @@
+# TODO
+- mechanismus: fotos nachladen für besuchte seiten
+
 # NOTES
 - connectToDevTools spam: see github issue https://github.com/nuxt-modules/apollo/issues/662
 
 # DONE
+- warum bilder in taxa anders als auf den detailseiten?
 - isloading state and not keine pilze gefunden (home, detail page)
 - capitalize card taxon name (not super trivial with the highlighting)
 - mobile: somehow to wide. lightbox scrolls off viewport

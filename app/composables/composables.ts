@@ -357,7 +357,7 @@ async function enrichFungi(rows: TaxonDescendantFungi[]): Promise<TaxonChildMush
 
   const [{ data: attrs }, { data: photos }] = await Promise.all([
     supabase.from('attributes').select('fungi_id, edibility, toxicity, season_from, season_to').in('fungi_id', ids),
-    supabase.from('photos').select('fungi_id, url, attribution, license_code').in('fungi_id', ids)
+    supabase.from('photos').select('fungi_id, url, attribution, license_code').in('fungi_id', ids).order('id', { ascending: true })
   ])
 
   const attrsById = new Map((attrs ?? []).map((a: any) => [a.fungi_id, a]))
