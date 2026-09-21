@@ -3,11 +3,18 @@ import { ref, computed, watch } from 'vue'
 import { Combobox, ComboboxInput, ComboboxOptions, ComboboxOption } from '@headlessui/vue'
 import DeleteIcon from '@/assets/delete.svg'
 import FilterIcon from '@/assets/filter.svg'
+import SearchIcon from '@/assets/search.svg'
 import { useStore } from '@/stores/store'
 
+const props = withDefaults(defineProps<{ compact?: boolean }>(), { compact: false })
+
 const store = useStore()
-const query = ref('')
-const selected = ref('')
+const route = useRoute()
+const router = useRouter()
+const query = ref(store.search)
+// ComboboxInput displays displayValue(selected), not the :value prop — so this needs the
+// same initial value as `query`, or the input renders blank on mount despite a non-empty search
+const selected = ref(store.search)
 const { suggestions } = useSearchMushroomNames(query)
 
 // When selected suggestion changes, update search
@@ -22,6 +29,10 @@ function applySearch(val?: string) {
   store.setSearch(searchVal)
   selected.value = searchVal
   query.value = searchVal
+  // results only render on the home page, so searching from elsewhere (e.g. the navbar) takes you there
+  if (route.path !== '/') {
+    router.push('/')
+  }
 }
 
 function clearSearch() {
@@ -40,7 +51,7 @@ watch(() => store.search, (newSearch) => {
 
 <template>
   <!-- Search Bar -->
-  <div class="flex items-center gap-2 mb-2 relative">
+  <div class="flex items-center gap-2 relative" :class="compact ? '' : 'mb-2'">
     <div class="w-full relative">
       <Combobox v-model="selected" nullable>
         <ComboboxInput :displayValue="(val) => typeof val === 'string' ? val : ''" :value="query"
@@ -65,8 +76,12 @@ watch(() => store.search, (newSearch) => {
         </ComboboxOptions>
       </Combobox>
     </div>
-    <button @click="applySearch()" class="btn btn-primary">
+    <button v-if="!compact" @click="applySearch()" class="btn btn-primary">
       Suchen
+    </button>
+    <button v-else @click="applySearch()"
+      class="shrink-0 p-2 rounded-lg text-tan-600 hover:bg-tan-100" aria-label="Suchen" type="button">
+      <SearchIcon class="w-5 h-5" />
     </button>
   </div>
   <!-- Filter Button -->
