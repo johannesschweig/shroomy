@@ -85,7 +85,7 @@ export function useRandomFungiWithPhoto() {
 }
 
 export function useSearchMushroomNames(queryRef: Ref<string>) {
-  const suggestions = ref<string[]>([])
+  const suggestions = ref<{ id: number, name: string, preferred_common_name: string | null }[]>([])
   const loading = ref(false)
   const error = ref(null)
 
@@ -111,9 +111,11 @@ export function useSearchMushroomNames(queryRef: Ref<string>) {
   onResult((resultData) => {
     if (resultData.data?.fungiCollection?.edges) {
       suggestions.value = resultData.data.fungiCollection.edges
-        .map((e: any) => [e.node.name, e.node.preferred_common_name])
-        .flat()
-        .filter(Boolean)
+        .map((e: any) => ({
+          id: e.node.id,
+          name: e.node.name,
+          preferred_common_name: e.node.preferred_common_name
+        }))
     }
   })
 

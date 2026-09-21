@@ -92,6 +92,7 @@ query SearchMushroomNames($search: String) {
   ) {
     edges {
       node {
+        id
         name
         preferred_common_name
       }

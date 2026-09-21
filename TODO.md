@@ -1,10 +1,10 @@
 # TODO
-- better autocomplete (latin+german in one preview)
 
 # NOTES
 - connectToDevTools spam: see github issue https://github.com/nuxt-modules/apollo/issues/662
 
 # DONE
+- better autocomplete (latin+german in one preview)
 - search bar in navbar (nur wenn nicht auf /, mobile: text-logo ausgeblendet, icon statt "Suchen"-Button)
 - mechanismus: fotos nachladen für besuchte seiten (needs_photo_review spalte in fungi table, bot traffic gefiltert via isbot)
 - warum bilder in taxa anders als auf den detailseiten?
