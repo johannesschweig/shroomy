@@ -55,7 +55,7 @@ watch(() => store.search, (newSearch) => {
     <div class="w-full relative">
       <Combobox v-model="selected" nullable>
         <ComboboxInput :displayValue="(val) => typeof val === 'string' ? val : ''" :value="query"
-          @input="query = $event.target.value" placeholder="Suche nach Namen (de, lat.)"
+          @input="query = $event.target.value" :placeholder="compact ? 'Suche...' : 'Suche nach Namen (de, lat.)'"
           class="w-full px-4 py-2 border border-stone-300 rounded-lg bg-stone-50 text-stone-800 placeholder-stone-400 focus:outline-none focus:ring focus:ring-amber-400"
           @blur.capture.stop @keyup.enter="applySearch()" />
         <button v-if="query" @click="clearSearch"
