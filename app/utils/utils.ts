@@ -10,6 +10,27 @@ export const GERMAN_MONTHS = [
   'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'
 ];
 
+// season_from/season_to (1-12) wrap around the year boundary (e.g. 9 -> 3 for Sept-March),
+// same convention MushroomSeason's month-pill highlighting already relies on. When the
+// range covers all 12 months (e.g. 12 -> 11) it means "year-round", not literally
+// "from December to November" — worth calling out explicitly instead of printing that.
+export function getSeasonText(seasonFrom?: number, seasonTo?: number): string | null {
+  if (!seasonFrom || !seasonTo) return null
+  const monthCount = ((seasonTo - seasonFrom + 12) % 12) + 1
+  if (monthCount === 12) return 'ganzjährig'
+  return `von ${GERMAN_MONTHS[seasonFrom - 1]} bis ${GERMAN_MONTHS[seasonTo - 1]}`
+}
+
+// buckets obs_count_ger into a human frequency label — shared by MushroomQuickStats
+// (as a tile) and MushroomIntro (woven into the intro sentence)
+export function getFrequencyLabel(obsCountGer: number | undefined): string {
+  const count = obsCountGer || 0
+  if (count < 10) return 'Sehr selten'
+  if (count < 30) return 'Selten'
+  if (count < 70) return 'Häufig'
+  return 'Sehr häufig'
+}
+
 const TW_COLOR_MAP: Record<string, string> = {
   none: 'bg-white',
   white: 'bg-white',

@@ -30,15 +30,7 @@ export const GET_SHROOM_BY_ID = gql`
           type
           season_from
           season_to
-          size_from
-          size_to
-          gills_color
-          gills_attachment
           gills_traits
-          stem_color
-          stem_traits
-          cap_color
-          cap_shape
           flesh_color
           flesh_bruising_color
           edibility
@@ -49,6 +41,9 @@ export const GET_SHROOM_BY_ID = gql`
           habitat
           traits
           look_alikes
+          description
+          occurrence_text
+          occurrence_trees
         }
       }
     }

@@ -6,10 +6,9 @@ import MushroomGallery from '@/components/mushroom-detail/MushroomGallery.vue'
 import MushroomQuickStats from '@/components/mushroom-detail/MushroomQuickStats.vue'
 import MushroomIntro from '@/components/mushroom-detail/MushroomIntro.vue'
 import MushroomCharacteristics from '@/components/mushroom-detail/MushroomCharacteristics.vue'
-import MushroomTraitsGrid from '@/components/mushroom-detail/MushroomTraitsGrid.vue'
+import MushroomOccurrence from '@/components/mushroom-detail/MushroomOccurrence.vue'
 import MushroomSeason from '@/components/mushroom-detail/MushroomSeason.vue'
 import MushroomLookAlikes from '~/components/mushroom-detail/MushroomLookAlikes.vue'
-import MushroomSensory from '~/components/mushroom-detail/MushroomSensory.vue'
 import MushroomLinks from '~/components/mushroom-detail/MushroomLinks.vue'
 import type Shroom from '~/types/Shroom'
 
@@ -119,16 +118,10 @@ useHead({
     <div v-if="shroom.id_123" class="space-y-12">
       <MushroomQuickStats :shroom="shroom" />
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        <div class="lg:col-span-2 space-y-12">
-          <MushroomIntro :shroom="shroom" />
-          <MushroomCharacteristics :shroom="shroom" />
-          <MushroomSensory :shroom="shroom" />
-        </div>
-
-        <div class="space-y-8">
-          <MushroomTraitsGrid :shroom="shroom" />
-        </div>
+      <div class="space-y-12">
+        <MushroomIntro :shroom="shroom" />
+        <MushroomCharacteristics :shroom="shroom" />
+        <MushroomOccurrence v-if="shroom.occurrence_text" :shroom="shroom" />
       </div>
 
       <MushroomSeason :from="shroom.season_from" :to="shroom.season_to" />
