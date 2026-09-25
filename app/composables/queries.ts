@@ -30,16 +30,8 @@ export const GET_SHROOM_BY_ID = gql`
           type
           season_from
           season_to
-          gills_traits
-          flesh_color
-          flesh_bruising_color
           edibility
           toxicity
-          taste
-          smell
-          spore_color
-          habitat
-          traits
           look_alikes
           description
           occurrence_text
